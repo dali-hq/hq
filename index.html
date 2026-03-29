@@ -201,55 +201,45 @@ function loadNewComers() {
     renderCards('result-new', newComers);
 }
   
-  function loadResigned() {
+function loadResigned() {
     const tbody = document.getElementById('resigned-tbody');
     if (!tbody) return;
 
-    // 1. 建立分組
     const groups = {};
     
     RESIGNED_DATA.forEach(item => {
-        // 自動抓取日期與地點 (如果抓不到就顯示「-」)
-        const date = item.date || item.日期 || "-";
-        const site = item.site || item.工地 || "-";
+        const date = item.date || "-";
+        const site = item.site || "-";
         const key = date + "_" + site;
         
         if (!groups[key]) {
             groups[key] = { date: date, site: site, members: [] };
         }
         
-        // 2. 自動組合姓名與工號 (偵測不同欄位名)
-        let nameInfo = "";
-        if (item.member) {
-            nameInfo = item.member;
-        } else if (item.members && Array.isArray(item.members)) {
-            // 如果原本就是陣列，直接取第一個
-            nameInfo = item.members[0];
+        // 關鍵修正：判斷 members 是否為陣列
+        if (Array.isArray(item.members)) {
+            // 如果是陣列，就把裡面的內容通通加進去
+            groups[key].members = groups[key].members.concat(item.members);
+        } else if (item.member) {
+            groups[key].members.push(item.member);
         } else if (item.id || item.name) {
-            nameInfo = (item.id || "") + " " + (item.name || "");
-        }
-        
-        if (nameInfo.trim()) {
-            groups[key].members.push(nameInfo.trim());
+            groups[key].members.push((item.id || "") + " " + (item.name || ""));
         }
     });
 
-    // 3. 排序 (日期由新到舊)
     const sortedGroups = Object.values(groups).sort((a, b) => b.date.localeCompare(a.date));
 
-    // 4. 顯示到表格
     if (sortedGroups.length === 0) {
         tbody.innerHTML = "<tr><td colspan='2'>目前無資料</td></tr>";
     } else {
         tbody.innerHTML = sortedGroups.map(g => `
           <tr>
             <td class="col-info">${g.date}<br>${g.site}</td>
-            <td class="col-members">${g.members.join('<br>')}</td>
+            <td class="col-members">${g.members.filter(m => m).join('<br>')}</td>
           </tr>
         `).join('');
     }
 }
-
 
   function loadOffDuty() {
     const today = new Date().toISOString().slice(0,10).replace(/-/g,"/");
