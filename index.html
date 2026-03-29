@@ -190,18 +190,24 @@
     div.innerHTML = html || "無資料";
   }
 
-  function searchSingle() {
-    const kw = document.getElementById('empId').value.trim().toUpperCase();
-    if(!kw) return;
-    const res = WORKER_DATA.filter(e => e.id.toUpperCase().includes(kw) || e.name.toUpperCase().includes(kw));
-    renderCards('result-single', res);
-  }
+function doSearch() {
+    const input = document.getElementById('empId').value.toUpperCase();
+    const keywords = input.split(/[\s,]+/).filter(k => k !== "");
+    if (keywords.length === 0) return;
 
-  function searchMulti() {
-    const kws = document.getElementById('multiInput').value.toUpperCase().split(/[\s,]+/).filter(k => k !== "");
-    const res = WORKER_DATA.filter(e => kws.some(k => e.id.toUpperCase().includes(k) || e.name.toUpperCase().includes(k)));
-    renderCards('result-multi', res);
-  }
+    // 同時支援單人(一個詞)與複數(多個詞)的過濾邏輯
+    const results = WORKER_DATA.filter(e => 
+        keywords.some(k => e.id.toUpperCase().includes(k) || e.name.toUpperCase().includes(k))
+    );
+
+    renderCards('result-display', results);
+}
+
+function clearSearch() {
+    document.getElementById('empId').value = '';
+    document.getElementById('result-display').innerHTML = '';
+}
+
 
   function loadDali() { renderCards('result-dali', WORKER_DATA); }
   
