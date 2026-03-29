@@ -39,7 +39,6 @@
       padding: 10px 0;
       width: 100%;
     }
-
     /* 移工卡片基本樣式 (預設手機一排 2 員) */
     .emp-card {
       background: #fff;
@@ -92,31 +91,42 @@
     }
 
     #loading { display: none; margin-top: 10px; font-weight: bold; color: #666; }
+    /* 搜尋容器：限制最大寬度並居中 */
+.search-container {
+  max-width: 400px; 
+  margin: 0 auto 20px auto; /* 居中且下方留白 */
+}
+
+/* 讓輸入框變成單行 */
+#empId {
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+/* 電腦版 (螢幕大於 1200px) 的集中感 */
+@media (min-width: 1200px) {
+  .search-container {
+    max-width: 500px; /* 電腦版稍微寬一點點，但依然集中 */
+  }
+}
+
 </style>
 </head>
 <body>
 <div class="card">
-  
-  <!-- 各頁面內容 (保留原本 HTML 結構) -->
-  <div id="page-single">
-    <h2>♟️實毅大里員工</h2>
-    <input type="text" id="empId" placeholder="輸入工號或姓名" onkeypress="if(event.keyCode==13) searchSingle()">
-    <div class="btn-group">
-      <button class="btn-search" onclick="searchSingle()">查詢</button>
-      <button class="btn-clear" onclick="clearSingle()">清空</button>
+    <!-- 各頁面內容 (保留原本 HTML 結構) -->
+  <div id="page-search">
+    <h2 style="color: var(--primary);">🔍 員工快速查詢</h2>
+    <div class="search-container">
+      <input type="text" id="empId" placeholder="輸入工號或姓名 (空格分隔可多選)" onkeypress="if(event.keyCode==13) doSearch()">
+      <div class="btn-group">
+        <button class="btn-search" onclick="doSearch()">搜尋</button>
+        <button class="btn-clear" onclick="clearSearch()">清空</button>
+      </div>
     </div>
-    <div id="result-single"></div>
+    <div id="result-display"></div>
   </div>
 
-  <div id="page-multi" style="display:none;">
-    <h2>複數照片查詢</h2>
-    <textarea id="multiInput" placeholder="輸入多個工號或姓名 (空格分隔)"></textarea>
-    <div class="btn-group">
-      <button class="btn-search" onclick="searchMulti()">批次搜尋</button>
-      <button class="btn-clear" onclick="clearMulti()">清空</button>
-    </div>
-    <div id="result-multi" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
-  </div>
 
   <div id="page-new" style="display:none;">
     <h2 style="color: #27ae60;">🌱 新進同仁</h2>
