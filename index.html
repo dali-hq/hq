@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="referrer" content="no-referrer">
+  <!-- 引入資料檔 -->
+  <script src="data.js"></script>
+  <style>
+    body { font-family: "Microsoft JhengHei", sans-serif; text-align: center; background: #f5f7fa; padding: 15px; margin: 0; }
+    
+    /* 基礎卡片容器 (預設手機版) */
+    .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: inline-block; width: 100%; max-width: 450px; box-sizing: border-box; margin-top: 10px; }
+    
+    .logo-container img { max-height: 80px; width: auto; margin-bottom: 10px; }
+    input, textarea { padding: 15px; border: 2px solid #ddd; border-radius: 6px; font-size: 18px; outline: none; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
+    .btn-group { display: flex; gap: 10px; margin-bottom: 15px; }
+    .btn-search { flex: 2; padding: 15px 0; background-color: #4a90e2; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; }
+    .btn-clear { flex: 1; padding: 15px 0; background-color: #95a5a6; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; }
+    
+    /* 導覽連結 */
+    .nav-link { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; font-size: 14px; line-height: 2.2; display: flex; flex-wrap: wrap; justify-content: center; }
+    .nav-link a { color: #4a90e2; text-decoration: none; font-weight: bold; cursor: pointer; margin: 0 5px; white-space: nowrap; }
+
+    /* 移工卡片通用容器 */
+    #result-dali, #result-multi, #result-new {
+      display: flex;
+      flex-wrap: wrap;      
+      justify-content: center; 
+      gap: 10px;            
+      padding: 10px 0;
+      width: 100%;
+    }
+
+    /* 移工卡片基本樣式 (預設手機一排 2 員) */
+    .emp-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      box-sizing: border-box;
+      text-align: center;
+      width: calc((100% - 15px) / 2); 
+    }
+
+    .emp-card img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 4px; }
+    .emp-card .emp-name-tag { font-weight: bold; font-size: 14px; margin-top: 6px; border-bottom: 1px solid #f0f0f0; padding-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* 轉出人員表格 */
+    .resigned-table { width: 100%; max-width: 600px; margin: 20px auto; border-collapse: collapse; font-size: 15px; table-layout: fixed; background: white; border: 2px solid #636e72; }
+    .resigned-table th, .resigned-table td { border: 1px solid #ccc; padding: 12px 8px; vertical-align: middle; }
+    .resigned-table th { background: #636e72; color: white; }
+    .col-info { width: 105px !important; text-align: center !important; background-color: #f9f9f9; font-weight: bold; white-space: nowrap; } 
+    .col-members { width: auto; text-align: left !important; padding-left: 15px !important; line-height: 1.6; }
+
+    /* 休假區 */
+    #off-duty-box { margin: 30px auto; padding: 15px; background-color: #fff0f0; border-radius: 12px; border: 1px solid #ffcccc; text-align: left; font-size: 14px; width: 100%; max-width: 400px; box-sizing: border-box; }
+
+    /* ------------------------------------------------ */
+    /* 螢幕寬度大於 1200px (電腦版 24 吋螢幕強制 8 員一列) */
+    /* ------------------------------------------------ */
+    @media (min-width: 1200px) {
+      .card { max-width: 1450px !important; width: 98% !important; padding: 20px 10px !important; }
+      #result-dali {
+        display: grid !important;
+        grid-template-columns: repeat(8, 1fr) !important; /* 強制分 8 格 */
+        gap: 12px !important;  
+        width: 100% !important;
+        justify-items: center; 
+      }
+      .emp-card { width: 100% !important; max-width: 160px !important; margin: 0 !important; display: block !important; }
+      .emp-card img { height: 180px !important; }
+      .mobile-br { display: none; }
+    }
+
+    /* ------------------------------------------------ */
+    /* 螢幕寬度小於 600px (手機版) */
+    /* ------------------------------------------------ */
+    @media (max-width: 600px) {
+      .mobile-br { display: block; width: 100%; height: 0; }
+      .nav-link { line-height: 2.5; }
+      #result-dali { display: flex !important; gap: 10px !important; }
+    }
+
+    #loading { display: none; margin-top: 10px; font-weight: bold; color: #666; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo-container"><img src="https://lh3.googleusercontent.com"></div>
+  
+  <!-- 各頁面內容 (保留原本 HTML 結構) -->
+  <div id="page-single">
+    <h2>員工照片查詢系統</h2>
+    <input type="text" id="empId" placeholder="輸入工號或姓名" onkeypress="if(event.keyCode==13) searchSingle()">
+    <div class="btn-group">
+      <button class="btn-search" onclick="searchSingle()">查詢</button>
+      <button class="btn-clear" onclick="clearSingle()">清空</button>
+    </div>
+    <div id="result-single"></div>
+  </div>
+
+  <div id="page-multi" style="display:none;">
+    <h2>複數照片查詢</h2>
+    <textarea id="multiInput" placeholder="輸入多個工號或姓名 (空格分隔)"></textarea>
+    <div class="btn-group">
+      <button class="btn-search" onclick="searchMulti()">批次搜尋</button>
+      <button class="btn-clear" onclick="clearMulti()">清空</button>
+    </div>
+    <div id="result-multi" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
+  </div>
+
+  <div id="page-new" style="display:none;">
+    <h2 style="color: #27ae60;">🌱 新進同仁</h2>
+    <div id="result-new" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
+  </div>
+
+  <div id="page-resigned" style="display:none;">
+    <h2 style="color: #d63031; font-weight: bold;">🚫 轉出人員名單</h2>
+    <table class="resigned-table">
+      <thead><tr><th class="col-info">日期 / 工地</th><th class="col-members">轉出人員名單</th></tr></thead>
+      <tbody id="resigned-tbody"></tbody>
+    </table>
+  </div>
+
+  <div id="page-dali" style="display:none;">
+    <h2 style="color: #2980b9; font-weight: bold;">🏢 大里工地員工一覽 (86員)</h2>
+    <div id="result-dali" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 20px;"></div>
+  </div>
+
+  <div id="loading">讀取中...</div>
+
+  <div class="nav-link">
+    <a onclick="showPage('single')">🏠 單人</a>|<a onclick="showPage('multi')">🔍 複數</a>|
+    <a onclick="showPage('new')">🌱 新進</a>|<span class="mobile-br"></span>
+    <a onclick="showPage('resigned')">🚫 轉出</a>|<a onclick="showPage('dali')">🏢 大里一覽</a>
+  </div>
+
+  <div id="off-duty-box">
+    <div style="font-weight:bold; color:#d63031; margin-bottom:8px;">📅 今日休假人員</div>
+    <div id="off-list">載入中...</div>
+  </div>
+</div>
+
+<script>
+  window.onload = function() { loadOffDuty(); };
+
+  function showPage(p) {
+    ['single', 'multi', 'new', 'resigned', 'dali'].forEach(id => {
+      document.getElementById('page-' + id).style.display = 'none';
+    });
+    document.getElementById('page-' + p).style.display = 'block';
+    
+    if (p === 'dali') loadDali();
+    if (p === 'new') loadNewComers();
+    if (p === 'resigned') loadResigned();
+  }
+
+  // --- 核心邏輯替換 (原本在 .gs 的邏輯現在都在這) ---
+
+  function renderCards(targetId, list) {
+    const div = document.getElementById(targetId);
+    // 排序邏輯
+    list.sort((a, b) => (parseInt(a.id.toString().replace(/\D/g,'')) || 0) - (parseInt(b.id.toString().replace(/\D/g,'')) || 0));
+    let html = list.map(e => `
+      <div class='emp-card'>
+        <div class='emp-name-tag'>${e.id} ${e.name}</div>
+        <img src='${e.photoUrl}' onerror="this.src='https://via.placeholder.com'">
+      </div>
+    `).join('');
+    div.innerHTML = html || "無資料";
+  }
+
+  function searchSingle() {
+    const kw = document.getElementById('empId').value.trim().toUpperCase();
+    if(!kw) return;
+    const res = WORKER_DATA.filter(e => e.id.toUpperCase().includes(kw) || e.name.toUpperCase().includes(kw));
+    renderCards('result-single', res);
+  }
+
+  function searchMulti() {
+    const kws = document.getElementById('multiInput').value.toUpperCase().split(/[\s,]+/).filter(k => k !== "");
+    const res = WORKER_DATA.filter(e => kws.some(k => e.id.toUpperCase().includes(k) || e.name.toUpperCase().includes(k)));
+    renderCards('result-multi', res);
+  }
+
+  function loadDali() { renderCards('result-dali', WORKER_DATA); }
+  
+  function loadNewComers() { renderCards('result-new', NEW_COMERS); }
+
+  function loadResigned() {
+    const tbody = document.getElementById('resigned-tbody');
+    tbody.innerHTML = RESIGNED_DATA.map(g => `
+      <tr>
+        <td class="col-info">${g.date}<br>${g.site}</td>
+        <td class="col-members">${g.members.join('<br>')}</td>
+      </tr>
+    `).join('');
+  }
+
+  function loadOffDuty() {
+    const today = new Date().toISOString().slice(0,10).replace(/-/g,"/");
+    const list = LEAVE_DATA.filter(d => today >= d.start && today <= d.end);
+    document.getElementById('off-list').innerHTML = list.length ? 
+      list.map(e => `${e.id} ${e.name} (${e.start.slice(5)}~${e.end.slice(5)})`).join('<br>') : "今日無人休假";
+  }
+
+  function clearSingle() { document.getElementById('empId').value = ''; document.getElementById('result-single').innerHTML = ''; }
+  function clearMulti() { document.getElementById('multiInput').value = ''; document.getElementById('result-multi').innerHTML = ''; }
+</script>
+</body>
+</html>
