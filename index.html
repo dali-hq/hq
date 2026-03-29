@@ -30,32 +30,20 @@
     .emp-card img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 4px; }
     .emp-card .emp-name-tag { font-weight: bold; font-size: 14px; margin-top: 6px; border-bottom: 1px solid #f0f0f0; padding-bottom: 4px; overflow: hidden; text-overflow: ellipsis; }
 
-    
-    /* 轉出表格：加入圓角與邊框優化 */
-    .resigned-table { 
-        width: 100%; 
-        max-width: 450px; 
-        margin: 0 auto; 
-        border-collapse: separate; /* 關鍵：必須用 separate 才能顯示圓角 */
+        /* 轉出表格：加入圓角與邊框優化 */
+    .resigned-table { width: 100%; max-width: 450px; margin: 0 auto; border-collapse: separate; /* 關鍵：必須用 separate 才能顯示圓角 */
         border-spacing: 0;         /* 讓格子接縫處不要有空隙 */
-        font-size: 15px; 
-        background: white; 
-        border: 2px solid #636e72; 
+        font-size: 15px; background: white; border: 2px solid #636e72; 
         border-radius: 12px;       /* 這裡設定圓角大小 */
-        overflow: hidden;          /* 確保內容不會超出圓角邊界 */
-    }
+        overflow: hidden;          /* 確保內容不會超出圓角邊界 */ }
 
     /* 移除內部重複的邊框，避免線條太粗 */
-    .resigned-table th, .resigned-table td { 
-        border: 1px solid #ccc; 
-        padding: 12px 8px; 
-    }
+    .resigned-table th, .resigned-table td { border: 1px solid #ccc; padding: 12px 8px;     }
     /* 修正最角落格子的邊框，讓視覺更乾淨 */
     .resigned-table th:first-child { border-top-left-radius: 10px; }
     .resigned-table th:last-child { border-top-right-radius: 10px; }
     .resigned-table tr:last-child td:first-child { border-bottom-left-radius: 10px; }
     .resigned-table tr:last-child td:last-child { border-bottom-right-radius: 10px; }
-
 
     #off-duty-box { margin-top: 30px; padding: 15px; background: #fff0f0; border-radius: 12px; border: 1px solid #ffcccc; text-align: left; font-size: 14px; max-width: 450px; margin: 30px auto 0 auto; }
 
@@ -68,6 +56,17 @@
       .result-container { display: grid !important; grid-template-columns: repeat(8, 1fr) !important; gap: 12px; max-width: none !important; }
       .emp-card { width: 100% !important; }
     }
+    /* 讓手機版斷行生效的關鍵 */
+
+    @media (max-width: 600px) {
+     .mobile-br { display: block;  /* 變成區塊元素，才會換行 */
+     width: 100%;     /* 佔滿整行空間 */
+     height: 0;       /* 不佔高度，純粹斷行用 */ }
+     }
+    /* 電腦版時隱藏這道「牆」，讓連結排回同一行 */
+    @media (min-width: 601px) {
+      .mobile-br { display: none; }
+     }
 </style>
 </head>
 <body>
