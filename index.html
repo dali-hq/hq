@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <title>實毅大里員工</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="referrer" content="no-referrer">
   <!-- 引入資料檔 -->
@@ -88,11 +89,10 @@
 </head>
 <body>
 <div class="card">
-  <div class="logo-container"><img src="https://lh3.googleusercontent.com"></div>
   
   <!-- 各頁面內容 (保留原本 HTML 結構) -->
   <div id="page-single">
-    <h2>員工照片查詢系統</h2>
+    <h2>實毅大里-員工照片查詢系統</h2>
     <input type="text" id="empId" placeholder="輸入工號或姓名" onkeypress="if(event.keyCode==13) searchSingle()">
     <div class="btn-group">
       <button class="btn-search" onclick="searchSingle()">查詢</button>
@@ -203,29 +203,41 @@ function loadNewComers() {
   
   function loadResigned() {
     const tbody = document.getElementById('resigned-tbody');
-    
-    // 1. 進行分組處理 (Group by Date + Site)
+    if (!tbody) return;
+
+    // 1. 分組處理
     const groups = {};
     RESIGNED_DATA.forEach(item => {
-        const key = `${item.date}_${item.site}`;
+        // 抓取日期與地點，若無則顯示未知
+        const date = item.date || "未知日期";
+        const site = item.site || "未知地點";
+        const key = `${date}_${site}`;
+        
         if (!groups[key]) {
-            groups[key] = { date: item.date, site: item.site, members: [] };
+            groups[key] = { date: date, site: site, members: [] };
         }
-        groups[key].members.push(item.member || (item.name ? `${item.id} ${item.name}` : ""));
+        
+        // 抓取成員名稱 (相容多種欄位寫法)
+        let nameInfo = item.member || item.name || "";
+        if (item.id && !nameInfo.includes(item.id)) {
+            nameInfo = item.id + " " + (item.name || "");
+        }
+        if (nameInfo) groups[key].members.push(nameInfo);
     });
 
-    // 2. 轉換為陣列並排序 (可選：依日期由新到舊)
+    // 2. 排序 (日期由新到舊)
     const sortedGroups = Object.values(groups).sort((a, b) => b.date.localeCompare(a.date));
 
-    // 3. 渲染到表格
+    // 3. 渲染
     tbody.innerHTML = sortedGroups.map(g => `
       <tr>
         <td class="col-info">${g.date}<br>${g.site}</td>
-        <td class="col-members">${g.members.filter(m => m).join('<br>')}</td>
+        <td class="col-members">${g.members.join('<br>')}</td>
       </tr>
     `).join('');
+    
+    if (sortedGroups.length === 0) tbody.innerHTML = "<tr><td colspan='2'>目前無轉出人員</td></tr>";
 }
-
 
   function loadOffDuty() {
     const today = new Date().toISOString().slice(0,10).replace(/-/g,"/");
