@@ -9,9 +9,10 @@
   <style>
     body { font-family: "Microsoft JhengHei", sans-serif; text-align: center; background: #f5f7fa; padding: 15px; margin: 0; }
     
-    /* 基礎容器：限制轉出名單與新進不要無限撐開 */
+    /* 基礎容器：預設手機寬度 */
     .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: inline-block; width: 100%; max-width: 450px; box-sizing: border-box; margin-top: 10px; transition: max-width 0.3s; }
     
+    /* 搜尋區域始終保持集中 */
     .search-section { max-width: 400px; margin: 0 auto; }
     input { padding: 15px; border: 2px solid #ddd; border-radius: 6px; font-size: 18px; outline: none; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
     .btn-group { display: flex; gap: 10px; margin-bottom: 15px; }
@@ -23,30 +24,27 @@
     .nav-duty { color: #2c3e50 !important; }
     .nav-duty span { color: #27ae60 !important; }
 
-    /* 移工卡片通用樣式 (手機版) */
-    .result-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px 0; width: 100%; max-width: 450px; margin: 0 auto; }
+    /* 移工卡片容器：預設手機版 */
+    .result-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px 0; width: 100%; }
     .emp-card { background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); box-sizing: border-box; text-align: center; width: calc((100% - 15px) / 2); }
     .emp-card img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 4px; }
     .emp-card .emp-name-tag { font-weight: bold; font-size: 14px; margin-top: 6px; border-bottom: 1px solid #f0f0f0; padding-bottom: 4px; overflow: hidden; text-overflow: ellipsis; }
 
-    /* 轉出表格：強制限制寬度，不要跟著螢幕變寬 */
-    .resigned-table { width: 100%; max-width: 400px; margin: 0 auto; border-collapse: collapse; font-size: 15px; background: white; border: 2px solid #636e72; }
+    /* 轉出表格：電腦版也要集中 */
+    .resigned-table { width: 100%; max-width: 450px; margin: 0 auto; border-collapse: collapse; font-size: 15px; background: white; border: 2px solid #636e72; }
     .resigned-table th, .resigned-table td { border: 1px solid #ccc; padding: 12px 8px; }
     .resigned-table th { background: #636e72; color: white; }
-    .col-info { width: 100px; background-color: #f9f9f9; font-weight: bold; }
 
-    #off-duty-box { margin-top: 30px; padding: 15px; background: #fff0f0; border-radius: 12px; border: 1px solid #ffcccc; text-align: left; font-size: 14px; max-width: 400px; margin-left: auto; margin-right: auto; }
+    #off-duty-box { margin-top: 30px; padding: 15px; background: #fff0f0; border-radius: 12px; border: 1px solid #ffcccc; text-align: left; font-size: 14px; max-width: 450px; margin: 30px auto 0 auto; }
 
-    /* 電腦版大螢幕優化：只有「一覽」會變大，其他維持集中 */
+    /* 電腦版大螢幕優化：查詢結果、新進、一覽都要撐開並排 */
     @media (min-width: 1200px) {
-      .card { max-width: 500px; } /* 預設維持窄版集中感 */
-      .card.wide { max-width: 1300px !important; width: 95% !important; } /* 一覽時才撐開 */
+      /* 只有轉出人員名單維持窄版，其他有照片的都變寬 */
+      .card.wide { max-width: 1300px !important; width: 95% !important; }
       
-      #result-dali { display: grid !important; grid-template-columns: repeat(8, 1fr) !important; gap: 12px; max-width: none !important; }
-      #result-dali .emp-card { width: 100% !important; }
-      
-      /* 搜尋與新進的結果容器在電腦版依然保持 500px 寬度 */
-      #result-display, #result-new { max-width: 500px; }
+      /* 設定照片並排：一排 8 員 */
+      .result-container { display: grid !important; grid-template-columns: repeat(8, 1fr) !important; gap: 12px; max-width: none !important; }
+      .emp-card { width: 100% !important; }
     }
 </style>
 </head>
@@ -61,12 +59,14 @@
         <button class="btn-clear" onclick="clearSearch()">清空</button>
       </div>
     </div>
-    <div id="result-display"></div>
+    <!-- 查詢結果 -->
+  <div id="result-display" class="result-container"></div>
   </div>
 
   <div id="page-new" style="display:none;">
     <h2 style="color: #27ae60;">🌱 03/13新進同仁</h2>
-    <div id="result-new"></div>
+    <!-- 新進人員 -->
+  <div id="result-new" class="result-container"></div>
   </div>
 
   <div id="page-resigned" style="display:none;">
@@ -79,7 +79,8 @@
 
   <div id="page-dali" style="display:none;">
     <h2 style="color: #2980b9;">🏢 大里工地員工</h2>
-    <div id="result-dali"></div>
+    <!-- 大里一覽 -->
+  <div id="result-dali" class="result-container"></div>
   </div>
 
   <div class="nav-link">
@@ -102,8 +103,8 @@
   window.onload = function() { loadOffDuty(); };
 
 function showPage(p) {
-    // 隱藏所有頁面
-    ['search', 'new', 'resigned', 'dali'].forEach(id => {
+    const pages = ['search', 'new', 'resigned', 'dali'];
+    pages.forEach(id => {
       document.getElementById('page-' + id).style.display = 'none';
     });
     
@@ -111,16 +112,18 @@ function showPage(p) {
     const target = document.getElementById('page-' + p);
     target.style.display = 'block';
 
-    // 關鍵邏輯：只有點擊「一覽」時，卡片才變寬 (wide)
-    if (p === 'dali') {
-        card.classList.add('wide');
-        renderCards('result-dali', WORKER_DATA);
-    } else {
+    // 邏輯：除了「轉出」以外，有照片的頁面在電腦版都變寬
+    if (p === 'resigned') {
         card.classList.remove('wide');
+        loadResigned();
+    } else {
+        card.classList.add('wide');
+        if (p === 'search') { /* 搜尋結果由 doSearch 觸發 */ }
         if (p === 'new') loadNewComers();
-        if (p === 'resigned') loadResigned();
+        if (p === 'dali') renderCards('result-dali', WORKER_DATA);
     }
 }
+
   function renderCards(targetId, list) {
     const div = document.getElementById(targetId);
     list.sort((a, b) => (parseInt(a.id.toString().replace(/\D/g,'')) || 0) - (parseInt(b.id.toString().replace(/\D/g,'')) || 0));
