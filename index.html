@@ -67,30 +67,29 @@
 
     #off-duty-box { margin-top: 30px; padding: 15px; background: #fff0f0; border-radius: 12px; border: 1px solid #ffcccc; text-align: left; font-size: 14px; max-width: 450px; margin: 30px auto 0 auto; }
 
-/* 電腦版大螢幕優化：Grid 佈局的置中設定 */
+/* 電腦版大螢幕優化：保持卡片大小並置中 */
 @media (min-width: 1200px) {
-  .result-container { 
-    display: grid !important; 
-    grid-template-columns: repeat(8, 1fr) !important; 
-    justify-content: center; /* Grid 整體置中 */
-    justify-items: center;    /* 每一張卡片在格子內置中 */
-    gap: 15px; 
-    max-width: fit-content !important; /* 關鍵：寬度隨內容縮放，才能真正置中 */
-    margin: 0 auto !important; 
+  .card:has(.result-container) { 
+    max-width: 1300px !important; 
+    width: 95% !important; 
   }
-}  
-  /* 設定照片並排：PC版一排 8 員 */
+
   .result-container { 
-    display: grid !important; 
-    grid-template-columns: repeat(8, 1fr) !important; 
+    display: flex !important;      /* 改回 flex 讓卡片不被 grid 壓縮 */
+    flex-wrap: wrap !important;
+    justify-content: center !important; /* 確保結果置中 */
     gap: 15px; 
-    max-width: none !important; 
+    max-width: none !important;
   }
-  
+
   .emp-card { 
-    width: 100% !important; 
+    /* 設定電腦版卡片的固定寬度，不會變小 */
+    width: 150px !important; 
+    flex-grow: 0;                /* 不強制撐開 */
+    flex-shrink: 0;               /* 不允許縮小 */
   }
 }
+
 
     @media (max-width: 600px) {
      .mobile-br { display: block;  /* 變成區塊元素，才會換行 */
