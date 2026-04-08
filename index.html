@@ -47,16 +47,27 @@
 
     #off-duty-box { margin-top: 30px; padding: 15px; background: #fff0f0; border-radius: 12px; border: 1px solid #ffcccc; text-align: left; font-size: 14px; max-width: 450px; margin: 30px auto 0 auto; }
 
-    /* 電腦版大螢幕優化：查詢結果、新進、一覽都要撐開並排 */
-    @media (min-width: 1200px) {
-      /* 只有轉出人員名單維持窄版，其他有照片的都變寬 */
-      .card.wide { max-width: 1300px !important; width: 95% !important; }
-      
-      /* 設定照片並排：一排 8 員 */
-      .result-container { display: grid !important; grid-template-columns: repeat(8, 1fr) !important; gap: 12px; max-width: none !important; }
-      .emp-card { width: 100% !important; }
-    }
-    /* 讓手機版斷行生效的關鍵 */
+/* 電腦版大螢幕優化：自動判斷只要裡面有結果就撐開 */
+@media (min-width: 1200px) {
+  /* 讓包含搜尋結果的 card 自動變寬，不再受限於 450px */
+  .card:has(.result-container) { 
+    max-width: 1300px !important; 
+    width: 95% !important; 
+    transition: max-width 0.3s;
+  }
+  
+  /* 設定照片並排：PC版一排 8 員 */
+  .result-container { 
+    display: grid !important; 
+    grid-template-columns: repeat(8, 1fr) !important; 
+    gap: 15px; 
+    max-width: none !important; 
+  }
+  
+  .emp-card { 
+    width: 100% !important; 
+  }
+}
 
     @media (max-width: 600px) {
      .mobile-br { display: block;  /* 變成區塊元素，才會換行 */
