@@ -171,18 +171,21 @@ function loadNewComers() {
     renderCards('result-new', res);
         // 2. 取得容器，在開頭補上 3/13 的標題
     const container = document.getElementById('result-new');
-    // 💡 加上 display: block 和 width: 100% 確保在電腦版一定會換行
-    const headerStyle = 'display: block; width: 100%; flex-basis: 100%; color: #e67e22; font-weight: bold; margin: 15px 0; font-size: 18px; text-align: center;';
-    const headerStyle313 = headerStyle.replace('#e67e22', '#27ae60') + 'border-top: 1px dashed #ccc; padding-top: 20px; margin-top: 30px;';
+    // 4/13 標題樣式 (最上方)
+    const style413 = 'width:100%; flex-basis:100%; color:#e67e22; font-weight:bold; margin:10px 0; font-size:18px;';
+    
+    // 3/13 標題樣式 (中間換行處)
+    // 💡 關鍵：加上 display:block 和 width:100% 確保強制換行
+    const style313 = 'width:100%; flex-basis:100%; color:#27ae60; font-weight:bold; margin:30px 0 10px 0; border-top:1px dashed #ccc; padding-top:20px; font-size:18px; display:block;';
 
-    // 2. 在最前面插入 4/13 標題 (31010)
-    container.insertAdjacentHTML('afterbegin', `<div style="${headerStyle}">🚀 04/13 抵達人員 (陳庭義)</div>`);
+    // 2. 插入 4/13 標題
+    container.insertAdjacentHTML('afterbegin', `<div style="${style413}">🚀 04/13 抵達人員</div>`);
 
-    // 3. 找到 36074，並在它前面插入 3/13 標題
+    // 3. 找到 36074 (3/13 的第一位)，並在它「前面」插入換行標題
     const cards = container.getElementsByClassName('emp-card');
     for (let card of cards) {
         if (card.innerText.includes('36074')) {
-            card.insertAdjacentHTML('beforebegin', `<div style="${headerStyle313}">🌱 03/13 抵達人員</div>`);
+            card.insertAdjacentHTML('beforebegin', `<div style="${style313}">🌱 03/13 抵達人員</div>`);
             break; 
         }
     }
