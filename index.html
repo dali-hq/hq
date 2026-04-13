@@ -116,12 +116,18 @@
     <!-- 查詢結果 -->
   <div id="result-display" class="result-container"></div>
   </div>
+  
+<div id="page-new" style="display:none;">
+  <!-- 3/13 分組 -->
+  <h2 style="color: #27ae60;">🌱 03/13 新進同仁</h2>
+  <div id="result-new-0313" class="result-container"></div>
 
-  <div id="page-new" style="display:none;">
-    <h2 style="color: #27ae60;">🌱 03/13新進同仁</h2>
-    <!-- 新進人員 -->
-  <div id="result-new" class="result-container"></div>
-  </div>
+  <hr style="margin: 40px 0; border: 0; border-top: 1px dashed #ccc;">
+
+  <!-- 4/13 分組 -->
+  <h2 style="color: #e67e22;">🚀 04/13 新進同仁</h2>
+  <div id="result-new-0413" class="result-container"></div>
+</div>
 
   <div id="page-resigned" style="display:none;">
     <h2 style="color: #d63031;">🚫 轉出人員名單</h2>
@@ -196,11 +202,18 @@ function showPage(p) {
     renderCards('result-display', res);
   }
 
-  function loadNewComers() {
-    const NEW_COMER_IDS = ["36074", "36075", "36076", "36077", "36078", "36079", "36080"];
-    const res = WORKER_DATA.filter(w => NEW_COMER_IDS.includes(w.id.toString().trim()));
-    renderCards('result-new', res);
-  }
+function loadNewComers() {
+  // 3/13 新進 (36074~36080)
+  const ids0313 = ["36074", "36075", "36076", "36077", "36078", "36079", "36080"];
+  const res313 = WORKER_DATA.filter(w => ids0313.includes(w.id.toString().trim()));
+  renderCards('result-0313', res313);
+
+  // 4/13 新進 (31010)
+  const ids0413 = ["31010"];
+  const res413 = WORKER_DATA.filter(w => ids0413.includes(w.id.toString().trim()));
+  renderCards('result-0413', res413);
+}
+
 
   function loadResigned() {
     const tbody = document.getElementById('resigned-tbody');
