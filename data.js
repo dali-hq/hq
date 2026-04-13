@@ -3,7 +3,7 @@ const WORKER_DATA = [
     "id": "31010",
     "name": "陳庭義",
     "site": "1If7_AmHzMWZj48DTQGaZ7XAre2I3FEVk",
-    "photoUrl": "https://1h3.googleusercontent.com/d/1If7_AmHzMWZj48DTQGaZ7XAre2I3FEVk"
+    "photoUrl": "https://lh3.googleusercontent.com/d/1If7_AmHzMWZj48DTQGaZ7XAre2I3FEVk"
 },
 {
 "id": "36080",
