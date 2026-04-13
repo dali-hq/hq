@@ -118,24 +118,16 @@
   </div>
   
 <div id="page-new" style="display:none;">
-  <!-- 3/13 分組 -->
-  <h2 style="color: #27ae60;">🌱 03/13 新進同仁</h2>
-  <div id="result-new-0313" class="result-container"></div>
+    <!-- 3/13 分組 -->
+    <h2 style="color: #27ae60;">🌱 03/13 新進同仁</h2>
+    <div id="result-new-0313" class="result-container"></div>
 
-  <hr style="margin: 40px 0; border: 0; border-top: 1px dashed #ccc;">
+    <hr style="margin: 30px 0; border: 0; border-top: 1px dashed #ccc;">
 
-  <!-- 4/13 分組 -->
-  <h2 style="color: #e67e22;">🚀 04/13 新進同仁</h2>
-  <div id="result-new-0413" class="result-container"></div>
+    <!-- 4/13 分組 -->
+    <h2 style="color: #e67e22;">🚀 04/13 新進同仁</h2>
+    <div id="result-new-0413" class="result-container"></div>
 </div>
-
-  <div id="page-resigned" style="display:none;">
-    <h2 style="color: #d63031;">🚫 轉出人員名單</h2>
-    <table class="resigned-table">
-      <thead><tr><th class="col-info">日期/工地</th><th>轉出人員名單</th></tr></thead>
-      <tbody id="resigned-tbody"></tbody>
-    </table>
-  </div>
 
   <div id="page-dali" style="display:none;">
     <h2 style="color: #2980b9;">🏢 大里工地員工</h2>
@@ -203,15 +195,15 @@ function showPage(p) {
   }
 
 function loadNewComers() {
-  // 3/13 新進 (36074~36080)
-  const ids0313 = ["36074", "36075", "36076", "36077", "36078", "36079", "36080"];
-  const res313 = WORKER_DATA.filter(w => ids0313.includes(w.id.toString().trim()));
-  renderCards('result-0313', res313);
+    // 3/13 名單
+    const ids0313 = ["36074", "36075", "36076", "36077", "36078", "36079", "36080"];
+    const res0313 = WORKER_DATA.filter(w => ids0313.includes(w.id.toString().trim()));
+    renderCards('result-new-0313', res0313);
 
-  // 4/13 新進 (31010)
-  const ids0413 = ["31010"];
-  const res413 = WORKER_DATA.filter(w => ids0413.includes(w.id.toString().trim()));
-  renderCards('result-0413', res413);
+    // 4/13 名單
+    const ids0413 = ["31010"];
+    const res0413 = WORKER_DATA.filter(w => ids0413.includes(w.id.toString().trim()));
+    renderCards('result-new-0413', res0413);
 }
 
 
