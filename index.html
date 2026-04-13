@@ -164,20 +164,21 @@ function showPage(p) {
   }
 
 function loadNewComers() {
-    const NEW_COMER_IDS = ["36074", "36075", "36076", "36077", "36078", "36079", "36080", "31010"];
-    const res = WORKER_DATA.filter(w => NEW_COMER_IDS.includes(w.id.toString().trim()));
+    const ids = ["36074", "36075", "36076", "36077", "36078", "36079", "36080", "31010"];
+    const res = WORKER_DATA.filter(w => ids.includes(w.id.toString().trim()));
     
-    // 渲染到原本的容器
+    // 1. 先照舊版方式全部畫出來
     renderCards('result-new', res);
     
-    // 💡 技巧：渲染完後，直接在 31010 的卡片前面插入一個「分行標題」
+    // 2. 取得容器，在開頭補上 3/13 的標題
     const container = document.getElementById('result-new');
+    container.insertAdjacentHTML('afterbegin', '<div style="width:100%; color:#27ae60; font-weight:bold; margin:10px 0; font-size:18px;">🌱 03/13 抵達人員</div>');
+
+    // 3. 找到 31010，並在它前面插入 4/13 的標題
     const cards = container.getElementsByClassName('emp-card');
-    
     for (let card of cards) {
-        // 如果這張卡片是 31010，就在它前面塞入一個寬度 100% 的文字標籤
         if (card.innerText.includes('31010')) {
-            card.insertAdjacentHTML('beforebegin', '<div style="width:100%; color:#e67e22; font-weight:bold; margin:20px 0 10px 0; font-size:18px;">🚀 04/13 新進人員</div>');
+            card.insertAdjacentHTML('beforebegin', '<div style="width:100%; color:#e67e22; font-weight:bold; margin:25px 0 10px 0; border-top:1px dashed #ccc; padding-top:15px; font-size:18px;">🚀 04/13 抵達人員</div>');
         }
     }
 }
