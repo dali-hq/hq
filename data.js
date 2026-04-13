@@ -664,7 +664,4 @@ const RESIGNED_DATA = [
 ]
 }
 ];
-
-const NEW_COMER_IDS = ["Fri Mar 13 2026 00:00:00 GMT+0800 (Taiwan Standard 
-Time)","36074","36075","36076","36077","36078","36079","36080","Mon Apr 13 
-2026 00:00:00 GMT+0800 (Taiwan Standard Time)","31010"];
+const NEW_COMER_IDS = ["36074", "36075", "36076", "36077", "36078", "36079", "36080", "31010"];
