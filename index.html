@@ -164,24 +164,23 @@ function showPage(p) {
   }
 
 function loadNewComers() {
-    const ids = ["36074", "36075", "36076", "36077", "36078", "36079", "36080", "31010"];
+    const ids = ["31010", "36074", "36075", "36076", "36077", "36078", "36079", "36080"];
     const res = WORKER_DATA.filter(w => ids.includes(w.id.toString().trim()));
     
-    // 1. 先照舊版方式全部畫出來
+    // 1. 執行原本的渲染
     renderCards('result-new', res);
-        // 2. 取得容器，在開頭補上 3/13 的標題
-    const container = document.getElementById('result-new');
-    // 4/13 標題樣式 (最上方)
-    const style413 = 'width:100%; flex-basis:100%; color:#e67e22; font-weight:bold; margin:10px 0; font-size:18px;';
     
-    // 3/13 標題樣式 (中間換行處)
-    // 💡 關鍵：加上 display:block 和 width:100% 確保強制換行
-    const style313 = 'width:100%; flex-basis:100%; color:#27ae60; font-weight:bold; margin:30px 0 10px 0; border-top:1px dashed #ccc; padding-top:20px; font-size:18px; display:block;';
+    const container = document.getElementById('result-new');
+    
+    // 💡 強制換行的關鍵 CSS：width 100% + flex-basis 100% + flex-shrink 0
+    const forceBreak = 'width: 100%; flex-basis: 100%; flex-shrink: 0; box-sizing: border-box;';
+    const baseStyle = `${forceBreak} color: #e67e22; font-weight: bold; margin: 15px 0; font-size: 18px; text-align: center;`;
+    const style313 = `${forceBreak} color: #27ae60; font-weight: bold; margin: 40px 0 15px 0; border-top: 2px dashed #ccc; padding-top: 20px; font-size: 18px; text-align: center;`;
 
     // 2. 插入 4/13 標題
-    container.insertAdjacentHTML('afterbegin', `<div style="${style413}">🚀 04/13 新進</div>`);
+    container.insertAdjacentHTML('afterbegin', `<div style="${baseStyle}">🚀 04/13 新進</div>`);
 
-    // 3. 找到 36074 (3/13 的第一位)，並在它「前面」插入換行標題
+    // 3. 找到 36074 插入 3/13 標題
     const cards = container.getElementsByClassName('emp-card');
     for (let card of cards) {
         if (card.innerText.includes('36074')) {
