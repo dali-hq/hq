@@ -1,9 +1,9 @@
 const WORKER_DATA = [
 {
-    "id": "31010",
-    "name": "陳庭義",
-    "site": "1If7_AmHzMWZj48DTQGaZ7XAre2I3FEVk",
-    "photoUrl": "https://lh3.googleusercontent.com/d/1If7_AmHzMWZj48DTQGaZ7XAre2I3FEVk"
+"id": "31010",
+"name": "陳庭義",
+"site": "1If7_AmHzMWZj48DTQGaZ7XAre2I3FEVk",
+"photoUrl": "https://lh3.googleusercontent.com/d/1If7_AmHzMWZj48DTQGaZ7XAre2I3FEVk"
 },
 {
 "id": "36080",
@@ -665,4 +665,6 @@ const RESIGNED_DATA = [
 }
 ];
 
-const NEW_COMERS = [];
+const NEW_COMER_IDS = ["Fri Mar 13 2026 00:00:00 GMT+0800 (Taiwan Standard 
+Time)","36074","36075","36076","36077","36078","36079","36080","Mon Apr 13 
+2026 00:00:00 GMT+0800 (Taiwan Standard Time)","31010"];
