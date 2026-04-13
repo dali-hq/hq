@@ -25,28 +25,8 @@
     .nav-duty span { color: #27ae60 !important; }
 
     /* 移工卡片容器：預設手機版 */
-    /* 修改搜尋結果容器：確保整體置中 */
-.result-container { 
-    display: flex; 
-    flex-wrap: wrap; 
-    justify-content: center; /* 手機版：卡片數量少時置中 */
-    align-items: start;
-    gap: 12px; 
-    padding: 10px 0; 
-    width: 100%; 
-    margin: 0 auto;          /* 確保容器本身在 .card 內置中 */
-}
-    /* 修改後的移工卡片樣式 */
-.emp-card { 
-    background: #fff; 
-    border: 1px solid #7f8c8d; /* 深灰色 1px 細線 */
-    border-radius: 8px; 
-    padding: 8px; 
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* 減輕陰影，讓深灰線條更明顯 */
-    box-sizing: border-box; 
-    text-align: center; 
-    width: calc((100% - 15px) / 2); 
-}
+    .result-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px 0; width: 100%; }
+    .emp-card { background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); box-sizing: border-box; text-align: center; width: calc((100% - 15px) / 2); }
     .emp-card img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 4px; }
     .emp-card .emp-name-tag { font-weight: bold; font-size: 14px; margin-top: 6px; border-bottom: 1px solid #f0f0f0; padding-bottom: 4px; overflow: hidden; text-overflow: ellipsis; }
 
@@ -67,29 +47,16 @@
 
     #off-duty-box { margin-top: 30px; padding: 15px; background: #fff0f0; border-radius: 12px; border: 1px solid #ffcccc; text-align: left; font-size: 14px; max-width: 450px; margin: 30px auto 0 auto; }
 
-/* 電腦版大螢幕優化：保持卡片大小並置中 */
-@media (min-width: 1200px) {
-  .card:has(.result-container) { 
-    max-width: 1300px !important; 
-    width: 95% !important; 
-  }
-
-  .result-container { 
-    display: flex !important;      /* 改回 flex 讓卡片不被 grid 壓縮 */
-    flex-wrap: wrap !important;
-    justify-content: center !important; /* 確保結果置中 */
-    gap: 15px; 
-    max-width: none !important;
-  }
-
-  .emp-card { 
-    /* 設定電腦版卡片的固定寬度，不會變小 */
-    width: 150px !important; 
-    flex-grow: 0;                /* 不強制撐開 */
-    flex-shrink: 0;               /* 不允許縮小 */
-  }
-}
-
+    /* 電腦版大螢幕優化：查詢結果、新進、一覽都要撐開並排 */
+    @media (min-width: 1200px) {
+      /* 只有轉出人員名單維持窄版，其他有照片的都變寬 */
+      .card.wide { max-width: 1300px !important; width: 95% !important; }
+      
+      /* 設定照片並排：一排 8 員 */
+      .result-container { display: grid !important; grid-template-columns: repeat(8, 1fr) !important; gap: 12px; max-width: none !important; }
+      .emp-card { width: 100% !important; }
+    }
+    /* 讓手機版斷行生效的關鍵 */
 
     @media (max-width: 600px) {
      .mobile-br { display: block;  /* 變成區塊元素，才會換行 */
@@ -116,12 +83,20 @@
     <!-- 查詢結果 -->
   <div id="result-display" class="result-container"></div>
   </div>
-  
-<div id="page-new" style="display:none;">
-    <h2 style="color: #27ae60;">🌱 新進同仁 (03/13 & 04/13)</h2>
-    <!-- 所有的卡片都會跑進下面這個 div -->
-    <div id="result-new" class="result-container"></div>
-</div>
+
+  <div id="page-new" style="display:none;">
+    <h2 style="color: #27ae60;">🌱 新進同仁03/13, 04/13</h2>
+    <!-- 新進人員 -->
+  <div id="result-new" class="result-container"></div>
+  </div>
+
+  <div id="page-resigned" style="display:none;">
+    <h2 style="color: #d63031;">🚫 轉出人員名單</h2>
+    <table class="resigned-table">
+      <thead><tr><th class="col-info">日期/工地</th><th>轉出人員名單</th></tr></thead>
+      <tbody id="resigned-tbody"></tbody>
+    </table>
+  </div>
 
   <div id="page-dali" style="display:none;">
     <h2 style="color: #2980b9;">🏢 大里工地員工</h2>
@@ -144,7 +119,7 @@
     <div id="off-list">讀取中...</div>
   </div>
 </div>
-<script src="Data.js"></script>
+
 <script>
   window.onload = function() { loadOffDuty(); };
 
@@ -187,11 +162,26 @@ function showPage(p) {
     const res = WORKER_DATA.filter(e => kw.some(k => e.id.toUpperCase().includes(k) || e.name.toUpperCase().includes(k)));
     renderCards('result-display', res);
   }
+
 function loadNewComers() {
-    const ids = ["31010", "36074", "36075", "36076", "36077", "36078", "36079", "36080"];
-    const res = WORKER_DATA.filter(w => ids.includes(w.id.toString().trim()));
+    const NEW_COMER_IDS = ["36074", "36075", "36076", "36077", "36078", "36079", "36080", "31010"];
+    const res = WORKER_DATA.filter(w => NEW_COMER_IDS.includes(w.id.toString().trim()));
+    
+    // 渲染到原本的容器
     renderCards('result-new', res);
+    
+    // 💡 技巧：渲染完後，直接在 31010 的卡片前面插入一個「分行標題」
+    const container = document.getElementById('result-new');
+    const cards = container.getElementsByClassName('emp-card');
+    
+    for (let card of cards) {
+        // 如果這張卡片是 31010，就在它前面塞入一個寬度 100% 的文字標籤
+        if (card.innerText.includes('31010')) {
+            card.insertAdjacentHTML('beforebegin', '<div style="width:100%; color:#e67e22; font-weight:bold; margin:20px 0 10px 0; font-size:18px;">🚀 04/13 新進人員</div>');
+        }
+    }
 }
+
   function loadResigned() {
     const tbody = document.getElementById('resigned-tbody');
     const groups = {};
