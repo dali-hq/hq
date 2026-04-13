@@ -194,19 +194,17 @@ function showPage(p) {
     const res = WORKER_DATA.filter(e => kw.some(k => e.id.toUpperCase().includes(k) || e.name.toUpperCase().includes(k)));
     renderCards('result-display', res);
   }
-
 function loadNewComers() {
-    // 3/13 名單：36074 到 36080
+    // 1. 處理 3/13 分組 (36074~36080)
     const ids0313 = ["36074", "36075", "36076", "36077", "36078", "36079", "36080"];
     const res0313 = WORKER_DATA.filter(w => ids0313.includes(w.id.toString().trim()));
-    renderCards('result-new-0313', res0313);
+    renderCards('result-new-0313', res0313); // 這裡要對應 HTML 的 ID
 
-    // 4/13 名單：31010
+    // 2. 處理 4/13 分組 (31010)
     const ids0413 = ["31010"];
     const res0413 = WORKER_DATA.filter(w => ids0413.includes(w.id.toString().trim()));
-    renderCards('result-new-0413', res0413);
+    renderCards('result-new-0413', res0413); // 這裡要對應 HTML 的 ID
 }
-
 
   function loadResigned() {
     const tbody = document.getElementById('resigned-tbody');
