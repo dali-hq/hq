@@ -11,10 +11,12 @@
         .sticky-header {
             position: sticky; top: 0; z-index: 1000;
             background: var(--primary-red); color: white;
-            padding: 8px 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            padding: 10px 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-align: center;
         }
-        .summary-bar { display: flex; justify-content: space-around; padding: 5px; background: rgba(255,255,255,0.1); border-radius: 6px; }
-        .sum-val { font-size: 15px; font-weight: bold; }
+        .summary-bar { display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 20px; border-radius: 20px; margin-top: 5px; }
+        .sum-label { font-size: 13px; opacity: 0.9; margin-right: 5px; }
+        .sum-val { font-size: 18px; font-weight: bold; }
 
         .content { max-width: 1000px; margin: 10px auto; padding: 0 5px; }
         
@@ -36,7 +38,6 @@
             tr { padding: 8px 10px; border: 1.5px solid var(--black); background: white; margin-bottom: 6px; }
             td { border: none !important; padding: 2px 0 !important; }
             
-            /* 手機版分隔線隱藏背景，改用間距 */
             .divider-row { border: none !important; background: transparent; height: 15px; margin-bottom: 0; }
             .divider-row td { display: none; }
 
@@ -56,7 +57,7 @@
 
         @media print {
             .sticky-header { background: white !important; color: black !important; position: static; box-shadow: none; border-bottom: 3px solid black; }
-            .summary-bar { background: none !important; color: black !important; }
+            .summary-bar { background: none !important; color: black !important; border: 1px solid black; }
             body { background: white !important; }
             tr { page-break-inside: avoid; }
             .subtotal, .item-sub-cell { color: black !important; }
@@ -66,10 +67,9 @@
 <body>
 
 <div class="sticky-header">
-    <div style="text-align:center; font-size: 18px; margin-bottom: 5px; font-weight: bold;">🏮 十八庄行腳物資管理清單</div>
+    <div style="font-size: 18px; font-weight: bold;">🏮 十八庄行腳物資管理</div>
     <div class="summary-bar">
-        <div style="text-align:center;"><small>支出：</small><span id="total" class="sum-val">0</span></div>
-        <div style="text-align:center;"><small>剩餘：</small><span id="rem" class="sum-val">14,000</span></div>
+        <span class="sum-label">預估金額：</span><span id="total" class="sum-val">0</span>
     </div>
 </div>
 
@@ -91,7 +91,6 @@
 </div>
 
 <script>
-    // 使用 null 代表分隔線
     const data = [
         ["寶礦利 580ml", 24, 462, 2, "瓶"],
         ["寶礦利(低卡) 580ml", 24, 462, 1, "瓶"],
@@ -100,17 +99,24 @@
         ["原萃綠茶玉露(4入)", 4, 78, 4, "瓶"],
         null,
         ["義美無加糖元氣豆奶", 24, 284, 1, "瓶"],
-        ["貝納頌經典拿鐵(3入)", 3, 75, 8, "瓶"],
-        ["貝納頌榛果拿鐵(3入)", 3, 66, 4, "瓶"],
+        ["貝納頌榛果拿鐵(3入)", 3, 66, 8, "瓶"],
         null,
         ["名糖檸檬鹽糖", 1, 89, 3, "袋"],
         ["BF薄荷岩鹽檸檬糖", 1, 62, 3, "袋"],
-        ["綜合堅果隨手包", 1, 30, 120, "包"],
         null,
         ["聯翔鳳梨酥", 1, 30, 80, "個"],
         ["聯翔杏仁瓦片(12入)", 12, 336, 5, "包"],
         null,
-        ["家樂福環保袋-大", 1, 42, 2, "卷"]
+        ["綜合堅果隨手包", 1, 30, 120, "包"],
+        ["中祥蔬菜蘇打餅(10入)", 10, 75, 3, "包"],
+        null,
+        ["義美杏仁巧克力酥片", 8, 108, 8, "包"],
+        ["本味誠現-濃可可酥餅", 12, 94, 4, "片"],
+        ["本味誠現乳酥餅", 13, 94, 4, "片"],
+        ["本味誠現牛奶餅", 20, 106, 4, "片"],
+        ["茱蒂絲蘇打餅-奶油", 10, 62, 4, "包"],
+        null,
+        ["家樂福環保清潔袋-大", 1, 42, 2, "卷"]
     ];
 
     function render() {
@@ -160,7 +166,6 @@
         document.querySelectorAll(isMobile ? '.pc-only-hide' : '.pc-only').forEach(el => el.style.setProperty('display', isMobile ? 'flex' : 'table-cell', 'important'));
         
         document.getElementById('total').innerText = totalAll.toLocaleString();
-        document.getElementById('rem').innerText = (14000 - totalAll).toLocaleString();
     }
 
     function updateVal(index, field, val) { 
