@@ -3,80 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>實毅營造-行腳物資管理</title>
+    <title>實毅營造-行腳管理</title>
     <style>
         :root { --primary-red: #d32f2f; --bg-color: #fffcf5; }
-        body { font-family: "Microsoft JhengHei", sans-serif; background: var(--bg-color); margin: 0; padding: 10px; color: #333; }
+        body { font-family: "Microsoft JhengHei", sans-serif; background: var(--bg-color); margin: 0; padding: 10px; font-size: 14px; }
         
-        /* 容器與標題 */
-        .box { max-width: 1000px; margin: auto; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 6px solid var(--primary-red); }
-        h2 { text-align: center; color: var(--primary-red); margin: 10px 0 20px; font-size: 1.5rem; }
-
-        /* 摘要欄固定在頂部 (手機很有用) */
+        .box { max-width: 800px; margin: auto; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 6px solid var(--primary-red); overflow: hidden; }
+        
+        /* 置頂摘要區 - 更加緊湊 */
         .summary { 
             display: flex; justify-content: space-around; background: #fdf2f2; 
-            padding: 12px; margin-bottom: 20px; font-weight: bold; border-radius: 8px; 
-            border: 1px solid #f9dcdc; position: sticky; top: 5px; z-index: 100;
+            padding: 10px; font-weight: bold; border-bottom: 1px solid #f9dcdc;
+            position: sticky; top: 0; z-index: 100;
         }
-        .sum-box { text-align: center; }
-        .sum-label { font-size: 12px; color: #666; display: block; }
-        .sum-val { font-size: 16px; }
+        .sum-box { text-align: center; line-height: 1.2; }
+        .sum-label { font-size: 11px; color: #666; }
+        .sum-val { font-size: 15px; color: #333; }
 
-        /* 表格基礎樣式 */
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #fafafa; color: #888; padding: 10px; font-size: 13px; border-bottom: 2px solid #eee; }
-        td { padding: 10px 5px; border-bottom: 1px solid #eee; text-align: center; }
-        
-        input { width: 90%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 16px; }
-        input:focus { border-color: var(--primary-red); outline: none; background: #fffafa; }
-
-        .text-left { text-align: left; }
-        .text-right { text-align: right; padding-right: 15px; }
-        .v-line { border-right: 2px solid #eee; }
+        /* PC 表格樣式 */
+        table { width: 100%; border-collapse: collapse; display: table; }
+        th { background: #fafafa; padding: 10px; font-size: 12px; border-bottom: 1px solid #eee; }
+        td { padding: 8px 4px; border-bottom: 1px solid #eee; text-align: center; }
+        input { width: 85%; padding: 5px; border: 1px solid #ddd; border-radius: 4px; text-align: center; }
+        .v-line { border-right: 1px solid #eee; }
         .subtotal { font-weight: bold; color: var(--primary-red); }
-        .note-text { font-weight: bold; color: #2c3e50; }
 
-        /* --- 手機版 RWD 樣式 --- */
+        /* --- 手機版極簡化 --- */
         @media screen and (max-width: 600px) {
-            thead { display: none; } /* 隱藏表頭 */
+            table { display: block; }
+            thead { display: none; }
+            tbody { display: block; }
             tr { 
-                display: block; margin-bottom: 15px; border: 1px solid #eee; 
-                border-radius: 8px; padding: 10px; background: #fff; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+                display: flex; flex-wrap: wrap; padding: 10px; 
+                border-bottom: 1px solid #eee; align-items: center;
             }
-            td { 
-                display: flex; justify-content: space-between; align-items: center; 
-                text-align: right; border-bottom: 1px dashed #eee; padding: 8px 5px;
+            /* 第一列：名稱與金額（橫向並排） */
+            td:nth-child(1) { order: 1; flex: 2; border: none; text-align: left; }
+            td:nth-child(5) { order: 2; flex: 1; border: none; text-align: right; padding-right: 10px; }
+            /* 第二列：計算詳情（縮小字體並排） */
+            td:nth-child(2), td:nth-child(3), td:nth-child(4) { 
+                order: 3; flex: 1; font-size: 12px; border: none; padding-top: 5px; color: #666;
             }
-            td::before { content: attr(data-label); font-weight: bold; color: #888; font-size: 13px; }
-            td:last-child { border-bottom: none; justify-content: center; background: #fffcf5; }
-            input { width: 60%; text-align: right; }
-            .v-line { border-right: none; }
-            .text-left, .text-right { text-align: right; padding: 8px 5px; }
-            .item-name-cell { background: #fdf2f2; border-radius: 5px 5px 0 0; }
-            .item-name-cell input { width: 100%; font-weight: bold; text-align: left; border: none; background: transparent; }
+            /* 第三列：總量推算（醒目置底） */
+            td:nth-child(6) { 
+                order: 4; flex: 100%; border: none; text-align: left; 
+                font-size: 12px; background: #fafafa; border-radius: 4px; margin-top: 5px; padding: 4px 8px;
+            }
+            
+            input { width: 90%; font-size: 14px; padding: 4px; border: none; background: #f9f9f9; text-align: left; }
+            input[type="number"] { text-align: center; border: 1px solid #eee; }
+            
+            td::before { content: attr(data-label); font-size: 10px; color: #999; display: block; margin-bottom: 2px; }
+            td:nth-child(1)::before, td:nth-child(6)::before { display: none; } /* 名稱與總量不顯示標籤 */
         }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2>🏮 行腳物資管理</h2>
-    
     <div class="summary">
         <div class="sum-box"><span class="sum-label">預算</span><span class="sum-val">14,000</span></div>
         <div class="sum-box"><span class="sum-label">支出</span><span id="total" class="sum-val">0</span></div>
         <div class="sum-box"><span class="sum-label">剩餘</span><span id="rem" class="sum-val" style="color:var(--primary-red)">14,000</span></div>
     </div>
 
-    <table>
+    <table id="mainTable">
         <thead>
             <tr>
-                <th width="22%">項目名稱</th>
+                <th width="30%">項目</th>
                 <th width="10%">組數</th>
                 <th width="12%">單價</th>
                 <th width="10%">數量</th>
-                <th width="18%" class="v-line">小計</th>
-                <th width="28%">總量推算</th>
+                <th width="15%" class="v-line">小計</th>
+                <th width="23%">總量推算</th>
             </tr>
         </thead>
         <tbody id="list"></tbody>
@@ -86,22 +85,20 @@
 <script>
     const data = [
         ["寶礦利 580ml", 24, 462, 2, "瓶"],
-        ["寶礦利(低卡) 580ml", 24, 462, 1, "瓶"],
+        ["寶礦利(低卡)", 24, 462, 1, "瓶"],
         ["悅氏礦泉水 600ml", 24, 168, 2, "瓶"],
         ["Simple 純水 280ml", 24, 144, 2, "瓶"],
         ["綜合堅果隨手包", 1, 30, 120, "包"],
         ["名糖檸檬鹽糖", 1, 89, 3, "包"],
         ["BF薄荷岩鹽檸檬糖", 1, 62, 3, "包"],
-        ["貝納頌經典拿鐵(3入)", 3, 75, 8, "瓶"],
-        ["貝納頌榛果拿鐵(3入)", 3, 66, 4, "瓶"],
-        ["家樂福環保垃圾袋", 1, 42, 2, "卷"],
+        ["貝納頌經典拿鐵", 3, 75, 8, "瓶"],
+        ["貝納頌榛果拿鐵", 3, 66, 4, "瓶"],
+        ["清潔袋", 1, 42, 2, "卷"],
         ["聯翔鳳梨酥", 1, 30, 80, "個"],
         ["聯翔杏仁瓦片", 12, 336, 5, "包"],
         ["義美無糖豆奶", 24, 284, 1, "瓶"],
         ["原萃綠茶玉露", 4, 78, 4, "瓶"]
     ];
-
-    for (let i = 0; i < 5; i++) { data.push(["", 0, 0, 0, "個"]); }
 
     function render() {
         let totalAll = 0;
@@ -109,27 +106,25 @@
         tbody.innerHTML = '';
         
         data.forEach((item, i) => {
-            let subtotal = item[2] * item[3];
-            totalAll += subtotal;
+            let sub = item[2] * item[3];
+            totalAll += sub;
             let totalUnits = item[1] * item[3];
-            let noteContent = item[3] > 0 ? `共計 ${totalUnits} ${item[4]}` : "-";
+            let note = item[3] > 0 ? `👉 目前物資量：${totalUnits} ${item[4]}` : "-";
             
             tbody.innerHTML += `
                 <tr>
-                    <td data-label="項目" class="item-name-cell"><input type="text" value="${item[0]}" onchange="data[${i}][0]=this.value;render()"></td>
-                    <td data-label="組數"><input type="number" value="${item[1]}" oninput="updateVal(${i}, 1, this.value)"></td>
+                    <td class="text-left"><input type="text" value="${item[0]}" onchange="data[${i}][0]=this.value;render()"></td>
+                    <td data-label="入數"><input type="number" value="${item[1]}" oninput="updateVal(${i}, 1, this.value)"></td>
                     <td data-label="單價"><input type="number" value="${item[2]}" oninput="updateVal(${i}, 2, this.value)"></td>
                     <td data-label="數量"><input type="number" value="${item[3]}" oninput="updateVal(${i}, 3, this.value)"></td>
-                    <td data-label="金額" class="text-right v-line"><span class="subtotal">${subtotal.toLocaleString()}</span></td>
-                    <td data-label="總量"><span class="note-text">${noteContent}</span></td>
+                    <td data-label="小計" class="v-line"><span class="subtotal">${sub.toLocaleString()}</span></td>
+                    <td><span style="color:#d32f2f; font-weight:bold;">${note}</span></td>
                 </tr>`;
         });
 
         document.getElementById('total').innerText = totalAll.toLocaleString();
         let remain = 14000 - totalAll;
-        let remEl = document.getElementById('rem');
-        remEl.innerText = remain.toLocaleString();
-        remEl.style.color = remain < 0 ? "red" : "#333";
+        document.getElementById('rem').innerText = remain.toLocaleString();
     }
 
     function updateVal(index, field, val) {
