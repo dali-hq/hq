@@ -5,101 +5,98 @@
     <title>實毅營造-行腳物資管理</title>
     <style>
         body { font-family: "Microsoft JhengHei", sans-serif; background: #fffcf5; padding: 20px; color: #333; }
-        .box { max-width: 850px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border-top: 6px solid #d32f2f; }
+        .box { max-width: 950px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border-top: 6px solid #d32f2f; }
         h2 { text-align: center; color: #d32f2f; margin-bottom: 25px; }
         .summary { display: flex; justify-content: space-around; background: #fdf2f2; padding: 15px; margin-bottom: 20px; font-weight: bold; border-radius: 8px; border: 1px solid #f9dcdc; }
         .sum-box { text-align: center; }
         .sum-label { font-size: 14px; color: #666; display: block; }
         .sum-val { font-size: 20px; }
         table { width: 100%; border-collapse: collapse; }
-        th { border-bottom: 2px solid #eee; padding: 12px; font-size: 14px; background: #fafafa; color: #888; }
-        td { padding: 8px; border-bottom: 1px solid #f1f1f1; }
-        input { width: 90%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 15px; }
+        th { border-bottom: 2px solid #eee; padding: 12px; font-size: 13px; background: #fafafa; color: #888; }
+        td { padding: 8px 4px; border-bottom: 1px solid #f1f1f1; }
+        input { width: 90%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 14px; }
         input:focus { border-color: #d32f2f; outline: none; background: #fffafa; }
         .text-left { text-align: left; }
-        .text-right { text-align: right; padding-right: 20px; } /* 金額靠右並留點間距 */
+        .text-right { text-align: right; padding-right: 15px; }
         .subtotal { font-weight: bold; color: #d32f2f; font-family: Consolas, monospace; }
-        .item-input { text-align: left; width: 95%; }
-        .highlight { color: #d32f2f; }
+        .note-text { font-size: 13px; color: #666; }
+        .unit-hint { font-size: 12px; color: #999; display: block; }
     </style>
 </head>
 <body>
 <div class="box">
-    <h2>🏮 十八庄媽祖行腳物資管理 (預算 14k)</h2>
+    <h2>🏮 十八庄媽祖行腳物資管理</h2>
     <div class="summary">
         <div class="sum-box"><span class="sum-label">總預算</span><span class="sum-val">14,000</span></div>
         <div class="sum-box"><span class="sum-label">目前支出</span><span id="total" class="sum-val">0</span></div>
-        <div class="sum-box"><span class="sum-label">剩餘餘額</span><span id="rem" class="sum-val highlight">14,000</span></div>
+        <div class="sum-box"><span class="sum-label">剩餘餘額</span><span id="rem" class="sum-val">14,000</span></div>
     </div>
     <table>
         <thead>
             <tr>
-                <th width="35%">項目名稱</th>
-                <th width="15%">單價</th>
-                <th width="15%">數量</th>
-                <th width="35%" class="text-right">金額 (小計)</th>
+                <th width="25%">項目名稱</th>
+                <th width="10%">組數<br><small>(瓶/包/盒)</small></th>
+                <th width="12%">單價</th>
+                <th width="10%">數量</th>
+                <th width="15%" class="text-right">金額 (小計)</th>
+                <th width="28%">自動備註 (總計推算)</th>
             </tr>
         </thead>
-        <tbody id="list">
-            </tbody>
+        <tbody id="list"></tbody>
     </table>
 </div>
 
 <script>
-    // 預設清單數據
+    // 數據結構: [項目名, 單件組數, 單價, 數量, 單位名]
     const data = [
-        ["寶礦利 580ml (24瓶/箱)", 462, 2],
-        ["寶礦利(低卡) 580ml (24瓶/箱)", 462, 1],
-        ["悅氏礦泉水 600ml (24入)", 168, 2],
-        ["Simple 純水 280ml (24入)", 144, 2],
-        ["綜合堅果隨手包", 30, 120],
-        ["名糖檸檬鹽糖", 89, 3],
-        ["BF薄荷岩鹽檸檬糖(128G)", 62, 3],
-        ["貝納頌經典拿鐵 (3入)", 75, 8],
-        ["貝納頌榛果拿鐵 (3入)", 66, 4],
-        ["家樂福環保清潔袋-大", 42, 2],
-        ["聯翔鳳梨酥", 30, 80],
-        ["聯翔杏仁瓦片 (12包/盒)", 336, 5],
-        ["義美無糖豆奶 (箱)", 284, 1],
-        ["原萃綠茶玉露 (4入)", 78, 4]
+        ["寶礦利 580ml", 24, 462, 2, "瓶"],
+        ["寶礦利(低卡)", 24, 462, 1, "瓶"],
+        ["悅氏礦泉水 600ml", 24, 168, 2, "瓶"],
+        ["Simple 純水 280ml", 24, 144, 2, "瓶"],
+        ["綜合堅果隨手包", 1, 30, 120, "包"],
+        ["名糖檸檬鹽糖", 1, 89, 3, "包"],
+        ["BF薄荷岩鹽檸檬糖", 1, 62, 3, "包"],
+        ["貝納頌經典拿鐵(3入)", 3, 75, 8, "瓶"],
+        ["貝納頌榛果拿鐵(3入)", 3, 66, 4, "瓶"],
+        ["家樂福環保垃圾袋", 1, 42, 2, "卷"],
+        ["聯翔鳳梨酥", 1, 30, 80, "個"],
+        ["聯翔杏仁瓦片", 12, 336, 5, "包"],
+        ["義美無糖豆奶", 24, 284, 1, "瓶"],
+        ["原萃綠茶玉露", 4, 78, 4, "瓶"]
     ];
 
-    // 增加 13 個空白列 (原有的 8 個 + 新增的 5 個)
-    for (let i = 0; i < 13; i++) {
-        data.push(["", 0, 0]);
-    }
-
-    const tbody = document.getElementById('list');
+    // 新增 5 個空白列
+    for (let i = 0; i < 5; i++) { data.push(["", 0, 0, 0, "個"]); }
 
     function render() {
         let totalAll = 0;
+        const tbody = document.getElementById('list');
         tbody.innerHTML = '';
         
         data.forEach((item, i) => {
-            let subtotal = item[1] * item[2];
+            let subtotal = item[2] * item[3];
             totalAll += subtotal;
+            let totalUnits = item[1] * item[3];
+            let note = item[0] ? `共計 ${totalUnits} ${item[4]}` : "";
             
             tbody.innerHTML += `
                 <tr>
-                    <td class="text-left">
-                        <input type="text" class="item-input" value="${item[0]}" placeholder="點擊輸入項目..." onchange="data[${i}][0]=this.value">
-                    </td>
-                    <td>
-                        <input type="number" value="${item[1]}" oninput="updateVal(${i}, 1, this.value)">
-                    </td>
-                    <td>
-                        <input type="number" value="${item[2]}" oninput="updateVal(${i}, 2, this.value)">
-                    </td>
-                    <td class="text-right">
-                        <span class="subtotal">${subtotal.toLocaleString()}</span>
+                    <td class="text-left"><input type="text" value="${item[0]}" onchange="data[${i}][0]=this.value;render()"></td>
+                    <td><input type="number" value="${item[1]}" oninput="updateVal(${i}, 1, this.value)"></td>
+                    <td><input type="number" value="${item[2]}" oninput="updateVal(${i}, 2, this.value)"></td>
+                    <td><input type="number" value="${item[3]}" oninput="updateVal(${i}, 3, this.value)"></td>
+                    <td class="text-right"><span class="subtotal">${subtotal.toLocaleString()}</span></td>
+                    <td class="text-left note-text">
+                        ${note} <input type="text" placeholder="補充..." style="width:50%; border:none; background:transparent; text-align:left; color:#999;" onchange="render()">
                     </td>
                 </tr>`;
         });
 
         document.getElementById('total').innerText = totalAll.toLocaleString();
         let remain = 14000 - totalAll;
-        document.getElementById('rem').innerText = remain.toLocaleString();
-        document.getElementById('rem').style.color = remain < 0 ? "#d32f2f" : "#333";
+        let remEl = document.getElementById('rem');
+        remEl.innerText = remain.toLocaleString();
+        remEl.style.color = remain < 0 ? "#d32f2f" : "#333";
     }
 
     function updateVal(index, field, val) {
@@ -107,7 +104,6 @@
         render();
     }
 
-    // 初次載入
     render();
 </script>
 </body>
