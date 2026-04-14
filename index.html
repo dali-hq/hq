@@ -88,6 +88,14 @@
     @media (min-width: 601px) {
       .mobile-br { display: none; }
      }
+    @media (min-width: 1200px) {
+    .wide-result {
+        max-width: 1300px;
+        margin: 0 auto;
+        display: grid !important;
+        grid-template-columns: repeat(8, 1fr) !important;
+    }
+}
 </style>
 </head>
 <body>
@@ -101,9 +109,10 @@
         <button class="btn-clear" onclick="clearSearch()">清空</button>
       </div>
     </div>
-    <!-- 查詢結果 -->
-  <div id="result-display" class="result-container"></div>
   </div>
+</div>
+
+<div id="result-display" class="result-container wide-result"></div>
 
   <div id="page-new" style="display:none;">
     <h2 style="color: #27ae60;">🌱 新進同仁</h2>
@@ -177,13 +186,26 @@ function showPage(p) {
     `).join('') || "查無資料";
   }
 
-  function doSearch() {
-    const kw = document.getElementById('empId').value.toUpperCase().split(/[\s,]+/).filter(k => k !== "");
-    if(!kw.length) return;
-    const res = WORKER_DATA.filter(e => kw.some(k => e.id.toUpperCase().includes(k) || e.name.toUpperCase().includes(k)));
-    renderCards('result-display', res);
-  }
+function doSearch() {
+    // 取得外層的 card 容器
+    const cardElement = document.querySelector('.card');
+    
+    // 執行搜尋邏輯...
+    
+    // 當有搜尋結果時，加上 wide 讓它撐開
+    cardElement.classList.add('wide');
+}
 
+function clearSearch() {
+    const cardElement = document.querySelector('.card');
+    
+    // 清空邏輯...
+    
+    // 清空後恢復成窄版（手機寬度）
+    cardElement.classList.remove('wide');
+  document.getElementById('empId').value = ''; document.getElementById('result-display').innerHTML = ''; 
+}
+ 
 function loadNewComers() {
     const ids = ["31010", "36074", "36075", "36076", "36077", "36078", "36079", "36080"];
     const res = WORKER_DATA.filter(w => ids.includes(w.id.toString().trim()));
@@ -231,7 +253,7 @@ function loadNewComers() {
       list.map(e => `${e.id} ${e.name} (${e.start.slice(5)}~${e.end.slice(5)})`).join('<br>') : "今日無人休假";
   }
 
-  function clearSearch() { document.getElementById('empId').value = ''; document.getElementById('result-display').innerHTML = ''; }
+
 </script>
 </body>
 </html>
