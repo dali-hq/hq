@@ -3,68 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>實毅營造-行腳管理</title>
+    <title>實毅營造-行腳物資管理</title>
     <style>
         :root { --primary-red: #d32f2f; }
-        body { font-family: "Microsoft JhengHei", sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+        body { font-family: "Microsoft JhengHei", sans-serif; background: #fffcf5; margin: 0; padding: 0; color: #333; }
         
-        /* 頂部極簡固定列 */
-        .header {
+        /* 置頂區域 */
+        .sticky-header {
             position: sticky; top: 0; z-index: 1000;
             background: var(--primary-red); color: white;
-            padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-        .header h2 { margin: 0; font-size: 16px; flex: 1; }
-        .summary-mini { display: flex; gap: 10px; }
-        .sum-box { text-align: right; line-height: 1.2; }
-        .sum-box small { font-size: 10px; opacity: 0.8; display: block; }
-        .sum-box span { font-size: 14px; font-weight: bold; }
+        .sticky-header h2 { margin: 0 0 10px 0; font-size: 18px; text-align: center; }
+        .summary-bar { 
+            display: flex; justify-content: space-around; background: rgba(255,255,255,0.1); 
+            padding: 8px; border-radius: 6px; font-weight: bold;
+        }
+        .sum-item { text-align: center; }
+        .sum-label { font-size: 11px; opacity: 0.8; display: block; }
+        .sum-val { font-size: 16px; }
 
-        .content { max-width: 900px; margin: 0 auto; padding-bottom: 20px; }
+        /* 主內容區 */
+        .content { max-width: 1000px; margin: 15px auto; padding: 0 10px; }
         
-        /* 表格 PC 版 */
-        table { width: 100%; border-collapse: collapse; background: white; table-layout: fixed; }
-        th { background: #eee; padding: 10px 2px; font-size: 12px; }
-        td { padding: 8px 2px; border-bottom: 1px solid #eee; text-align: center; }
-        input { width: 90%; padding: 4px; border: 1px solid #ddd; border-radius: 3px; text-align: center; }
+        /* --- PC 版表格樣式 (預設) --- */
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; table-layout: fixed; display: table; }
+        thead { display: table-header-group; }
+        th { background: #f8f8f8; color: #666; padding: 12px 2px; font-size: 13px; border-bottom: 2px solid #eee; text-align: center; }
+        td { padding: 10px 2px; border-bottom: 1px solid #f1f1f1; text-align: center; }
+        
+        input { width: 90%; padding: 6px 2px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 14px; }
+        input:focus { border-color: var(--primary-red); outline: none; background: #fffafa; }
 
-        /* 手機版精簡樣式 */
+        .col-name { width: 28%; }
+        .col-unit { width: 45px; } 
+        .col-price { width: 75px; }
+        .col-qty { width: 50px; }  
+        .col-note { width: 20%; }
+        .col-sub { width: 95px; }
+
+        .text-left { text-align: left; padding-left: 10px; }
+        .text-right { text-align: right; padding-right: 15px; }
+        .v-line-left { border-left: 1px solid #eee; }
+        .subtotal { font-weight: bold; color: var(--primary-red); font-family: Consolas, monospace; }
+
+        /* --- 手機版極簡佈局 --- */
         @media screen and (max-width: 600px) {
             thead { display: none; }
-            tr { 
-                display: block; background: white; margin-bottom: 4px; 
-                padding: 8px 12px; border-bottom: 1px solid #ddd;
-            }
-            td { display: block; width: 100% !important; padding: 2px 0 !important; text-align: left !important; border: none !important; }
-            
-            /* 第一行：名稱 (左) 與 小計 (右) */
-            .row-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-            .item-title { font-weight: bold; width: 65% !important; }
-            .item-title input { text-align: left; border: none; background: transparent; font-size: 15px; width: 100%; }
-            .item-subtotal { width: 30% !important; text-align: right !important; color: var(--primary-red); font-weight: bold; font-size: 16px; }
+            table, tbody, tr, td { display: block; width: 100%; }
+            tr { padding: 10px 8px; border-bottom: 1px solid #eee; background: white; margin-bottom: 2px; }
+            td { border: none !important; padding: 2px 0 !important; }
 
-            /* 第二行：參數橫排 (組 / 單價 / 數量 / 總量) */
-            .row-params { display: flex; gap: 5px; font-size: 11px; color: #666; align-items: center; }
-            .row-params div { display: flex; align-items: center; }
-            .row-params input { width: 35px; margin: 0 2px; padding: 2px; font-size: 11px; }
-            .total-hint { margin-left: auto; color: #2ecc71; font-weight: bold; }
+            /* 手機版：第一行 (名稱與小計) */
+            .row-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+            .item-name-cell { flex: 2; text-align: left !important; }
+            .item-name-cell input { text-align: left; border: none; font-weight: bold; font-size: 16px; background: transparent; padding: 0; }
+            .item-sub-cell { flex: 1; text-align: right !important; font-size: 17px; }
+
+            /* 手機版：第二行 (組/單價/數量/提示) */
+            .row-bottom { display: flex; align-items: center; font-size: 12px; color: #666; gap: 8px; }
+            .param-group { display: flex; align-items: center; }
+            .param-group input { width: 38px; height: 22px; margin: 0 3px; font-size: 12px; padding: 1px; }
+            .mobile-note { margin-left: auto; color: #27ae60; font-weight: bold; font-size: 11px; }
+            
+            /* 隱藏 PC 專用的 td 結構，改用彈性佈局容器 */
+            .pc-only { display: none !important; }
         }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h2>🏮 行腳物資管理</h2>
-    <div class="summary-mini">
-        <div class="sum-box"><small>支出</small><span id="total">0</span></div>
-        <div class="sum-box"><small>剩餘</small><span id="rem">14,000</span></div>
+<div class="sticky-header">
+    <h2>🏮 十八庄行腳物資管理</h2>
+    <div class="summary-bar">
+        <div class="sum-item"><span class="sum-label">總預算</span><span class="sum-val">14,000</span></div>
+        <div class="sum-item"><span class="sum-label">已支出</span><span id="total" class="sum-val">0</span></div>
+        <div class="sum-item"><span class="sum-label">剩餘</span><span id="rem" class="sum-val">14,000</span></div>
     </div>
 </div>
 
 <div class="content">
-    <table id="mainTable">
+    <table>
+        <thead>
+            <tr>
+                <th class="col-name">項目名稱</th>
+                <th class="col-unit">組</th>
+                <th class="col-price">單價</th>
+                <th class="col-qty">數量</th>
+                <th class="col-note">物資總量</th>
+                <th class="col-sub v-line-left text-right">小計金額</th>
+            </tr>
+        </thead>
         <tbody id="list"></tbody>
     </table>
+    <div style="height: 50px;"></div>
 </div>
 
 <script>
@@ -96,22 +128,38 @@
             let sub = item[2] * item[3]; 
             totalAll += sub;
             let totalUnits = item[1] * item[3];
-            let note = (item[0] && item[3] > 0) ? `(共${totalUnits}${item[4]})` : "";
+            let note = (item[0] && item[3] > 0) ? `共${totalUnits}${item[4]}` : "";
             
+            // 為了同時相容 PC 與 手機，我們在 JS 生成時放入兩種結構，透過 CSS 控制顯示
             tbody.innerHTML += `
                 <tr>
-                    <td class="row-top">
-                        <div class="item-title"><input type="text" value="${item[0]}" onchange="data[${i}][0]=this.value;render()"></div>
-                        <div class="item-subtotal">$${sub.toLocaleString()}</div>
+                    <td class="item-name-cell text-left row-top">
+                        <div class="item-name-cell"><input type="text" value="${item[0]}" onchange="data[${i}][0]=this.value;render()"></div>
+                        <div class="item-sub-cell subtotal pc-only-hide text-right" style="display:none">$${sub.toLocaleString()}</div>
                     </td>
-                    <td class="row-params">
-                        <div>組<input type="number" value="${item[1]}" oninput="updateVal(${i}, 1, this.value)"></div>
-                        <div>$ <input type="number" value="${item[2]}" oninput="updateVal(${i}, 2, this.value)"></div>
-                        <div>x <input type="number" value="${item[3]}" oninput="updateVal(${i}, 3, this.value)"></div>
-                        <div class="total-hint">${note}</div>
+                    
+                    <td class="pc-only col-unit"><input type="number" value="${item[1]}" oninput="updateVal(${i}, 1, this.value)"></td>
+                    <td class="pc-only col-price"><input type="number" value="${item[2]}" oninput="updateVal(${i}, 2, this.value)"></td>
+                    <td class="pc-only col-qty"><input type="number" value="${item[3]}" oninput="updateVal(${i}, 3, this.value)"></td>
+                    
+                    <td class="row-bottom pc-only-hide" style="display:none">
+                        <div class="param-group">組<input type="number" value="${item[1]}" oninput="updateVal(${i}, 1, this.value)"></div>
+                        <div class="param-group">$<input type="number" value="${item[2]}" oninput="updateVal(${i}, 2, this.value)"></div>
+                        <div class="param-group">x<input type="number" value="${item[3]}" oninput="updateVal(${i}, 3, this.value)"></div>
+                        <div class="mobile-note">${note}</div>
                     </td>
+
+                    <td class="pc-only col-note" style="font-size:13px">${note || "-"}</td>
+                    <td class="pc-only col-sub text-right v-line-left"><span class="subtotal">${sub.toLocaleString()}</span></td>
                 </tr>`;
         });
+
+        // 處理手機版顯示邏輯 (用簡單方式切換)
+        const isMobile = window.innerWidth <= 600;
+        const hides = document.querySelectorAll(isMobile ? '.pc-only' : '.pc-only-hide');
+        hides.forEach(el => el.style.setProperty('display', 'none', 'important'));
+        const shows = document.querySelectorAll(isMobile ? '.pc-only-hide' : '.pc-only');
+        shows.forEach(el => el.style.setProperty('display', isMobile ? 'flex' : 'table-cell', 'important'));
 
         document.getElementById('total').innerText = totalAll.toLocaleString();
         let remain = 14000 - totalAll;
@@ -124,6 +172,7 @@
         data[index][field] = parseFloat(val) || 0;
         render();
     }
+    window.onresize = render;
     render();
 </script>
 </body>
