@@ -9,9 +9,19 @@
   <style>
     body { font-family: "Microsoft JhengHei", sans-serif; text-align: center; background: #f5f7fa; padding: 15px; margin: 0; }
     
-    /* 基礎容器：預設手機寬度 */
-    .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: inline-block; width: 100%; max-width: 450px; box-sizing: border-box; margin-top: 10px; transition: max-width 0.3s; }
-    
+/* 基礎容器修正 */
+.card { 
+    background: white; 
+    padding: 25px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
+    display: block; /* 改為 block 比較好控制寬度 */
+    width: 100%; 
+    max-width: 450px; 
+    box-sizing: border-box; 
+    margin: 10px auto; /* 改為 auto 確保在電腦版也是置中 */
+    transition: max-width 0.3s; 
+}
     /* 搜尋區域始終保持集中 */
     .search-section { max-width: 400px; margin: 0 auto; }
     input { padding: 15px; border: 2px solid #ddd; border-radius: 6px; font-size: 18px; outline: none; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
@@ -47,15 +57,26 @@
 
     #off-duty-box { margin-top: 30px; padding: 15px; background: #fff0f0; border-radius: 12px; border: 1px solid #ffcccc; text-align: left; font-size: 14px; max-width: 450px; margin: 30px auto 0 auto; }
 
-    /* 電腦版大螢幕優化：查詢結果、新進、一覽都要撐開並排 */
-    @media (min-width: 1200px) {
-      /* 只有轉出人員名單維持窄版，其他有照片的都變寬 */
-      .card.wide { max-width: 1300px !important; width: 95% !important; }
-      
-      /* 設定照片並排：一排 8 員 */
-      .result-container { display: grid !important; grid-template-columns: repeat(8, 1fr) !important; gap: 12px; max-width: none !important; }
-      .emp-card { width: 100% !important; }
+/* 電腦版大螢幕優化 */
+@media (min-width: 1024px) { /* 門檻調降到 1024px */
+    .card.wide { 
+        max-width: 1200px !important; /* 電腦版最大寬度 */
+        width: 95% !important; 
     }
+    
+    /* 設定照片並排：電腦版改用 grid 佈局 */
+    .result-container { 
+        display: grid !important; 
+        /* 讓它自動根據寬度填滿，每張卡片最小 140px，就不會縮得太小 */
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important; 
+        gap: 15px; 
+        max-width: none !important; 
+    }
+    
+    .emp-card { 
+        width: 100% !important; 
+    }
+}
     /* 讓手機版斷行生效的關鍵 */
 
     @media (max-width: 600px) {
