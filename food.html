@@ -8,50 +8,43 @@
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: #f2f2f2; color: #1a1a1a; padding: 20px; line-height: 1.6; }
         .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
         
-        /* 菜單連結按鈕區 */
-        .menu-links-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; padding-bottom: 25px; border-bottom: 2px solid #1a3317; }
-        .menu-btn { 
-            display: flex; 
+        h1 { text-align: center; color: #003366; font-weight: 900; margin-top: 0; font-size: 2.2em; margin-bottom: 10px; }
+        
+        /* 簡約連結區 */
+        .menu-nav { text-align: center; margin-bottom: 20px; font-size: 1.1em; }
+        .menu-link { 
+            display: inline-flex; 
             align-items: center; 
-            gap: 10px; 
-            padding: 12px 25px; 
-            background-color: #fdfaf5; 
-            border: 2px solid #1a3317; 
-            border-radius: 50px; 
-            color: #1a3317; 
+            color: #003366; 
             text-decoration: none; 
-            font-weight: 800; 
-            transition: all 0.3s;
+            margin: 0 15px; 
+            font-weight: bold;
+            transition: color 0.2s;
         }
-        .menu-btn:hover { background-color: #1a3317; color: #ffffff; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .menu-icon { font-size: 1.4em; }
+        .menu-link:hover { color: #d00; text-decoration: underline; }
+        .menu-link i { margin-right: 5px; font-style: normal; font-size: 1.2em; }
 
-        h1 { text-align: center; color: #1a3317; font-weight: 900; margin-top: 0; font-size: 2.2em; }
-        p.subtitle { text-align: center; color: #333; margin-bottom: 30px; font-weight: bold; background: #fff3cd; display: inline-block; width: 100%; padding: 10px 0; border-radius: 4px; }
+        p.subtitle { text-align: center; color: #333; margin-bottom: 30px; font-weight: bold; background: #e6f0ff; display: inline-block; width: 100%; padding: 10px 0; border-radius: 4px; }
         
-        .section-header { background: #d1c7ac; padding: 12px 15px; border-radius: 4px; margin-top: 40px; font-weight: bold; color: #221100; display: flex; justify-content: space-between; border-left: 8px solid #1a3317; font-size: 1.1em; }
+        .section-header { background: #b8c6db; padding: 12px 15px; border-radius: 4px; margin-top: 40px; font-weight: bold; color: #003366; display: flex; justify-content: space-between; border-left: 8px solid #003366; font-size: 1.1em; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
-        th { background-color: #e8e8e8; color: #000; padding: 15px; border: 1px solid #bbb; font-size: 1.05em; }
-        td { padding: 12px; border: 1px solid #ccc; vertical-align: middle; }
+        .table-wrapper { border: 2px solid #003366; border-radius: 12px; overflow: hidden; margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        th { background-color: #e6f0ff; color: #003366; padding: 15px; border: 1px solid #003366; font-size: 1.05em; }
+        td { padding: 12px; border: 1px solid #003366; vertical-align: middle; background-color: #fff; }
         
         .name-cell { text-align: center; font-weight: 800; font-size: 1.1em; color: #000; }
-        .price-cell { color: #a52a2a; font-weight: 900; text-align: center; font-size: 1.1em; }
-        .qty-input { width: 80%; padding: 10px; border: 2px solid #999; border-radius: 4px; text-align: center; font-size: 1.1em; font-weight: bold; }
-        .note-input { width: 95%; padding: 10px; border: 1px solid #888; border-radius: 4px; font-size: 1em; color: #000; }
+        .price-cell { color: #d00; font-weight: 900; text-align: center; font-size: 1.1em; }
+        .qty-input { width: 80%; padding: 10px; border: 2px solid #003366; border-radius: 6px; text-align: center; font-size: 1.1em; font-weight: bold; color: #003366; }
+        .note-input { width: 92%; padding: 10px; border: 1px solid #003366; border-radius: 6px; font-size: 1em; color: #000; }
         
-        .summary-box { margin-top: 50px; padding: 30px; background: #fdfdfd; border: 3px solid #1a3317; border-radius: 12px; }
+        .summary-box { margin-top: 50px; padding: 30px; background: #fdfdfd; border: 3px solid #003366; border-radius: 15px; }
         .calc-row { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.3em; font-weight: bold; }
         .discount-active { color: #d00; font-weight: 900; text-decoration: underline; }
-        .final-row { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 20px; border-top: 3px solid #1a3317; font-size: 1.8em; font-weight: 900; color: #1a3317; }
+        .final-row { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 20px; border-top: 3px solid #003366; font-size: 1.8em; font-weight: 900; color: #003366; }
         
-        tr:hover { background-color: #f2f6f1; }
-        input:focus { border-color: #1a3317; outline: none; background-color: #fff9e6; }
-        
-        @media (max-width: 600px) {
-            .menu-links-container { flex-direction: column; align-items: center; }
-            .menu-btn { width: 80%; justify-content: center; }
-        }
+        tr:hover td { background-color: #f0f7ff; }
+        input:focus { border-color: #003366; outline: none; background-color: #e6f0ff; }
     </style>
 </head>
 <body>
@@ -59,52 +52,56 @@
 <div class="container">
     <h1>食見生活 Foodlosophy</h1>
     
-    <div class="menu-links-container">
-        <a href="https://raw.githubusercontent.com/dali-hq/hq/main/%E9%A3%9F%E8%A6%8B%E7%94%9F%E6%B4%BB-%E8%8F%9C%E5%96%AE.png" target="_blank" class="menu-btn">
-            <span class="menu-icon">📄</span> 檢視菜單正面
+    <div class="menu-nav">
+        <a href="https://drive.google.com/file/d/17wd1ItKC39-3tL27oEhPkx46F2Y-nWed/view" target="_blank" class="menu-link">
+            <i>🍱</i> 菜單正面
         </a>
-        <a href="https://drive.google.com/file/d/1YbIxfqbytDTd-oZuFGwGZXV8sXcohrQC/view" target="_blank" class="menu-btn">
-            <span class="menu-icon">📄</span> 檢視菜單背面
+        <a href="https://drive.google.com/file/d/1YbIxfqbytDTd-oZuFGwGZXV8sXcohrQC/view" target="_blank" class="menu-link">
+            <i>🥝</i> 菜單背面
         </a>
     </div>
 
     <p class="subtitle">團購統計表 (滿 $1000 九折 / 滿 $2000 八五折)</p>
 
     <div class="section-header"><span>雙拼主餐區 Double-Combo</span><span>外送單價</span></div>
-    <table>
-        <thead>
-            <tr><th width="25%">品項</th><th width="15%">單價</th><th width="15%">數量</th><th width="45%">備註 (填寫人名)</th></tr>
-        </thead>
-        <tbody>
-            <tr data-price="230"><td class="name-cell">酥嫩雙雞餐</td><td class="price-cell">$230</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input" placeholder="請填寫人名"></td></tr>
-            <tr data-price="240"><td class="name-cell">松阪翅客餐</td><td class="price-cell">$240</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-            <tr data-price="250"><td class="name-cell">特選豚牛餐</td><td class="price-cell">$250</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-            <tr data-price="280"><td class="name-cell">極炙鱸牛餐</td><td class="price-cell">$280</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-        </tbody>
-    </table>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr><th width="25%">品項</th><th width="15%">單價</th><th width="15%">數量</th><th width="45%">備註 (填寫人名)</th></tr>
+            </thead>
+            <tbody>
+                <tr data-price="230"><td class="name-cell">酥嫩雙雞餐</td><td class="price-cell">$230</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input" placeholder="填寫人名"></td></tr>
+                <tr data-price="240"><td class="name-cell">松阪翅客餐</td><td class="price-cell">$240</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="250"><td class="name-cell">特選豚牛餐</td><td class="price-cell">$250</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="280"><td class="name-cell">極炙鱸牛餐</td><td class="price-cell">$280</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+            </tbody>
+        </table>
+    </div>
 
     <div class="section-header"><span>經典主餐區 Classic Mains</span><span>外送單價</span></div>
-    <table>
-        <thead>
-            <tr><th width="25%">品項</th><th width="15%">單價</th><th width="15%">數量</th><th width="45%">備註 (填寫人名)</th></tr>
-        </thead>
-        <tbody>
-            <tr data-price="140"><td class="name-cell">蔥油手撕雞餐</td><td class="price-cell">$140</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-            <tr data-price="150"><td class="name-cell">經典嫩雞胸餐</td><td class="price-cell">$150</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-            <tr data-price="160"><td class="name-cell">紐奧良雞翅餐</td><td class="price-cell">$160</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-            <tr data-price="180"><td class="name-cell">香草雞腿排餐</td><td class="price-cell">$180</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-            <tr data-price="180"><td class="name-cell">嫩煎骰子牛餐</td><td class="price-cell">$180</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-            <tr data-price="180"><td class="name-cell">香烤松阪豬餐</td><td class="price-cell">$180</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-            <tr data-price="170"><td class="name-cell">秘製豬里肌餐</td><td class="price-cell">$170</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-            <tr data-price="200"><td class="name-cell">金焰烤鮭魚餐</td><td class="price-cell">$200</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-            <tr data-price="200"><td class="name-cell">香鱸魚卵片餐</td><td class="price-cell">$200</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-        </tbody>
-    </table>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr><th width="25%">品項</th><th width="15%">單價</th><th width="15%">數量</th><th width="45%">備註 (填寫人名)</th></tr>
+            </thead>
+            <tbody>
+                <tr data-price="140"><td class="name-cell">蔥油手撕雞餐</td><td class="price-cell">$140</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="150"><td class="name-cell">經典嫩雞胸餐</td><td class="price-cell">$150</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="160"><td class="name-cell">紐奧良雞翅餐</td><td class="price-cell">$160</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="180"><td class="name-cell">香草雞腿排餐</td><td class="price-cell">$180</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="180"><td class="name-cell">嫩煎骰子牛餐</td><td class="price-cell">$180</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="180"><td class="name-cell">香烤松阪豬餐</td><td class="price-cell">$180</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="170"><td class="name-cell">秘製豬里肌餐</td><td class="price-cell">$170</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="200"><td class="name-cell">金焰烤鮭魚餐</td><td class="price-cell">$200</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="200"><td class="name-cell">香鱸魚卵片餐</td><td class="price-cell">$200</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+            </tbody>
+        </table>
+    </div>
 
     <div class="summary-box">
-        <div class="calc-row"><span>原始總金額：</span><span>$<span id="raw-total">0</span></span></div>
-        <div class="calc-row"><span>折扣狀態：</span><span id="discount-desc" class="discount-active">尚未達標</span></div>
-        <div class="final-row"><span>實付金額：</span><span>$<span id="final-total">0</span></span></div>
+        <div class="calc-row"><span>原始總計：</span><span>$<span id="raw-total">0</span></span></div>
+        <div class="calc-row"><span>折扣狀態：</span><span id="discount-desc" class="discount-active">無折扣</span></div>
+        <div class="final-row"><span>實付總額：</span><span>$<span id="final-total">0</span></span></div>
     </div>
 </div>
 
