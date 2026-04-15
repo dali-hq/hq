@@ -6,7 +6,7 @@
     <title>食見生活 - 團購統計</title>
     <style>
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: #f2f2f2; color: #1a1a1a; padding: 20px; line-height: 1.6; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+        .container { max-width: 950px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
         
         h1 { text-align: center; color: #003366; font-weight: 900; margin-top: 0; font-size: 2.2em; margin-bottom: 10px; }
         
@@ -27,13 +27,15 @@
         
         .table-wrapper { border: 2px solid #003366; border-radius: 12px; overflow: hidden; margin-top: 15px; }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        th { background-color: #e6f0ff; color: #003366; padding: 15px; border: 1px solid #003366; font-size: 1.05em; }
-        td { padding: 12px; border: 1px solid #003366; vertical-align: middle; background-color: #fff; }
+        th { background-color: #e6f0ff; color: #003366; padding: 12px 5px; border: 1px solid #003366; font-size: 1em; text-align: center; }
+        td { padding: 10px 5px; border: 1px solid #003366; vertical-align: middle; background-color: #fff; text-align: center; }
         
-        .name-cell { text-align: center; font-weight: 800; font-size: 1.1em; color: #000; }
-        .price-cell { color: #d00; font-weight: 900; text-align: center; font-size: 1.1em; }
-        .qty-input { width: 80%; padding: 10px; border: 2px solid #003366; border-radius: 6px; text-align: center; font-size: 1.1em; font-weight: bold; color: #003366; }
-        .note-input { width: 92%; padding: 10px; border: 1px solid #003366; border-radius: 6px; font-size: 1em; color: #000; }
+        .name-cell { font-weight: 800; font-size: 1.05em; color: #000; text-align: left; padding-left: 15px; }
+        .price-cell { color: #444; font-weight: bold; }
+        .subtotal-cell { color: #d00; font-weight: 900; font-size: 1.1em; }
+        
+        .qty-input { width: 70%; padding: 8px; border: 2px solid #003366; border-radius: 6px; text-align: center; font-size: 1.1em; font-weight: bold; color: #003366; }
+        .note-input { width: 90%; padding: 8px; border: 1px solid #003366; border-radius: 6px; font-size: 0.95em; color: #000; }
         
         .summary-box { margin-top: 50px; padding: 30px; background: #fdfdfd; border: 3px solid #003366; border-radius: 15px; }
         .rule-row { text-align: center; color: #333; font-weight: bold; background: #e6f0ff; padding: 8px; border-radius: 6px; margin-bottom: 20px; font-size: 1em; border: 1px dashed #003366; }
@@ -43,6 +45,13 @@
         
         tr:hover td { background-color: #f0f7ff; }
         input:focus { border-color: #003366; outline: none; background-color: #e6f0ff; }
+
+        /* 針對手機版的欄位寬度調整 */
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            th, td { font-size: 0.9em; padding: 8px 2px; }
+            .name-cell { padding-left: 5px; }
+        }
     </style>
 </head>
 <body>
@@ -63,13 +72,19 @@
     <div class="table-wrapper">
         <table>
             <thead>
-                <tr><th width="25%">品項</th><th width="15%">單價</th><th width="15%">數量</th><th width="45%">備註 (填寫人名)</th></tr>
+                <tr>
+                    <th width="22%">品項</th>
+                    <th width="12%">單價</th>
+                    <th width="12%">數量</th>
+                    <th width="15%">小計</th>
+                    <th width="39%">備註 (填寫人名)</th>
+                </tr>
             </thead>
             <tbody>
-                <tr data-price="230"><td class="name-cell">酥嫩雙雞餐</td><td class="price-cell">$230</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input" placeholder="填寫人名"></td></tr>
-                <tr data-price="240"><td class="name-cell">松阪翅客餐</td><td class="price-cell">$240</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-                <tr data-price="250"><td class="name-cell">特選豚牛餐</td><td class="price-cell">$250</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-                <tr data-price="280"><td class="name-cell">極炙鱸牛餐</td><td class="price-cell">$280</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="230"><td class="name-cell">酥嫩雙雞餐</td><td class="price-cell">$230</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input" placeholder="填寫人名"></td></tr>
+                <tr data-price="240"><td class="name-cell">松阪翅客餐</td><td class="price-cell">$240</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="250"><td class="name-cell">特選豚牛餐</td><td class="price-cell">$250</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="280"><td class="name-cell">極炙鱸牛餐</td><td class="price-cell">$280</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input"></td></tr>
             </tbody>
         </table>
     </div>
@@ -78,24 +93,30 @@
     <div class="table-wrapper">
         <table>
             <thead>
-                <tr><th width="25%">品項</th><th width="15%">單價</th><th width="15%">數量</th><th width="45%">備註 (填寫人名)</th></tr>
+                <tr>
+                    <th width="22%">品項</th>
+                    <th width="12%">單價</th>
+                    <th width="12%">數量</th>
+                    <th width="15%">小計</th>
+                    <th width="39%">備註 (填寫人名)</th>
+                </tr>
             </thead>
             <tbody>
-                <tr data-price="140"><td class="name-cell">蔥油手撕雞餐</td><td class="price-cell">$140</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-                <tr data-price="150"><td class="name-cell">經典嫩雞胸餐</td><td class="price-cell">$150</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-                <tr data-price="160"><td class="name-cell">紐奧良雞翅餐</td><td class="price-cell">$160</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-                <tr data-price="180"><td class="name-cell">香草雞腿排餐</td><td class="price-cell">$180</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-                <tr data-price="180"><td class="name-cell">嫩煎骰子牛餐</td><td class="price-cell">$180</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-                <tr data-price="180"><td class="name-cell">香烤松阪豬餐</td><td class="price-cell">$180</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-                <tr data-price="170"><td class="name-cell">秘製豬里肌餐</td><td class="price-cell">$170</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-                <tr data-price="200"><td class="name-cell">金焰烤鮭魚餐</td><td class="price-cell">$200</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
-                <tr data-price="200"><td class="name-cell">香鱸魚卵片餐</td><td class="price-cell">$200</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="140"><td class="name-cell">蔥油手撕雞餐</td><td class="price-cell">$140</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="150"><td class="name-cell">經典嫩雞胸餐</td><td class="price-cell">$150</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="160"><td class="name-cell">紐奧良雞翅餐</td><td class="price-cell">$160</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="180"><td class="name-cell">香草雞腿排餐</td><td class="price-cell">$180</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="180"><td class="name-cell">嫩煎骰子牛餐</td><td class="price-cell">$180</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="180"><td class="name-cell">香烤松阪豬餐</td><td class="price-cell">$180</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="170"><td class="name-cell">秘製豬里肌餐</td><td class="price-cell">$170</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="200"><td class="name-cell">金焰烤鮭魚餐</td><td class="price-cell">$200</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input"></td></tr>
+                <tr data-price="200"><td class="name-cell">香鱸魚卵片餐</td><td class="price-cell">$200</td><td><input type="number" class="qty-input" min="0" value="0" onchange="calculate()"></td><td class="subtotal-cell">$0</td><td><input type="text" class="note-input"></td></tr>
             </tbody>
         </table>
     </div>
 
     <div class="summary-box">
-        <div class="rule-row">外送：滿 $1000 九折 / 滿 $2000 八五折</div>
+        <div class="rule-row">團購折扣：滿 $1000 九折 / 滿 $2000 八五折</div>
         
         <div class="calc-row"><span>原始總計：</span><span>$<span id="raw-total">0</span></span></div>
         <div class="calc-row"><span>折扣狀態：</span><span id="discount-desc" class="discount-active">無折扣</span></div>
@@ -109,12 +130,21 @@
         document.querySelectorAll('tbody tr').forEach(row => {
             const price = parseInt(row.getAttribute('data-price'));
             const qty = parseInt(row.querySelector('.qty-input').value) || 0;
-            rawTotal += price * qty;
+            const subtotal = price * qty;
+            
+            // 更新每一列的小計
+            row.querySelector('.subtotal-cell').innerText = '$' + subtotal.toLocaleString();
+            
+            rawTotal += subtotal;
         });
+        
+        // 更新底部總計
         document.getElementById('raw-total').innerText = rawTotal.toLocaleString();
+        
         let ratio = 1, txt = "無折扣";
         if (rawTotal >= 2000) { ratio = 0.85; txt = "已享 85 折！"; }
         else if (rawTotal >= 1000) { ratio = 0.9; txt = "已享 9 折！"; }
+        
         document.getElementById('discount-desc').innerText = txt;
         document.getElementById('final-total').innerText = Math.round(rawTotal * ratio).toLocaleString();
     }
