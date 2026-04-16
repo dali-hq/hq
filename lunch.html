@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>食見生活-餐盒 訂購系統</title>
+    <title>食見生活-餐盒 訂餐統計</title>
     <style>
         body { font-family: "Microsoft JhengHei", sans-serif; max-width: 500px; margin: 10px auto; padding: 15px; background-color: #f2f2f2; }
         h2 { color: #2c3e50; text-align: center; font-style: normal; margin-bottom: 20px; }
         
-        /* 圖片連結樣式 */
         .menu-section { 
             margin-bottom: 20px; 
             display: flex; 
@@ -21,33 +20,26 @@
         .menu-link { text-decoration: none; color: #d35400; font-weight: bold; font-size: 18px; }
         .menu-link i { font-style: normal; margin-right: 5px; }
         
-        /* 訂單容器 */
         .container { 
             background: white; 
-            padding: 20px; 
+            padding: 25px; 
             border-radius: 15px; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
-            margin-bottom: 25px; 
-            border-top: 5px solid #e67e22;
+            border-top: 6px solid #e67e22;
         }
         
-        .order-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 15px; 
-        }
-        .order-title { background: #e67e22; color: white; padding: 3px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; }
-
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 6px; font-weight: bold; color: #34495e; font-style: normal; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #34495e; font-style: normal; }
         input, select, textarea { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; background-color: #fafafa; }
         
-        button { width: 100%; padding: 14px; background-color: #2c3e50; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 17px; font-weight: bold; transition: 0.2s; }
+        /* 強化自填欄位的提示感 */
+        .custom-input { border: 1.5px solid #e67e22; background-color: #fff9f4; }
+        
+        button { width: 100%; padding: 15px; background-color: #2c3e50; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; transition: 0.2s; margin-top: 10px; }
         button:hover { background-color: #1a252f; }
         button:disabled { opacity: 0.5; cursor: not-allowed; }
         
-        .status { margin-top: 12px; text-align: center; font-weight: bold; min-height: 20px; font-size: 14px; }
+        .status { margin-top: 15px; text-align: center; font-weight: bold; min-height: 24px; font-style: normal; }
         optgroup { font-style: normal; font-weight: bold; color: #2c3e50; }
     </style>
 </head>
@@ -64,69 +56,69 @@
         </a>
     </div>
 
-    <script>
-        // 定義菜單內容，方便重複使用
-        const menuOptions = `
-            <option value="">-- 請點擊選擇 --</option>
-            <optgroup label="【雙拼系列】">
-                <option value="雙拼-秘製排骨+嫩煎雞腿">秘製排骨 + 嫩煎雞腿</option>
-                <option value="雙拼-蒲燒鰻魚+嫩煎雞腿">蒲燒鰻魚 + 嫩煎雞腿</option>
-                <option value="雙拼-鹽烤鮭魚+嫩煎雞腿">鹽烤鮭魚 + 嫩煎雞腿</option>
-                <option value="雙拼-厚切豬排+嫩煎雞腿">厚切豬排 + 嫩煎雞腿</option>
-            </optgroup>
-            <optgroup label="【一般項目】">
-                <option value="一般-秘製厚切排骨">秘製厚切排骨</option>
-                <option value="一般-香煎嫩肉雞腿">香煎嫩肉雞腿</option>
-                <option value="一般-手作日式豬排">手作日式豬排</option>
-                <option value="一般-薄鹽現烤鮭魚">薄鹽現烤鮭魚</option>
-                <option value="一般-日式蒲燒鰻魚">日式蒲燒鰻魚</option>
-                <option value="一般-低脂時蔬(素)">低脂時蔬 (素)</option>
-            </optgroup>
-        `;
+    <div class="container">
+        <div class="form-group">
+            <label for="food">選擇餐點</label>
+            <select id="food">
+                <option value="">-- 請選擇或選「單點自填」 --</option>
+                <option value="單點/自填項目">➜ 點此「單點或自填」</option>
+                <optgroup label="【雙拼系列】">
+                    <option value="雙拼-秘製排骨+嫩煎雞腿">秘製排骨 + 嫩煎雞腿</option>
+                    <option value="雙拼-蒲燒鰻魚+嫩煎雞腿">蒲燒鰻魚 + 嫩煎雞腿</option>
+                    <option value="雙拼-鹽烤鮭魚+嫩煎雞腿">鹽烤鮭魚 + 嫩煎雞腿</option>
+                    <option value="雙拼-厚切豬排+嫩煎雞腿">厚切豬排 + 嫩煎雞腿</option>
+                </optgroup>
+                <optgroup label="【一般項目】">
+                    <option value="一般-秘製厚切排骨">秘製厚切排骨</option>
+                    <option value="一般-香煎嫩肉雞腿">香煎嫩肉雞腿</option>
+                    <option value="一般-手作日式豬排">手作日式豬排</option>
+                    <option value="一般-薄鹽現烤鮭魚">薄鹽現烤鮭魚</option>
+                    <option value="一般-日式蒲燒鰻魚">日式蒲燒鰻魚</option>
+                    <option value="一般-低脂時蔬(素)">低脂時蔬 (素)</option>
+                </optgroup>
+            </select>
+        </div>
 
-        // 產出三組 HTML
-        for (let i = 1; i <= 3; i++) {
-            document.write(`
-                <div class="container" id="order${i}">
-                    <div class="order-header">
-                        <span class="order-title">第 ${i} 份訂單</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="food${i}">選擇餐點</label>
-                        <select id="food${i}">${menuOptions}</select>
-                    </div>
+        <div class="form-group">
+            <label for="customFood">單點/自填項目 (若非選項內請填此)</label>
+            <input type="text" id="customFood" class="custom-input" placeholder="例如：單點雞腿、加購半顆蛋">
+        </div>
 
-                    <div class="form-group">
-                        <label for="name${i}">名字</label>
-                        <input type="text" id="name${i}" placeholder="填寫姓名">
-                    </div>
+        <div class="form-group">
+            <label for="name">名字</label>
+            <input type="text" id="name" placeholder="*請填寫名字*">
+        </div>
 
-                    <div class="form-group">
-                        <label for="note${i}">特殊要求</label>
-                        <textarea id="note${i}" rows="1" placeholder="若無可不填"></textarea>
-                    </div>
+        <div class="form-group">
+            <label for="note">特殊要求 (如：飯少、不辣)</label>
+            <textarea id="note" rows="1" placeholder="若無可不填"></textarea>
+        </div>
 
-                    <button onclick="sendOrder(${i})" id="btn${i}">提交訂單 ${i}</button>
-                    <div id="status${i}" class="status"></div>
-                </div>
-            `);
-        }
-    </script>
+        <button onclick="sendOrder()" id="submitBtn">提交訂單</button>
+        <div id="status" class="status"></div>
+    </div>
 
 <script>
     // ⚠️ 請在此填入您的 GAS 部署網址
     const GAS_URL = "https://script.google.com/macros/s/AKfycbwde186cf7AX6ulnvfJ45TeLMDt_bzyCoAb7hGphCd4OlL6-11THjDBygom8k81mE5X/exec";
 
-    function sendOrder(num) {
-        const name = document.getElementById('name' + num).value;
-        const food = document.getElementById('food' + num).value;
-        const note = document.getElementById('note' + num).value;
-        const btn = document.getElementById('btn' + num);
-        const status = document.getElementById('status' + num);
+    function sendOrder() {
+        const name = document.getElementById('name').value;
+        const selectedFood = document.getElementById('food').value;
+        const customFood = document.getElementById('customFood').value;
+        const note = document.getElementById('note').value;
+        const btn = document.getElementById('submitBtn');
+        const status = document.getElementById('status');
 
-        if (!name || !food) {
-            alert("請完成名字與餐點選擇！");
+        // 決定最終要傳送的餐點名稱
+        let finalFood = selectedFood;
+        if (customFood) {
+            // 如果有自填內容，則將自填內容附加上去或取代
+            finalFood = selectedFood === "單點/自填項目" ? customFood : selectedFood + " (" + customFood + ")";
+        }
+
+        if (!name || (!selectedFood && !customFood)) {
+            alert("請完成名字與餐點輸入！");
             return;
         }
 
@@ -136,7 +128,7 @@
 
         const orderData = {
             user: name,
-            food: food,
+            food: finalFood,
             note: note
         };
 
@@ -147,12 +139,13 @@
             body: JSON.stringify(orderData)
         })
         .then(() => {
-            status.innerText = "✅ 訂單 " + num + " 已成功提交！";
+            status.innerText = "✅ 訂購成功！資料已送達";
             status.style.color = "#27ae60";
-            // 清空該組欄位
-            document.getElementById('name' + num).value = "";
-            document.getElementById('food' + num).value = "";
-            document.getElementById('note' + num).value = "";
+            // 清空所有欄位
+            document.getElementById('name').value = "";
+            document.getElementById('food').value = "";
+            document.getElementById('customFood').value = "";
+            document.getElementById('note').value = "";
         })
         .catch(err => {
             status.innerText = "❌ 提交失敗，請檢查網路";
