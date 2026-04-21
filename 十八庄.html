@@ -18,41 +18,36 @@
         .sum-label { font-size: 13px; opacity: 0.9; margin-right: 5px; }
         .sum-val { font-size: 18px; font-weight: bold; }
 
-        .content { max-width: 1000px; margin: 10px auto; padding: 0 5px; }
+        .content { max-width: 800px; margin: 10px auto; padding: 0 5px; }
         
         table { width: 100%; border-collapse: collapse; background: white; table-layout: fixed; border: 1.5px solid var(--black); }
-        th { background: #f2f2f2; color: #000; padding: 10px 2px; font-size: 13px; border: 1px solid var(--black); }
-        td { padding: 8px 2px; border: 1px solid var(--black); text-align: center; }
+        th { background: #f2f2f2; color: #000; padding: 10px 2px; font-size: 14px; border: 1px solid var(--black); }
+        td { padding: 12px 5px; border: 1px solid var(--black); text-align: center; }
         
-        .subtotal { font-weight: bold; color: var(--primary-red); font-family: Consolas, monospace; }
+        .price-text { font-weight: bold; color: var(--primary-red); font-family: Consolas, monospace; font-size: 16px; }
 
         .mobile-only { display: none; }
 
         @media screen and (max-width: 600px) {
             thead { display: none; }
             table, tbody, tr, td { display: block; width: 100%; box-sizing: border-box; }
-            tr { padding: 8px 10px; border: 1.5px solid var(--black); background: white; margin-bottom: 6px; }
-            td { border: none !important; padding: 2px 0 !important; }
+            tr { padding: 10px; border: 1.5px solid var(--black); background: white; margin-bottom: 8px; }
+            td { border: none !important; padding: 0 !important; }
             
             .pc-only { display: none !important; }
             .mobile-only { display: block; }
 
-            .row-top { display: flex; justify-content: space-between; align-items: center; width: 100%; border-bottom: 1px solid var(--black); padding-bottom: 4px; margin-bottom: 4px; }
-            .item-name-cell { flex: 1; display: flex; align-items: center; min-width: 0; }
-            .idx-num { color: #000; font-weight: bold; font-size: 14px; margin-right: 5px; }
-            .item-name-cell span { font-weight: bold; font-size: 15px; }
-            .item-sub-cell { margin-left: 8px; color: var(--primary-red); font-weight: bold; font-size: 16px; }
-
-            .row-bottom { display: flex; align-items: center; gap: 8px; width: 100%; flex-wrap: wrap; }
-            .param-group { color: #000; font-size: 12px; }
-            .mobile-note { margin-left: auto; color: #27ae60; font-weight: bold; font-size: 11px; border: 1px solid var(--black); padding: 1px 4px; }
+            .row-main { display: flex; justify-content: space-between; align-items: center; }
+            .idx-name { display: flex; align-items: center; font-weight: bold; font-size: 15px; }
+            .idx { margin-right: 8px; }
+            .m-price { color: var(--primary-red); font-weight: bold; font-size: 18px; }
         }
 
         @media print {
             .sticky-header { background: white !important; color: black !important; position: static; box-shadow: none; border-bottom: 3px solid black; }
             .summary-bar { background: none !important; color: black !important; border: 1px solid black; }
             body { background: white !important; }
-            .subtotal, .item-sub-cell { color: black !important; }
+            .price-text, .m-price { color: black !important; }
         }
     </style>
 </head>
@@ -61,7 +56,7 @@
 <div class="sticky-header">
     <div style="font-size: 18px; font-weight: bold;">🏮 04/22十八庄擺攤</div>
     <div class="summary-bar">
-        <span class="sum-label">預估總額：</span><span id="total" class="sum-val">0</span>
+        <span class="sum-label">總計預算：</span><span id="total" class="sum-val">0</span>
     </div>
 </div>
 
@@ -69,13 +64,10 @@
     <table>
         <thead>
             <tr>
-                <th style="width:35px">#</th>
-                <th style="width:32%">項目名稱</th>
-                <th style="width:45px">組</th>
-                <th style="width:75px">單價</th>
-                <th style="width:50px">數量</th>
-                <th style="width:18%">物資總量</th>
-                <th style="width:90px">小計金額</th>
+                <th style="width:50px">項次</th>
+                <th>項目名稱</th>
+                <th style="width:60px">組</th>
+                <th style="width:120px">金額</th>
             </tr>
         </thead>
         <tbody id="list"></tbody>
@@ -84,11 +76,11 @@
 
 <script>
     const data = [
-        ["家樂福(寶礦利、餅乾)", 1, 8055, 1, "批", "大宗物資"],
-        ["馥漫(鳳梨酥、小蛋糕)", 1, 4630, 1, "批", "點心餐盒"],
-        ["盆花(一對)", 1, 1200, 1, "對", "拜拜"],
-        ["水果", 1, 600, 1, "批", ""],
-        ["金紙", 1, 1700, 1, "批", "拜拜"]
+        ["家樂福(寶礦利、餅乾)", 8055],
+        ["馥漫(鳳梨酥、小蛋糕)", 4630],
+        ["盆花(一對)", 1200],
+        ["水果", 600],
+        ["金紙", 1700]
     ];
 
     const tbody = document.getElementById('list');
@@ -96,32 +88,23 @@
     let totalAll = 0;
 
     data.forEach((item, index) => {
-        const [name, setNum, price, count, unit, note] = item;
-        const subtotal = price * count;
-        totalAll += subtotal;
+        const [name, price] = item;
+        totalAll += price;
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td class="pc-only">${index + 1}</td>
-            <td class="pc-only" style="text-align:left; padding-left:10px; font-weight:bold;">${name}</td>
-            <td class="pc-only">${setNum}</td>
-            <td class="pc-only">${price.toLocaleString()}</td>
-            <td class="pc-only">${count}</td>
-            <td class="pc-only">${setNum * count} ${unit}</td>
-            <td class="pc-only subtotal">${subtotal.toLocaleString()}</td>
+            <td class="pc-only" style="text-align:left; padding-left:15px; font-weight:bold;">${name}</td>
+            <td class="pc-only">1</td>
+            <td class="pc-only price-text">${price.toLocaleString()}</td>
 
             <td class="mobile-only">
-                <div class="row-top">
-                    <div class="item-name-cell">
-                        <span class="idx-num">${index + 1}.</span>
+                <div class="row-main">
+                    <div class="idx-name">
+                        <span class="idx">${index + 1}.</span>
                         <span>${name}</span>
                     </div>
-                    <div class="item-sub-cell">$${subtotal.toLocaleString()}</div>
-                </div>
-                <div class="row-bottom">
-                    <div class="param-group">單價:$${price.toLocaleString()}</div>
-                    <div class="param-group">數量:${count}</div>
-                    <div class="mobile-note">${note}</div>
+                    <div class="m-price">$${price.toLocaleString()}</div>
                 </div>
             </td>
         `;
