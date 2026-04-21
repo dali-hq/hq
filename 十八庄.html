@@ -94,90 +94,16 @@
 </div>
 
 <script>
-    // 修正了最後一行的引號錯誤
     const data = [
-        ["寶礦利 580ml", 24, 462, 2, "瓶"],
-        ["寶礦利(低卡) 580ml", 24, 462, 1, "瓶"],
-        ["義美無加糖元氣豆奶", 24, 284, 1, "瓶"],
-        ["貝納頌榛果拿鐵(3入)", 3, 66, 8, "瓶"],
-        null,
-        ["名糖檸檬鹽糖", 1, 89, 3, "袋"],
-        ["BF薄荷岩鹽檸檬糖", 1, 62, 3, "袋"],
-        null,
-        ["Sunny Ranch 每日堅果35g", 20, 457, 6, "包"],
-        ["中祥蔬菜蘇打餅(10入)", 10, 75, 3, "袋"],
-        null,
-        ["義美杏仁巧克力酥片", 8, 108, 8, "包"],
-        ["本味誠現-濃可可酥餅", 12, 94, 4, "袋"],
-        ["本味誠現乳酥餅", 13, 94, 4, "袋"],
-        ["本味誠現牛奶餅", 20, 106, 4, "袋"],
-        ["茱蒂絲蘇打餅-奶油", 10, 62, 4, "袋"],
-        null,
-        ["平底清潔袋(大)", 2, 150, 1, "卷"], 
-        null,
-        ["馥漫-鳳梨酥", 1, 29, 80, "個"],
-        ["馥漫-檸檬蛋糕", 1, 30, 30, "個"],
-        ["馥漫-雪花酥", 1, 12, 30, "個"],
-        ["馥漫-達克瓦茲", 1, 35, 30, "個"]
+        ["家樂福(寶礦利、餅乾)", 1, 8055, 1, "批"],
+        ["馥漫(鳳梨酥、小蛋糕)", 1, 4630, 1, "批"],
+        ["盆花(一對)", 2, 600, 1, "對"],
+        ["水果", 1, 600, 1, "批"],
+        ["金紙", 1, 1700, 1, "批"]
     ];
 
-    function render() {
-        let totalAll = 0;
-        let displayIdx = 1;
-        const tbody = document.getElementById('list');
-        tbody.innerHTML = '';
-
-        data.forEach((item, i) => {
-            if (item === null) {
-                tbody.innerHTML += `<tr class="divider-row"><td colspan="7"></td></tr>`;
-                return;
-            }
-
-            let sub = item[2] * item[3]; 
-            totalAll += sub;
-            let totalUnits = item[1] * item[3];
-            let note = (item[0] && item[3] > 0) ? `${totalUnits}${item[4]}` : "";
-            
-            tbody.innerHTML += `
-                <tr>
-                    <td class="pc-only">${displayIdx}</td>
-                    
-                    <td class="row-top">
-                        <div class="item-name-cell">
-                            <span class="idx-num mobile-only">${displayIdx}.</span>
-                            <input type="text" value="${item[0]}" onchange="data[${i}][0]=this.value;render()">
-                        </div>
-                        <div class="item-sub-cell mobile-only">$${sub.toLocaleString()}</div>
-                    </td>
-
-                    <td class="pc-only"><input type="number" value="${item[1]}" oninput="updateVal(${i}, 1, this.value)"></td>
-                    <td class="pc-only"><input type="number" value="${item[2]}" oninput="updateVal(${i}, 2, this.value)"></td>
-                    <td class="pc-only"><input type="number" value="${item[3]}" oninput="updateVal(${i}, 3, this.value)"></td>
-                    
-                    <td class="row-bottom mobile-only">
-                        <div class="param-group">入數<input type="number" value="${item[1]}" oninput="updateVal(${i}, 1, this.value)"></div>
-                        <div class="param-group">單價$<input type="number" value="${item[2]}" oninput="updateVal(${i}, 2, this.value)"></div>
-                        <div class="param-group">x 數量<input type="number" value="${item[3]}" oninput="updateVal(${i}, 3, this.value)"></div>
-                        <div class="mobile-note">${note ? '共'+note : ''}</div>
-                    </td>
-
-                    <td class="pc-only" style="font-size:12px">${note ? '共'+note : "-"}</td>
-                    <td class="pc-only subtotal" style="text-align:right; padding-right:8px;">$${sub.toLocaleString()}</td>
-                </tr>`;
-            displayIdx++;
-        });
-
-        document.getElementById('total').innerText = totalAll.toLocaleString();
-    }
-
-    function updateVal(index, field, val) { 
-        data[index][field] = parseFloat(val) || 0; 
-        render(); 
-    }
-
-    // 視窗調整時重新渲染，確保手機/電腦版切換正常
-    window.onresize = render;
-    render();
+    // 總計：16,185
 </script>
+ 
 </body>
 </html>
