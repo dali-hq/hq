@@ -90,19 +90,58 @@
             </tr>
         </thead>
         <tbody id="list"></tbody>
-    </table>
-</div>
 
 <script>
+    // 根據妳提供的最新採購數據
     const data = [
         ["家樂福(寶礦利、餅乾)", 1, 8055, 1, "批"],
         ["馥漫(鳳梨酥、小蛋糕)", 1, 4630, 1, "批"],
-        ["盆花(一對)", 2, 600, 1, "對"],
+        ["盆花(一對)", 1, 1200, 1, "對"],
         ["水果", 1, 600, 1, "批"],
         ["金紙", 1, 1700, 1, "批"]
     ];
 
-    // 總計：16,185
+    const tbody = document.getElementById('list');
+    const totalDisplay = document.getElementById('total');
+    let totalAll = 0;
+
+    data.forEach((item, index) => {
+        const [name, setNum, price, count, unit] = item;
+        const subtotal = price * count;
+        totalAll += subtotal;
+
+        const tr = document.createElement('tr');
+        
+        // 電腦版與手機版共用邏輯
+        tr.innerHTML = `
+            <td class="pc-only">${index + 1}</td>
+            <td class="pc-only" style="text-align:left; padding-left:10px;">${name}</td>
+            <td class="pc-only">${setNum}</td>
+            <td class="pc-only">${price.toLocaleString()}</td>
+            <td class="pc-only">${count}</td>
+            <td class="pc-only">${setNum * count} ${unit}</td>
+            <td class="pc-only subtotal">${subtotal.toLocaleString()}</td>
+
+            <td class="mobile-only">
+                <div class="row-top">
+                    <div class="item-name-cell">
+                        <span class="idx-num">${index + 1}.</span>
+                        <span style="font-weight:bold;">${name}</span>
+                    </div>
+                    <div class="item-sub-cell">$${subtotal.toLocaleString()}</div>
+                </div>
+                <div class="row-bottom">
+                    <div class="param-group">單價:$${price}</div>
+                    <div class="param-group">數量:${count}</div>
+                    <div class="mobile-note">總量:${setNum * count}${unit}</div>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    // 更新 Header 的總金額
+    totalDisplay.textContent = totalAll.toLocaleString();
 </script>
  
 </body>
