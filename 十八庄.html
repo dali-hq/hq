@@ -3,93 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>實毅-0422十八庄零食</title>
+    <title>實毅-0422十八庄</title>
     <style>
-        :root { 
-            --primary-red: #d32f2f; 
-            --gold: #f1c40f;
-            --bg-yellow: #fffcf5; 
-            --black: #2c3e50; 
-        }
+        :root { --primary-red: #d32f2f; --black: #000000; }
+        body { font-family: "Microsoft JhengHei", sans-serif; background: #fffcf5; margin: 0; padding: 0; color: #333; }
         
-        body { 
-            font-family: "Microsoft JhengHei", -apple-system, sans-serif; 
-            background: var(--bg-yellow); 
-            margin: 0; padding: 0; color: var(--black); 
-        }
-        
-        /* 標題欄：指揮官的視角 */
         .sticky-header {
             position: sticky; top: 0; z-index: 1000;
             background: var(--primary-red); color: white;
-            padding: 15px 12px; box-shadow: 0 4px 15px rgba(211,47,47,0.3);
+            padding: 10px 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
             text-align: center;
         }
-        
-        .header-title { font-size: 20px; font-weight: bold; letter-spacing: 2px; }
-        
-        .summary-bar { 
-            display: inline-block; background: rgba(0,0,0,0.15); 
-            padding: 8px 25px; border-radius: 50px; margin-top: 10px;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        
-        .sum-label { font-size: 14px; opacity: 0.9; }
-        .sum-val { font-size: 22px; font-weight: bold; font-family: 'Consolas', monospace; }
+        .summary-bar { display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 20px; border-radius: 20px; margin-top: 5px; }
+        .sum-label { font-size: 13px; opacity: 0.9; margin-right: 5px; }
+        .sum-val { font-size: 18px; font-weight: bold; }
 
-        .content { max-width: 900px; margin: 20px auto; padding: 0 10px; }
+        .content { max-width: 1000px; margin: 10px auto; padding: 0 5px; }
         
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid #ddd; }
-        th { background: #f8f9fa; color: #555; padding: 12px 5px; font-size: 14px; border-bottom: 2px solid var(--primary-red); }
-        td { padding: 12px 5px; border-bottom: 1px solid #eee; text-align: center; }
+        table { width: 100%; border-collapse: collapse; background: white; table-layout: fixed; border: 1.5px solid var(--black); }
+        th { background: #f2f2f2; color: #000; padding: 10px 2px; font-size: 13px; border: 1px solid var(--black); }
+        td { padding: 8px 2px; border: 1px solid var(--black); text-align: center; }
         
-        /* 狀態標籤 */
-        .status-tag { 
-            display: inline-block; padding: 2px 8px; border-radius: 4px; 
-            font-size: 11px; font-weight: bold; background: #e8f5e9; color: #2e7d32;
-        }
+        .subtotal { font-weight: bold; color: var(--primary-red); font-family: Consolas, monospace; }
 
-        .subtotal { font-weight: bold; color: var(--primary-red); font-size: 16px; }
+        .mobile-only { display: none; }
 
-        /* RWD 手機版優化 */
         @media screen and (max-width: 600px) {
             thead { display: none; }
-            tr { 
-                display: block; background: white; margin-bottom: 12px; 
-                border-radius: 8px; padding: 12px; border: 1px solid #eee;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            }
-            td { display: block; border: none; text-align: left; padding: 4px 0; }
+            table, tbody, tr, td { display: block; width: 100%; box-sizing: border-box; }
+            tr { padding: 8px 10px; border: 1.5px solid var(--black); background: white; margin-bottom: 6px; }
+            td { border: none !important; padding: 2px 0 !important; }
             
-            .m-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed #ddd; padding-bottom: 8px; margin-bottom: 8px; }
-            .m-title { font-weight: bold; font-size: 16px; color: #000; flex: 1; }
-            .m-price { font-size: 18px; color: var(--primary-red); font-weight: bold; }
-            .m-detail { display: flex; justify-content: space-between; font-size: 13px; color: #666; }
-            
-            .pc-only { display: none; }
+            .pc-only { display: none !important; }
+            .mobile-only { display: block; }
+
+            .row-top { display: flex; justify-content: space-between; align-items: center; width: 100%; border-bottom: 1px solid var(--black); padding-bottom: 4px; margin-bottom: 4px; }
+            .item-name-cell { flex: 1; display: flex; align-items: center; min-width: 0; }
+            .idx-num { color: #000; font-weight: bold; font-size: 14px; margin-right: 5px; }
+            .item-name-cell span { font-weight: bold; font-size: 15px; }
+            .item-sub-cell { margin-left: 8px; color: var(--primary-red); font-weight: bold; font-size: 16px; }
+
+            .row-bottom { display: flex; align-items: center; gap: 8px; width: 100%; flex-wrap: wrap; }
+            .param-group { color: #000; font-size: 12px; }
+            .mobile-note { margin-left: auto; color: #27ae60; font-weight: bold; font-size: 11px; border: 1px solid var(--black); padding: 1px 4px; }
+        }
+
+        @media print {
+            .sticky-header { background: white !important; color: black !important; position: static; box-shadow: none; border-bottom: 3px solid black; }
+            .summary-bar { background: none !important; color: black !important; border: 1px solid black; }
+            body { background: white !important; }
+            .subtotal, .item-sub-cell { color: black !important; }
         }
     </style>
 </head>
 <body>
 
 <div class="sticky-header">
-    <div class="header-title">🏮 十八庄媽祖擺攤清單</div>
+    <div style="font-size: 18px; font-weight: bold;">🏮 04/22十八庄擺攤</div>
     <div class="summary-bar">
-        <span class="sum-label">總採購金額：</span>
-        <span id="total" class="sum-val">0</span>
+        <span class="sum-label">預估總額：</span><span id="total" class="sum-val">0</span>
     </div>
 </div>
 
 <div class="content">
-    <table id="mainTable">
-        <thead class="pc-only">
+    <table>
+        <thead>
             <tr>
-                <th style="width:50px">#</th>
-                <th>項目名稱</th>
-                <th style="width:100px">單價</th>
-                <th style="width:80px">數量</th>
-                <th style="width:120px">小計</th>
-                <th style="width:120px">備註</th>
+                <th style="width:35px">#</th>
+                <th style="width:32%">項目名稱</th>
+                <th style="width:45px">組</th>
+                <th style="width:75px">單價</th>
+                <th style="width:50px">數量</th>
+                <th style="width:18%">物資總量</th>
+                <th style="width:90px">小計金額</th>
             </tr>
         </thead>
         <tbody id="list"></tbody>
@@ -97,46 +83,52 @@
 </div>
 
 <script>
-    const purchaseData = [
-        { name: "家樂福(寶礦利、餅乾)", price: 8055, qty: 1, unit: "批", note: "大宗物資" },
-        { name: "馥漫(鳳梨酥、小蛋糕)", price: 4630, qty: 1, unit: "批", note: "下午茶點心" },
-        { name: "盆花(一對)", price: 1200, qty: 1, unit: "對", note: "" },
-        { name: "時令水果", price: 600, qty: 1, unit: "批", note: "" },
-        { name: "祭祀金紙、(含香爐)", price: 1700, qty: 1, unit: "批", note: "" }
+    const data = [
+        ["家樂福(寶礦利、餅乾)", 1, 8055, 1, "批", "大宗物資"],
+        ["馥漫(鳳梨酥、小蛋糕)", 1, 4630, 1, "批", "點心餐盒"],
+        ["盆花(一對)", 1, 1200, 1, "對", "拜拜"],
+        ["水果", 1, 600, 1, "批", ""],
+        ["金紙", 1, 1700, 1, "批", "拜拜"]
     ];
 
     const tbody = document.getElementById('list');
     const totalDisplay = document.getElementById('total');
-    let grandTotal = 0;
+    let totalAll = 0;
 
-    purchaseData.forEach((item, index) => {
-        const subtotal = item.price * item.qty;
-        grandTotal += subtotal;
+    data.forEach((item, index) => {
+        const [name, setNum, price, count, unit, note] = item;
+        const subtotal = price * count;
+        totalAll += subtotal;
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td class="pc-only">${index + 1}</td>
-            <td class="pc-only" style="text-align:left; font-weight:bold;">${item.name}</td>
-            <td class="pc-only">${item.price.toLocaleString()}</td>
-            <td class="pc-only">${item.qty}</td>
-            <td class="pc-only subtotal">$${subtotal.toLocaleString()}</td>
-            <td class="pc-only"><span class="status-tag">${item.note}</span></td>
+            <td class="pc-only" style="text-align:left; padding-left:10px; font-weight:bold;">${name}</td>
+            <td class="pc-only">${setNum}</td>
+            <td class="pc-only">${price.toLocaleString()}</td>
+            <td class="pc-only">${count}</td>
+            <td class="pc-only">${setNum * count} ${unit}</td>
+            <td class="pc-only subtotal">${subtotal.toLocaleString()}</td>
 
-            <div class="mobile-only">
-                <div class="m-header">
-                    <div class="m-title">${index + 1}. ${item.name}</div>
-                    <div class="m-price">$${subtotal.toLocaleString()}</div>
+            <td class="mobile-only">
+                <div class="row-top">
+                    <div class="item-name-cell">
+                        <span class="idx-num">${index + 1}.</span>
+                        <span>${name}</span>
+                    </div>
+                    <div class="item-sub-cell">$${subtotal.toLocaleString()}</div>
                 </div>
-                <div class="m-detail">
-                    <span>數量: ${item.qty} ${item.unit}</span>
-                    <span class="status-tag">${item.note}</span>
+                <div class="row-bottom">
+                    <div class="param-group">單價:$${price.toLocaleString()}</div>
+                    <div class="param-group">數量:${count}</div>
+                    <div class="mobile-note">${note}</div>
                 </div>
-            </div>
+            </td>
         `;
         tbody.appendChild(tr);
     });
 
-    totalDisplay.textContent = `$${grandTotal.toLocaleString()}`;
+    totalDisplay.textContent = totalAll.toLocaleString();
 </script>
 
 </body>
