@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>萃泉茶飲 - 線上點餐</title>
     <style>
-        /* 配色變數設定 */
         :root { 
             --bg-light-blue: #e3f2fd;    /* 網頁底色：淺藍 */
             --text-deep-blue: #0d47a1;   /* 文字顏色：深藍 */
             --header-black: #000000;     /* 分類標題文字：黑色 */
             --tag-cyan: #4db6ac;         /* 分類標題底色：青綠色 */
-            --white: #ffffff;
         }
 
         body { 
@@ -22,16 +20,9 @@
             color: var(--text-deep-blue); 
         }
         
-        .menu-wrapper { 
-            max-width: 1100px; 
-            margin: 0 auto; 
-        }
+        .menu-wrapper { max-width: 1100px; margin: 0 auto; }
         
-        .brand-header { 
-            text-align: center; 
-            margin-bottom: 40px; 
-            padding-bottom: 10px; 
-        }
+        .brand-header { text-align: center; margin-bottom: 40px; }
         .brand-header h1 { 
             margin: 0; 
             color: var(--text-deep-blue); 
@@ -41,23 +32,19 @@
             padding-bottom: 5px;
         }
 
-        /* 三欄排版架構 */
         .menu-grid { 
             display: grid; 
             grid-template-columns: repeat(3, 1fr); 
             gap: 30px; 
         }
 
-        .category { 
-            margin-bottom: 30px; 
-        }
+        .category { margin-bottom: 30px; }
 
-        /* 分類標題：黑色文字 + 青綠色橢圓框 */
         .category-header { 
             display: inline-block;
             background-color: var(--tag-cyan);
             padding: 5px 25px;
-            border-radius: 50px; /* 橢圓形關鍵 */
+            border-radius: 50px; 
             margin-bottom: 15px;
         }
         .category-name { 
@@ -66,7 +53,6 @@
             color: var(--header-black); 
         }
 
-        /* 品項列表樣式 */
         .item-list { list-style: none; padding: 0; margin: 0; }
         .item { 
             display: flex; 
@@ -77,10 +63,7 @@
             cursor: pointer; 
             transition: 0.2s;
         }
-        .item:hover { 
-            background: rgba(255, 255, 255, 0.5); 
-            border-radius: 8px; 
-        }
+        .item:hover { background: rgba(255, 255, 255, 0.5); border-radius: 8px; }
         .item-name { font-size: 1rem; font-weight: 500; }
         .item-prices { font-size: 0.85rem; opacity: 0.8; font-family: monospace; }
 
@@ -98,10 +81,7 @@
         .btn-send { flex: 2; background: var(--text-deep-blue); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; }
         .btn-cancel { flex: 1; background: #eee; border: none; padding: 15px; border-radius: 12px; color: #666; cursor: pointer; }
 
-        /* 手機自適應 */
-        @media (max-width: 900px) {
-            .menu-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 900px) { .menu-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -183,6 +163,15 @@
                     <li class="item" onclick="popOrder('給點荔青')"><span class="item-name">給點荔青</span><span class="item-prices">60 / 70</span></li>
                     <li class="item" onclick="popOrder('荔刻烏龍')"><span class="item-name">荔刻烏龍</span><span class="item-prices">60 / 70</span></li>
                     <li class="item" onclick="popOrder('百香雙重奏')"><span class="item-name">百香雙重奏</span><span class="item-prices">60 / 70</span></li>
+                </ul>
+            </div>
+            <div class="category">
+                <div class="category-header"><span class="category-name">膩走開 GREASY</span></div>
+                <ul class="item-list">
+                    <li class="item" onclick="popOrder('鮮榨檸檬紅')"><span class="item-name">鮮榨檸檬紅</span><span class="item-prices">50 / 60</span></li>
+                    <li class="item" onclick="popOrder('鮮榨檸檬綠')"><span class="item-name">鮮榨檸檬綠</span><span class="item-prices">50 / 60</span></li>
+                    <li class="item" onclick="popOrder('鮮榨檸檬冬瓜')"><span class="item-name">鮮榨檸檬冬瓜</span><span class="item-prices">50 / 60</span></li>
+                    <li class="item" onclick="popOrder('鮮榨翡翠檸檬')"><span class="item-name">鮮榨翡翠檸檬</span><span class="item-prices">55 / 65</span></li>
                 </ul>
             </div>
         </div>
