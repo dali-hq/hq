@@ -1,75 +1,157 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>萃泉茶飲 - 自動點餐系統</title>
     <style>
-        .menu-container { position: relative; display: inline-block; width: 100%; max-width: 1000px; }
-        .menu-image { width: 100%; display: block; }
+        :root { --main-teal: #00a886; --bg-cream: #f4f7f6; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-cream); margin: 0; padding-bottom: 50px; }
         
-        /* 點擊熱點示例：紅韻錫蘭紅 M 30 */
+        .header { text-align: center; padding: 15px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        h2 { margin: 0; color: #004d40; font-size: 1.2rem; }
+
+        /* 核心菜單容器 */
+        .menu-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 800px; 
+            margin: 10px auto; 
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .menu-img { width: 100%; display: block; }
+
+        /* 透明熱點：對位時可將 background 改為 rgba(255,0,0,0.3) */
         .hotspot {
             position: absolute;
-            background: rgba(255, 255, 255, 0.1); /* 平時透明，開發時可改紅色方便對位 */
+            background: rgba(255, 255, 255, 0.01); 
             cursor: pointer;
-            border-radius: 50%;
+            border-radius: 4px;
+            -webkit-tap-highlight-color: transparent;
         }
+        .hotspot:active { background: rgba(0, 168, 134, 0.3); }
 
-        /* 簡單的彈出視窗 */
-        #orderModal {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; padding: 20px; border: 2px solid #00a886; z-index: 100; border-radius: 15px;
+        /* 訂單彈窗 */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 999; backdrop-filter: blur(3px);
         }
-        .btn-send { background: #00a886; color: white; padding: 10px; width: 100%; border: none; margin-top: 10px; cursor: pointer; }
+        .modal {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; width: 85%; max-width: 350px; padding: 25px;
+            border-radius: 20px; z-index: 1000;
+        }
+        .modal h3 { margin: 0 0 15px 0; color: var(--main-teal); border-left: 4px solid var(--main-teal); padding-left: 10px; }
+        .option-group { margin-bottom: 15px; }
+        .option-group label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; }
+        select, input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+        
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-send { flex: 2; background: var(--main-teal); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .btn-cancel { flex: 1; background: #eee; color: #666; border: none; padding: 15px; border-radius: 10px; cursor: pointer; }
+
+        /* 輔助工具：顯示目前的點擊座標，方便增加熱點 */
+        #debug-tool { position: fixed; bottom: 0; width: 100%; background: #333; color: #fff; font-size: 10px; padding: 5px; text-align: center; pointer-events: none; opacity: 0.8; }
     </style>
 </head>
 <body>
 
-<div class="menu-container">
-    <img src="https://lh3.googleusercontent.com/d/1ReTbTVKA9ag7S_u6xu0gTp0X0F83ov-O" class="menu-image">
-    
-    <div class="hotspot" style="top: 17%; left: 24%; width: 3%; height: 2%;" onclick="openOrder('紅韻錫蘭紅', 'M')"></div>
-    <div class="hotspot" style="top: 17%; left: 27%; width: 3%; height: 2%;" onclick="openOrder('紅韻錫蘭紅', 'L')"></div>
+<div class="header">
+    <h2>萃泉茶飲 點擊圖片點餐</h2>
 </div>
 
-<div id="orderModal">
-    <h3 id="modalTitle">品項名稱</h3>
-    <label>甜度：</label>
-    <select id="sugar"><option>正常甜</option><option>半糖</option><option>微糖</option><option>無糖</option></select><br><br>
-    <label>冰塊：</label>
-    <select id="ice"><option>正常冰</option><option>少冰</option><option>微冰</option><option>去冰</option></select><br><br>
-    <label>加料備註：</label>
-    <input type="text" id="addon" placeholder="如：加珍珠"><br>
-    <button class="btn-send" onclick="sendToGAS()">確認送出單</button>
-    <button onclick="closeModal()" style="border:none; background:none; color:grey;">取消</button>
+<div class="menu-container" id="menuWrapper">
+    <img src="https://lh3.googleusercontent.com/d/1ReTbTVKA9ag7S_u6xu0gTp0X0F83ov-O" class="menu-img">
+    
+    <div class="hotspot" style="top: 17%; left: 24%; width: 3%; height: 2.5%;" onclick="popOrder('紅韻錫蘭紅', 'M')"></div>
+    <div class="hotspot" style="top: 17%; left: 27%; width: 3%; height: 2.5%;" onclick="popOrder('紅韻錫蘭紅', 'L')"></div>
+    
+    <div class="hotspot" style="top: 19.5%; left: 24%; width: 3%; height: 2.5%;" onclick="popOrder('初見茉莉綠', 'M')"></div>
+    <div class="hotspot" style="top: 19.5%; left: 27%; width: 3%; height: 2.5%;" onclick="popOrder('初見茉莉綠', 'L')"></div>
 </div>
+
+<div class="modal-overlay" id="overlay"></div>
+<div class="modal" id="orderModal">
+    <h3 id="itemName">品項名稱</h3>
+    <div class="option-group">
+        <label>甜度</label>
+        <select id="selSugar">
+            <option>正常甜</option><option>少糖(7分)</option><option>半糖(5分)</option><option>微糖(3分)</option><option>1分糖</option><option>無糖</option>
+        </select>
+    </div>
+    <div class="option-group">
+        <label>冰塊</label>
+        <select id="selIce">
+            <option>正常冰</option><option>少冰</option><option>微冰</option><option>去冰</option><option>完全去冰</option><option>常溫</option><option>熱飲</option>
+        </select>
+    </div>
+    <div class="option-group">
+        <label>備註 (加料/特殊需求)</label>
+        <input type="text" id="txtAddon" placeholder="例：加珍珠、不加粉粿">
+    </div>
+    <div class="btn-group">
+        <button class="btn-cancel" onclick="closeModal()">取消</button>
+        <button class="btn-send" id="submitBtn" onclick="submitToGas()">送出訂單</button>
+    </div>
+</div>
+
+<div id="debug-tool">對位模式：移動滑鼠可查看座標</div>
 
 <script>
-    let currentItem = {};
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbyknnFh63H_DWDOtWkCmh7TSMExAf_WgGGebmKOky6S3ROyD6YMN-35KGy0jpNrf2-sQg/exec";
+    // 請填入您部署後的 GAS Web App URL
+    const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbyknnFh63H_DWDOtWkCmh7TSMExAf_WgGGebmKOky6S3ROyD6YMN-35KGy0jpNrf2-sQg/exec"; 
+    let currentData = {};
 
-    function openOrder(item, size) {
-        currentItem = { item, size };
-        document.getElementById('modalTitle').innerText = item + " (" + size + ")";
+    // 輔助對位邏輯
+    const wrapper = document.getElementById('menuWrapper');
+    wrapper.addEventListener('mousemove', (e) => {
+        const rect = wrapper.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+        const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+        document.getElementById('debug-tool').innerText = `座標參考 - Top: ${y}%, Left: ${x}% (點擊該處填入代碼)`;
+    });
+
+    function popOrder(item, size) {
+        currentData = { item, size };
+        document.getElementById('itemName').innerText = `${item} [${size}]`;
+        document.getElementById('overlay').style.display = 'block';
         document.getElementById('orderModal').style.display = 'block';
     }
 
-    function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
+    function closeModal() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('orderModal').style.display = 'none';
+        document.getElementById('txtAddon').value = ""; // 清空
+    }
 
-    function sendToGAS() {
+    async function submitToGas() {
+        const btn = document.getElementById('submitBtn');
         const payload = {
-            ...currentItem,
-            sugar: document.getElementById('sugar').value,
-            ice: document.getElementById('ice').value,
-            addon: document.getElementById('addon').value
+            ...currentData,
+            sugar: document.getElementById('selSugar').value,
+            ice: document.getElementById('selIce').value,
+            addon: document.getElementById('txtAddon').value
         };
 
-        fetch(GAS_URL, {
-            method: 'POST',
-            body: JSON.stringify(payload)
-        }).then(() => {
-            alert('點餐成功！資料已傳至 Google Sheet');
+        btn.disabled = true;
+        btn.innerText = "傳送中...";
+
+        try {
+            // 使用 no-cors 模式發送
+            await fetch(GAS_ENDPOINT, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(payload)
+            });
+            alert('點餐成功！');
             closeModal();
-        });
+        } catch (err) {
+            alert('傳送發生錯誤，請檢查網路。');
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "送出訂單";
+        }
     }
 </script>
 </body>
