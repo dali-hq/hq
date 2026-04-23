@@ -24,10 +24,11 @@
 
         /* 透明熱點：對位時可將 background 改為 rgba(255,0,0,0.3) */
         .hotspot {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.01); 
-            cursor: pointer;
-            border-radius: 4px;
+    position: absolute;
+    background: rgba(255, 0, 0, 0.3); /* 測試時先設為有顏色，看得到才好點 */
+    cursor: pointer;
+    z-index: 10; /* 確保熱點在圖片上方 */
+           border-radius: 4px;
             -webkit-tap-highlight-color: transparent;
         }
         .hotspot:active { background: rgba(0, 168, 134, 0.3); }
@@ -134,12 +135,13 @@
         document.getElementById('debug-tool').innerText = `座標參考 - Top: ${y}%, Left: ${x}% (點擊該處填入代碼)`;
     });
 
-    function popOrder(item, size) {
-        currentData = { item, size };
-        document.getElementById('itemName').innerText = `${item} [${size}]`;
-        document.getElementById('overlay').style.display = 'block';
-        document.getElementById('orderModal').style.display = 'block';
-    }
+function popOrder(item, size) {
+    console.log("點擊成功:", item, size); // 加入這行，按 F12 檢查有沒有跑出字
+    currentData = { item, size };
+    document.getElementById('itemName').innerText = item + " (" + size + ")";
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('orderModal').style.display = 'block';
+}
 
     function closeModal() {
         document.getElementById('overlay').style.display = 'none';
