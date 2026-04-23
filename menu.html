@@ -6,77 +6,35 @@
     <title>萃泉茶飲 - 線上點餐</title>
     <style>
         :root { 
-            --bg-light-blue: #e3f2fd;    /* 網頁底色：淺藍 */
-            --text-deep-blue: #0d47a1;   /* 文字顏色：深藍 */
-            --header-black: #000000;     /* 分類標題文字：黑色 */
-            --tag-cyan: #4db6ac;         /* 分類標題底色：青綠色 */
+            --bg-light-blue: #e3f2fd; 
+            --text-deep-blue: #0d47a1; 
+            --header-black: #000000; 
+            --tag-cyan: #4db6ac; 
         }
 
-        body { 
-            font-family: "PingFang TC", "Noto Sans TC", sans-serif; 
-            background-color: var(--bg-light-blue); 
-            margin: 0; 
-            padding: 20px; 
-            color: var(--text-deep-blue); 
-        }
-        
+        body { font-family: "PingFang TC", "Noto Sans TC", sans-serif; background-color: var(--bg-light-blue); margin: 0; padding: 20px; color: var(--text-deep-blue); }
         .menu-wrapper { max-width: 1100px; margin: 0 auto; }
-        
         .brand-header { text-align: center; margin-bottom: 40px; }
-        .brand-header h1 { 
-            margin: 0; 
-            color: var(--text-deep-blue); 
-            letter-spacing: 4px; 
-            border-bottom: 2px solid var(--text-deep-blue);
-            display: inline-block;
-            padding-bottom: 5px;
-        }
+        .brand-header h1 { margin: 0; color: var(--text-deep-blue); letter-spacing: 4px; border-bottom: 2px solid var(--text-deep-blue); display: inline-block; padding-bottom: 5px; }
 
-        .menu-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 30px; 
-        }
-
+        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
         .category { margin-bottom: 30px; }
-
-        .category-header { 
-            display: inline-block;
-            background-color: var(--tag-cyan);
-            padding: 5px 25px;
-            border-radius: 50px; 
-            margin-bottom: 15px;
-        }
-        .category-name { 
-            font-size: 1.15rem; 
-            font-weight: bold; 
-            color: var(--header-black); 
-        }
+        .category-header { display: inline-block; background-color: var(--tag-cyan); padding: 5px 25px; border-radius: 50px; margin-bottom: 15px; }
+        .category-name { font-size: 1.15rem; font-weight: bold; color: var(--header-black); }
 
         .item-list { list-style: none; padding: 0; margin: 0; }
-        .item { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 12px 10px; 
-            border-bottom: 1px solid rgba(13, 71, 161, 0.1); 
-            cursor: pointer; 
-            transition: 0.2s;
-        }
+        .item { display: flex; justify-content: space-between; align-items: center; padding: 12px 10px; border-bottom: 1px solid rgba(13, 71, 161, 0.1); cursor: pointer; transition: 0.2s; }
         .item:hover { background: rgba(255, 255, 255, 0.5); border-radius: 8px; }
         .item-name { font-size: 1rem; font-weight: 500; }
         .item-prices { font-size: 0.85rem; opacity: 0.8; font-family: monospace; }
 
-        /* 彈窗樣式 */
+        /* 彈窗 */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; backdrop-filter: blur(3px); }
-        .modal { 
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; width: 90%; max-width: 350px; padding: 25px; border-radius: 20px; z-index: 1001;
-            color: var(--text-deep-blue);
-        }
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; width: 90%; max-width: 350px; padding: 25px; border-radius: 20px; z-index: 1001; color: var(--text-deep-blue); }
         .option-group { margin-bottom: 15px; }
         .option-group label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; }
         select, input { width: 100%; padding: 12px; border: 1px solid #bbdefb; border-radius: 10px; font-size: 1rem; box-sizing: border-box; outline: none; color: var(--text-deep-blue); }
+        select:disabled { background-color: #f5f5f5; color: #999; cursor: not-allowed; }
         .btn-group { display: flex; gap: 10px; margin-top: 25px; }
         .btn-send { flex: 2; background: var(--text-deep-blue); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; }
         .btn-cancel { flex: 1; background: #eee; border: none; padding: 15px; border-radius: 12px; color: #666; cursor: pointer; }
@@ -87,137 +45,78 @@
 <body>
 
 <div class="menu-wrapper">
-    <div class="brand-header">
-        <h1>萃泉茶飲</h1>
-    </div>
-
-    <div class="menu-grid">
-        <div class="column">
-            <div class="category">
-                <div class="category-header"><span class="category-name">原茗 RAW TEA</span></div>
-                <ul class="item-list">
-                    <li class="item" onclick="popOrder('紅韻錫蘭紅')"><span class="item-name">紅韻錫蘭紅</span><span class="item-prices">30 / 35</span></li>
-                    <li class="item" onclick="popOrder('初見茉莉綠')"><span class="item-name">初見茉莉綠</span><span class="item-prices">30 / 35</span></li>
-                    <li class="item" onclick="popOrder('焙香烏龍')"><span class="item-name">焙香烏龍</span><span class="item-prices">30 / 35</span></li>
-                    <li class="item" onclick="popOrder('極萃金萱')"><span class="item-name">極萃金萱</span><span class="item-prices">30 / 35</span></li>
-                    <li class="item" onclick="popOrder('南投四季春')"><span class="item-name">南投四季春</span><span class="item-prices">30 / 35</span></li>
-                </ul>
-            </div>
-            <div class="category">
-                <div class="category-header"><span class="category-name">奶后 MILK TEA</span></div>
-                <ul class="item-list">
-                    <li class="item" onclick="popOrder('萃泉奶茶')"><span class="item-name">萃泉奶茶</span><span class="item-prices">45 / 55</span></li>
-                    <li class="item" onclick="popOrder('花香奶綠')"><span class="item-name">花香奶綠</span><span class="item-prices">45 / 55</span></li>
-                    <li class="item" onclick="popOrder('厚焙烏龍奶')"><span class="item-name">厚焙烏龍奶</span><span class="item-prices">45 / 55</span></li>
-                    <li class="item" onclick="popOrder('蜜糖波霸奶')"><span class="item-name">蜜糖波霸奶</span><span class="item-prices">50 / 60</span></li>
-                    <li class="item" onclick="popOrder('金紫芋圓奶')"><span class="item-name">金紫芋圓奶</span><span class="item-prices">50 / 60</span></li>
-                    <li class="item" onclick="popOrder('奶后私藏')"><span class="item-name">奶后私藏</span><span class="item-prices">60 / 70</span></li>
-                </ul>
-            </div>
+    <div class="brand-header"><h1>萃泉茶飲</h1></div>
+    <div class="menu-grid" id="menuGrid">
         </div>
-
-        <div class="column">
-            <div class="category">
-                <div class="category-header"><span class="category-name">0% 咖啡因</span></div>
-                <ul class="item-list">
-                    <li class="item" onclick="popOrder('琥珀冬瓜茶')"><span class="item-name">琥珀冬瓜茶</span><span class="item-prices">30 / 35</span></li>
-                    <li class="item" onclick="popOrder('冰釀蕎麥')"><span class="item-name">冰釀蕎麥</span><span class="item-prices">35 / 40</span></li>
-                    <li class="item" onclick="popOrder('冰釀蕎麥拿鐵')"><span class="item-name">冰釀蕎麥拿鐵</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('冰釀蕎麥雲朵')"><span class="item-name">冰釀蕎麥雲朵</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('沁桃粉霧')"><span class="item-name">沁桃粉霧</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('梅壓力')"><span class="item-name">梅壓力</span><span class="item-prices">50 / 60</span></li>
-                    <li class="item" onclick="popOrder('黑白配')"><span class="item-name">黑白配</span><span class="item-prices">55 / 65</span></li>
-                </ul>
-            </div>
-            <div class="category">
-                <div class="category-header"><span class="category-name">鮮乳 FRESH MILK</span></div>
-                <ul class="item-list">
-                    <li class="item" onclick="popOrder('紅韻錫蘭拿鐵')"><span class="item-name">紅韻錫蘭拿鐵</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('茉莉花香拿鐵')"><span class="item-name">茉莉花香拿鐵</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('厚焙烏龍拿鐵')"><span class="item-name">厚焙烏龍拿鐵</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('蜜糖波霸紅韻拿鐵')"><span class="item-name">蜜糖波霸紅韻拿鐵</span><span class="item-prices">60 / 70</span></li>
-                    <li class="item" onclick="popOrder('金紫芋圓紅韻拿鐵')"><span class="item-name">金紫芋圓紅韻拿鐵</span><span class="item-prices">60 / 70</span></li>
-                    <li class="item" onclick="popOrder('可可歐蕾')"><span class="item-name">可可歐蕾</span><span class="item-prices">60 / 70</span></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="column">
-            <div class="category">
-                <div class="category-header"><span class="category-name">雲朵奶蓋</span></div>
-                <ul class="item-list">
-                    <li class="item" onclick="popOrder('紅韻錫蘭奶蓋')"><span class="item-name">紅韻錫蘭奶蓋</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('初見茉莉奶蓋')"><span class="item-name">初見茉莉奶蓋</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('厚焙烏龍奶蓋')"><span class="item-name">厚焙烏龍奶蓋</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('清香四季奶蓋')"><span class="item-name">清香四季奶蓋</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('極萃金萱奶蓋')"><span class="item-name">極萃金萱奶蓋</span><span class="item-prices">55 / 65</span></li>
-                </ul>
-            </div>
-            <div class="category">
-                <div class="category-header"><span class="category-name">沁果 FRUIT TEA</span></div>
-                <ul class="item-list">
-                    <li class="item" onclick="popOrder('大坪頂百香綠')"><span class="item-name">大坪頂百香綠</span><span class="item-prices">50 / 60</span></li>
-                    <li class="item" onclick="popOrder('百香檸檬綠')"><span class="item-name">百香檸檬綠</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('萬丹甘蔗青')"><span class="item-name">萬丹甘蔗青</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('蜜桃青青')"><span class="item-name">蜜桃青青</span><span class="item-prices">55 / 65</span></li>
-                    <li class="item" onclick="popOrder('給點荔青')"><span class="item-name">給點荔青</span><span class="item-prices">60 / 70</span></li>
-                    <li class="item" onclick="popOrder('荔刻烏龍')"><span class="item-name">荔刻烏龍</span><span class="item-prices">60 / 70</span></li>
-                    <li class="item" onclick="popOrder('百香雙重奏')"><span class="item-name">百香雙重奏</span><span class="item-prices">60 / 70</span></li>
-                </ul>
-            </div>
-            <div class="category">
-                <div class="category-header"><span class="category-name">膩走開 GREASY</span></div>
-                <ul class="item-list">
-                    <li class="item" onclick="popOrder('鮮榨檸檬紅')"><span class="item-name">鮮榨檸檬紅</span><span class="item-prices">50 / 60</span></li>
-                    <li class="item" onclick="popOrder('鮮榨檸檬綠')"><span class="item-name">鮮榨檸檬綠</span><span class="item-prices">50 / 60</span></li>
-                    <li class="item" onclick="popOrder('鮮榨檸檬冬瓜')"><span class="item-name">鮮榨檸檬冬瓜</span><span class="item-prices">50 / 60</span></li>
-                    <li class="item" onclick="popOrder('鮮榨翡翠檸檬')"><span class="item-name">鮮榨翡翠檸檬</span><span class="item-prices">55 / 65</span></li>
-                </ul>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="modal-overlay" id="overlay" onclick="closeModal()"></div>
 <div class="modal" id="orderModal">
     <h3 id="itemName" style="margin-top:0;">品項</h3>
     <div class="option-group">
-        <label>容量</label>
-        <select id="selSize"><option value="L">大杯 (L)</option><option value="M">中杯 (M)</option></select>
-    </div>
-    <div class="option-group">
-        <label>甜度</label>
-        <select id="selSugar">
-            <option>無糖</option><option>微糖</option><option>半糖</option><option>少糖</option><option>正常甜</option>
+        <label>容量 <span id="sizeNote" style="color: #666; font-weight: normal; font-size: 0.8rem;"></span></label>
+        <select id="selSize">
+            <option value="L">大杯 (L)</option>
+            <option value="M">中杯 (M)</option>
         </select>
     </div>
-    <div class="option-group">
-        <label>冰塊</label>
-        <select id="selIce">
-            <option>去冰</option><option>微冰</option><option>少冰</option><option>正常冰</option><option>熱飲</option>
-        </select>
-    </div>
-    <div class="option-group">
-        <label>訂購人</label>
-        <input type="text" id="txtName" placeholder="如何稱呼您">
-    </div>
-    <div class="option-group">
-        <label>備註/加料</label>
-        <input type="text" id="txtAddon" placeholder="例：加珍珠">
-    </div>
-    <div class="btn-group">
-        <button class="btn-cancel" onclick="closeModal()">取消</button>
-        <button class="btn-send" id="submitBtn" onclick="submitToGas()">送出訂單</button>
-    </div>
+    <div class="option-group"><label>甜度</label><select id="selSugar"><option>無糖</option><option>微糖</option><option>半糖</option><option>少糖</option><option>正常甜</option></select></div>
+    <div class="option-group"><label>冰塊</label><select id="selIce"><option>去冰</option><option>微冰</option><option>少冰</option><option>正常冰</option><option>熱飲</option></select></div>
+    <div class="option-group"><label>訂購人</label><input type="text" id="txtName" placeholder="如何稱呼您"></div>
+    <div class="option-group"><label>備註/加料</label><input type="text" id="txtAddon" placeholder="例：加珍珠"></div>
+    <div class="btn-group"><button class="btn-cancel" onclick="closeModal()">取消</button><button class="btn-send" id="submitBtn" onclick="submitToGas()">送出訂單</button></div>
 </div>
 
 <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbyknnFh63H_DWDOtWkCmh7TSMExAf_WgGGebmKOky6S3ROyD6YMN-35KGy0jpNrf2-sQg/exec"; 
-    let currentItem = "";
+    const menuData = [
+        { cat: "原茗 RAW TEA", items: [
+            {n:"紅韻錫蘭紅", p:"30/35", s:"both"}, {n:"初見茉莉綠", p:"30/35", s:"both"}, {n:"焙香烏龍", p:"30/35", s:"both"}, {n:"極萃金萱", p:"30/35", s:"both"}, {n:"南投四季春", p:"30/35", s:"both"}
+        ]},
+        { cat: "奶后 MILK TEA", items: [
+            {n:"萃泉奶茶", p:"45/55", s:"both"}, {n:"花香奶綠", p:"45/55", s:"both"}, {n:"厚焙烏龍奶", p:"45/55", s:"both"}, {n:"蜜糖波霸奶", p:"50/60", s:"both"}, {n:"金紫芋圓奶", p:"50/60", s:"both"}, {n:"奶后私藏", p:"-/70", s:"L"}
+        ]},
+        { cat: "0% 咖啡因", items: [
+            {n:"琥珀冬瓜茶", p:"30/35", s:"both"}, {n:"冰釀蕎麥", p:"35/40", s:"both"}, {n:"冰釀蕎麥拿鐵", p:"-/65", s:"L"}, {n:"冰釀蕎麥雲朵", p:"-/65", s:"L"}, {n:"沁桃粉霧", p:"-/65", s:"L"}, {n:"梅壓力", p:"-/60", s:"L"}, {n:"黑白配", p:"-/65", s:"L"}
+        ]},
+        { cat: "鮮乳 FRESH MILK", items: [
+            {n:"紅韻錫蘭拿鐵", p:"55/65", s:"both"}, {n:"茉莉花香拿鐵", p:"55/65", s:"both"}, {n:"厚焙烏龍拿鐵", p:"55/65", s:"both"}, {n:"蜜糖波霸紅韻拿鐵", p:"-/70", s:"L"}, {n:"金紫芋圓紅韻拿鐵", p:"-/70", s:"L"}, {n:"可可歐蕾", p:"-/70", s:"L"}
+        ]},
+        { cat: "雲朵奶蓋", items: [
+            {n:"紅韻錫蘭奶蓋", p:"-/65", s:"L"}, {n:"初見茉莉奶蓋", p:"-/65", s:"L"}, {n:"厚焙烏龍奶蓋", p:"-/65", s:"L"}, {n:"清香四季奶蓋", p:"-/65", s:"L"}, {n:"極萃金萱奶蓋", p:"-/65", s:"L"}
+        ]},
+        { cat: "沁果 FRUIT TEA", items: [
+            {n:"大坪頂百香綠", p:"-/60", s:"L"}, {n:"百香檸檬綠", p:"-/65", s:"L"}, {n:"萬丹甘蔗青", p:"-/65", s:"L"}, {n:"蜜桃青青", p:"-/65", s:"L"}, {n:"給點荔青", p:"-/70", s:"L"}, {n:"荔刻烏龍", p:"-/70", s:"L"}, {n:"百香雙重奏", p:"-/70", s:"L"}
+        ]},
+        { cat: "膩走開 GREASY", items: [
+            {n:"鮮榨檸檬紅", p:"50/60", s:"both"}, {n:"鮮榨檸檬綠", p:"50/60", s:"both"}, {n:"鮮榨檸檬冬瓜", p:"50/60", s:"both"}, {n:"鮮榨翡翠檸檬", p:"-/65", s:"L"}
+        ]}
+    ];
 
-    function popOrder(name) {
-        currentItem = name;
+    // 初始化渲染菜單
+    const grid = document.getElementById('menuGrid');
+    menuData.forEach(c => {
+        let catHtml = `<div class="category"><div class="category-header"><span class="category-name">${c.cat}</span></div><ul class="item-list">`;
+        c.items.forEach(i => {
+            catHtml += `<li class="item" onclick="popOrder('${i.n}', '${i.s}')"><span class="item-name">${i.n}</span><span class="item-prices">${i.p}</span></li>`;
+        });
+        catHtml += `</ul></div>`;
+        grid.innerHTML += catHtml;
+    });
+
+    function popOrder(name, sizeRule) {
         document.getElementById('itemName').innerText = name;
+        const sizeSelect = document.getElementById('selSize');
+        const sizeNote = document.getElementById('sizeNote');
+        
+        if(sizeRule === 'L') {
+            sizeSelect.value = 'L';
+            sizeSelect.disabled = true; // 鎖定大杯
+            sizeNote.innerText = "(限大杯)";
+        } else {
+            sizeSelect.disabled = false;
+            sizeNote.innerText = "";
+        }
+        
         document.getElementById('overlay').style.display = 'block';
         document.getElementById('orderModal').style.display = 'block';
     }
@@ -236,7 +135,7 @@
         btn.innerText = "傳送中...";
 
         const payload = {
-            name, item: currentItem,
+            name, item: document.getElementById('itemName').innerText,
             size: document.getElementById('selSize').value,
             sugar: document.getElementById('selSugar').value,
             ice: document.getElementById('selIce').value,
@@ -244,15 +143,10 @@
         };
 
         try {
-            await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+            await fetch("https://script.google.com/macros/s/AKfycbyknnFh63H_DWDOtWkCmh7TSMExAf_WgGGebmKOky6S3ROyD6YMN-35KGy0jpNrf2-sQg/exec", { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
             alert('點餐成功！');
             closeModal();
-        } catch (e) {
-            alert('連線出錯');
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "送出訂單";
-        }
+        } catch (e) { alert('出錯了'); } finally { btn.disabled = false; btn.innerText = "送出訂單"; }
     }
 </script>
 </body>
