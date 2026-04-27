@@ -32,43 +32,44 @@
         .bg-red { background-color: var(--red); }
 
         /* 建立網格排版，讓餐點方塊自動排列 */
-.menu-grid { display: grid; /* 這裡的 200px 是方塊的最小寬度，您可以根據字體大小調整 */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-    gap: 15px;  /* 方塊之間的間距 */
-    margin-top: 15px; margin-bottom: 30px;}
-        /* 調整下方所有餐點品項的文字大小 */
+.menu-grid { 
+    display: flex; /* 改用 flex 讓方塊根據文字長度自動調整，更像分類項目的排法 */
+    flex-wrap: wrap;
+    gap: 10px;      
+    margin-top: 15px; 
+    margin-bottom: 30px;
+    justify-content: flex-start; /* 左對齊 */
+}
 /* 共用的餐點方塊樣式 */
 .menu-item { 
     background: white; 
-    padding: 22px;
-    border-radius: 8px; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+    /* 調整 padding：上下縮小(10px)、左右放寬(20px)，使其形狀接近分類項目 */
+    padding: 10px 20px; 
+    border-radius: 50px; /* 改為圓角膠囊狀，與分類膠囊呼應 */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
     cursor: pointer; 
     text-align: center; 
     font-weight: bold; 
     transition: 0.2s;
     color: #000000;
-    font-size: 20px;
-    border: 2px solid transparent; /* 預設透明邊框，避免畫面跳動 */
+    
+    /* 2. 菜單項目字體放大 */
+    font-size: 22px; 
+    
+    /* 3. 框線改為 1px */
+    border: 1px solid transparent; 
+    
+    /* 確保方塊寬度不要太寬，維持跟分類項目的精簡感 */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px; 
 }
 
-/* 針對不同分類設定 2px 邊框顏色 */
-
-/* 活力輕享 (橘色區塊) */
-#light-share .menu-item {
-    border: 2px solid #FF9800;
-}
-
-/* 清爽元氣 (粉紅色區塊) */
-#fresh-energy .menu-item {
-    border: 2px solid #E91E63;
-}
-
-/* 特色盒餐 (紅色區塊) */
-#special-box .menu-item {
-    border: 2px solid #D32F2F;
-}
-
+/* 確保不同分類的邊框也是 1px */
+#light-share .menu-item { border: 1px solid #FF9800; }
+#fresh-energy .menu-item { border: 1px solid #E91E63; }
+#special-box .menu-item { border: 1px solid #D32F2F; }
 /* 滑鼠移上去時的細微效果 (可選) */
 .menu-item:hover {
     transform: scale(1.03);
@@ -141,7 +142,24 @@
         }
 
         .btn-submit { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 18px; font-weight: bold; }
-        .btn-cancel { width: 100%; margin-top: 10px; background: none; color: #888; border: none; cursor: pointer; text-decoration: underline; }
+        .btn-cancel { 
+    width: 100%; 
+    margin-top: 10px; 
+    padding: 12px;
+    background-color: #e0e0e0; /* 灰色背景 */
+    color: #000000;           /* 黑色文字 */
+    border: none; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    font-weight: bold;
+    text-decoration: none;    /* 移除底線 */
+    transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #d0d0d0; /* 滑鼠移上去變深一點的灰 */
+}
     </style>
 </head>
 <body>
