@@ -33,7 +33,21 @@
 
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 15px; }
         /* 尋找 .menu-item 並加入或修改 color 這一行 */
-        .menu-item { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; text-align: center; font-weight: bold; transition: 0.2s; }
+        /* 調整下方所有餐點品項的文字大小 */
+.menu-item { 
+    background: white; 
+    padding: 22px;        /* 稍微增加內距，字變大後比例才協調 */
+    border-radius: 8px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+    cursor: pointer; 
+    text-align: center; 
+    font-weight: bold; 
+    transition: 0.2s;
+    color: #000000;
+    
+    font-size: 20px;      /* 這裡是重點！原本大約 16px，現在改為 20px */
+    letter-spacing: 0.5px; /* 增加一點點字距，閱讀更舒適 */
+}
         .menu-item:hover { transform: scale(1.03); background: #fffcf9; }
 
         /* Modal 彈窗 */
@@ -41,43 +55,49 @@
         .modal-content { background: white; width: 90%; max-width: 450px; margin: 8% auto; padding: 25px; border-radius: 12px; text-align: left; }
         /* 點擊品項後，彈窗內出現的餐點標題字體大小 */
         /* 分類標頭容器 */
+/* 分類標頭容器 */
 .section-header {
     display: flex;
     align-items: center;
-    margin-top: 30px;
+    margin-top: 35px;
     margin-bottom: 15px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); /* 增加淡淡的陰影感 */
 }
 
-/* 左半邊：Icon + 文字 (淺色底) */
+/* 左半膠囊：Icon + 文字 */
 .section-title-box {
-    padding: 10px 20px;
-    border-radius: 20px 0 0 20px; /* 左側圓角 */
+    padding: 8px 25px;
+    border-radius: 50px 0 0 50px; /* 左側完整圓角 */
     font-weight: bold;
     font-size: 22px;
     display: flex;
     align-items: center;
     white-space: nowrap;
-    background-color: #fff; /* 淺色底 */
+    background-color: #ffffff; /* 淺色底 */
+    z-index: 2; /* 確保在橫條上方 */
 }
 
-/* 右半邊：裝飾橫條 (深色底) */
+/* 右半膠囊：深色橫條 */
 .section-bar {
     flex-grow: 1;
-    height: 35px; /* 橫條高度 */
-    border-radius: 0 5px 5px 0; /* 右側圓角 */
+    height: 42px; /* 稍微增加高度以包覆文字區 */
+    border-radius: 0 50px 50px 0; /* 右側完整圓角 */
+    margin-left: -10px; /* 讓兩者微重疊，避免中間有縫隙 */
+    z-index: 1;
 }
 
-/* 顏色定義 - 活力輕享 (橘) */
-.color-orange { color: #FF9800; border: 2px solid #FF9800; border-right: none; }
-.bg-orange-dark { background-color: #FF9800; }
+/* 顏色設定 - 橘 (活力輕享) */
+.color-orange { color: #FF9800; border: 2px solid #FF9800; }
+.bg-orange-dark { background-color: #FFB74D; opacity: 0.9; } /* 使用稍深或同色系的橘 */
 
-/* 顏色定義 - 清爽元氣 (粉) */
-.color-pink { color: #E91E63; border: 2px solid #E91E63; border-right: none; }
-.bg-pink-dark { background-color: #E91E63; }
+/* 顏色設定 - 粉 (清爽元氣) */
+.color-pink { color: #E91E63; border: 2px solid #E91E63; }
+.bg-pink-dark { background-color: #F06292; opacity: 0.9; }
 
-/* 顏色定義 - 特色盒餐 (紅) */
-.color-red { color: #D32F2F; border: 2px solid #D32F2F; border-right: none; }
-.bg-red-dark { background-color: #D32F2F; }
+/* 顏色設定 - 紅 (特色盒餐) */
+.color-red { color: #D32F2F; border: 2px solid #D32F2F; }
+        
+.bg-red-dark { background-color: #E57373; opacity: 0.9; }
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 12px; font-weight: bold; color: #444; }
         input[type="text"], select, textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; }
@@ -106,7 +126,7 @@
         📋菜單
     </a>
 
-    <div class="section-header">
+<div class="section-header">
     <div class="section-title-box color-orange">🔸 活力輕享</div>
     <div class="section-bar bg-orange-dark"></div>
 </div>
