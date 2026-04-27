@@ -16,8 +16,7 @@
         
         /* 標題與菜單連結 - 已移除底線 */
         /* 尋找 h1 標籤並修改如下 */
-        h1 { margin-bottom: 5px; color: #333; font-size: 24px; /* 這裡可以調整大小，數字越大字越大 */
-        }
+        h1 { margin-bottom: 5px; color: #333; font-size: 26px; /* 這裡可以調整大小，數字越大字越大 */ }
         /* 尋找 .menu-link 並修改 color 屬性 */
         .menu-link {display: inline-block; margin-bottom: 20px; color: #006400; /* 將原本的 #555 改為 #006400 (深綠色) */
         text-decoration: none; font-size: 18px; font-weight: bold; padding: 5px 10px; transition: 0.2s;}
@@ -40,7 +39,8 @@
         /* Modal 彈窗 */
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
         .modal-content { background: white; width: 90%; max-width: 450px; margin: 8% auto; padding: 25px; border-radius: 12px; text-align: left; }
-        
+        /* 點擊品項後，彈窗內出現的餐點標題字體大小 */
+        #selectedItemName { margin-top: 0; color: #D32F2F;    /* 這裡維持紅色的風格 */ font-size: 28px;   /* 在這裡調整字體大小，可以改 32px 或更高 */ font-weight: bold; padding-bottom: 10px;}
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 12px; font-weight: bold; color: #444; }
         input[type="text"], select, textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; }
