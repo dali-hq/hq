@@ -9,12 +9,34 @@
             --orange: #FF9800; --pink: #E91E63; --red: #D32F2F;
             --green: #006400; --gray: #e0e0e0;
         }
+        body { font-family: "Microsoft JhengHei", sans-serif; background: #f8f9fa; padding: 20px; /* 核心置中語法 */ display: flex; flex-direction: column; align-items: center; }
+
+/* 讓所有內容容器有一個最大寬度，避免在寬螢幕上拉得太開 */
+.container { width: 100%; max-width: 900px; /* 您可以根據喜好調整這個寬度 */}
+
+h1, .menu-link { text-align: center; }
+
+/* 讓膠囊標頭在容器內填滿，且內容維持左對齊（但在置中的容器裡） */
+.section-header { 
+    width: 100%;
+    display: flex; 
+    align-items: center; 
+    margin-top: 35px; 
+    margin-bottom: 15px; 
+}
+
+/* 網格置中調整 */
+.menu-grid { 
+    width: 100%;
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 12px; 
+    margin-top: 15px; 
+    margin-bottom: 30px; 
+    justify-content: center; /* 讓餐點方塊在正中間排列 */
+}
         body { font-family: "Microsoft JhengHei", sans-serif; background: #f8f9fa; padding: 20px; }
-        h1 { font-size: 36px; font-weight: 800; color: #333; margin-bottom: 5px; }
-
-        .menu-link { display: inline-block; margin-bottom: 20px; color: var(--green); text-decoration: none; font-size: 18px; font-weight: bold; }
-
-        .section-header { display: flex; align-items: center; margin-top: 35px; margin-bottom: 15px; }
+        
         .section-title-box { padding: 8px 25px; border-radius: 50px 0 0 50px; font-weight: bold; font-size: 22px; display: flex; align-items: center; white-space: nowrap; background-color: #fff; z-index: 2; }
         .section-bar { flex-grow: 1; height: 42px; border-radius: 0 50px 50px 0; margin-left: -10px; z-index: 1; opacity: 0.9; }
 
@@ -25,7 +47,7 @@
         .color-red { color: var(--red); border: 1px solid var(--red); }
         .bg-red-dark { background-color: #E57373; }
 
-        .menu-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; margin-bottom: 30px; }
+        
         .menu-item { background: white; padding: 10px 20px; border-radius: 50px; cursor: pointer; text-align: center; font-weight: bold; font-size: 22px; border: 1px solid transparent; display: inline-flex; align-items: center; justify-content: center; min-height: 42px; transition: 0.2s; }
         
         #light-share .menu-item { border-color: var(--orange); }
@@ -46,8 +68,10 @@
     </style>
 </head>
 <body>
-
-    <h1>🍱 一月初健康餐盒</h1>
+<div class="container">
+        <h1>🍱 一月初健康餐盒</h1>
+        <div style="text-align: center;">
+    
     <a href="https://lh3.googleusercontent.com/d/1AvmLPM6kOiekJaOLIHFI8txWShy8blIN" target="_blank" class="menu-link">📋菜單</a>
 
     <div class="section-header">
