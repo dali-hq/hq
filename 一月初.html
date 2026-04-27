@@ -203,43 +203,38 @@ h1, .menu-link { text-align: center; }
         }
 
        document.getElementById('orderForm').onsubmit = function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.innerText = '傳送中...';
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerText = '傳送中...';
 
-            const names = Array.from(document.querySelectorAll('.user-name-input')).map(el => el.value).join(', ');
-            const qty = document.getElementById('itemQuantity').value;
-            const item = document.getElementById('menuItem').value;
-            const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
-            const rice = document.querySelector('input[name="rice"]:checked').value;
+    const names = Array.from(document.querySelectorAll('.user-name-input')).map(el => el.value).join(', ');
+    const qty = document.getElementById('itemQuantity').value;
+    const item = document.getElementById('menuItem').value;
+    const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
+    const rice = document.querySelector('input[name="rice"]:checked').value;
 
-            // 1. 建立參數字串 (這是 GAS 最穩的接收方式)
-            const params = new URLSearchParams();
-            params.append('name', names);
-            params.append('item', `${item}${flavor} (x${qty})`);
-            params.append('rice', rice);
+    // 使用 URL 編碼格式，這是 GAS doPost(e) 最喜歡的格式
+    const postData = "name=" + encodeURIComponent(names) + 
+                     "&item=" + encodeURIComponent(`${item}${flavor} (x${qty})`) + 
+                     "&rice=" + encodeURIComponent(rice);
 
-            // 2. 執行傳送
-            fetch(scriptURL, {
-                method: 'POST',
-                body: params, // 使用 URLSearchParams
-                mode: 'no-cors' // 解決跨域攔截問題
-            })
-            .then(() => {
-                // 注意：no-cors 模式下無法讀取回傳內容，只要沒噴 catch 就是成功
-                alert('訂購指令已發出！請檢查試算表。');
-                closeModal();
-            })
-            .catch(err => {
-                console.error(err);
-                alert('傳送失敗，請檢查網址或網路。');
-            })
-            .finally(() => {
-                btn.disabled = false;
-                btn.innerText = '確認送出';
-            });
-        };
+    fetch(scriptURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: postData,
+        mode: 'no-cors' 
+    })
+    .then(() => {
+        alert('訂購完成！請確認試算表。');
+        closeModal();
+    })
+    .catch(err => alert('傳送失敗：' + err))
+    .finally(() => {
+        btn.disabled = false;
+        btn.innerText = '確認送出';
+    });
+};
     </script>
 </body>
 </html>
