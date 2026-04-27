@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一月初健康餐盒 - 週五訂餐系統</title>
+    <style>
+        :root {
+            --orange: #FF9800;
+            --pink: #E91E63;
+            --red: #D32F2F;
+        }
+        body { font-family: sans-serif; background: #f5f5f5; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        h1 { text-align: center; color: #333; }
+
+        .section-title { padding: 10px; color: white; border-radius: 5px; margin-top: 20px; }
+        .bg-orange { background-color: var(--orange); }
+        .bg-pink { background-color: var(--pink); }
+        .bg-red { background-color: var(--red); }
+
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .menu-item { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; text-align: center; transition: 0.3s; }
+        .menu-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        /* Modal 彈窗 */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+        .modal-content { background: white; width: 90%; max-width: 400px; margin: 10% auto; padding: 20px; border-radius: 10px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px; }
+        .btn-submit { width: 100%; padding: 10px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🍱 一月初健康餐盒訂購</h1>
+
+    <div class="section-title bg-orange">活力輕享</div>
+    <div class="menu-grid" id="light-share"></div>
+
+    <div class="section-title bg-pink">清爽元氣 (塔可/沙拉)</div>
+    <div class="menu-grid" id="fresh-energy"></div>
+
+    <div class="section-title bg-red">特色盒餐</div>
+    <div class="menu-grid" id="special-box"></div>
+</div>
+
+<div id="orderModal" class="modal">
+    <div class="modal-content">
+        <h3 id="selectedItemName">品項名稱</h3>
+        <form id="orderForm">
+            <input type="hidden" id="menuItem">
+            
+            <div class="form-group">
+                <label>姓名</label>
+                <input type="text" id="userName" required placeholder="請輸入您的姓名">
+            </div>
+
+            <div id="flavorGroup" class="form-group" style="display:none;">
+                <label>口味選擇</label>
+                <select id="flavorSelection"></select>
+            </div>
+
+            <div class="form-group">
+                <label>飯量選擇</label>
+                <select id="riceAmount">
+                    <option value="紫米">紫米</option>
+                    <option value="白飯">白飯</option>
+                    <option value="紅藜麥飯">紅藜麥飯</option>
+                    <option value="飯少(8分)">飯少(8分)</option>
+                    <option value="飯一半">飯一半</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>備註</label>
+                <textarea id="note" rows="2" placeholder="例如：去蔥、蛋全熟"></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">送出訂單</button>
+            <button type="button" onclick="closeModal()" style="width:100%; margin-top:10px; background:#ccc; border:none; padding:5px; border-radius:4px;">取消</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const menuData = {
+        light: ["塔香三杯雞", "蒜泥白肉豬", "黑胡椒清蒸鯛魚", "季節食蔬(素)"],
+        fresh: ["舒肥雞塔可飯", "鯛魚塔可飯", "培根蝦塔可飯", "舒肥雞堅果沙拉", "鮮蝦堅果沙拉"],
+        special: [
+            { name: "舒肥嫩煮雞", flavors: ["原味", "蜜汁烤肉醬", "鹹蛋黃塔塔", "椒鹽檸檬", "港式蔥鹽", "蒜香蜂蜜"] },
+            { name: "日式唐揚雞", flavors: ["椒鹽", "松露醬", "桂花釀"] },
+            "泰式椒麻雞", "宮保雞丁", "薑汁燒肉豬", "香烤松阪豬", "日式照燒牛", "川辣口水牛(辣)", "蔥爆牛柳(辣)", "照燒金磚魚", "清蒸鱸魚", "舒肥嫩鮭魚"
+        ]
+    };
+
+    function renderMenu() {
+        const render = (containerId, items) => {
+            const container = document.getElementById(containerId);
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'menu-item';
+                const name = typeof item === 'string' ? item : item.name;
+                div.innerText = name;
+                div.onclick = () => openModal(item);
+                container.appendChild(div);
+            });
+        };
+        render('light-share', menuData.light);
+        render('fresh-energy', menuData.fresh);
+        render('special-box', menuData.special);
+    }
+
+    function openModal(item) {
+        const isObject = typeof item === 'object';
+        const name = isObject ? item.name : item;
+        document.getElementById('selectedItemName').innerText = name;
+        document.getElementById('menuItem').value = name;
+        
+        const flavorGroup = document.getElementById('flavorGroup');
+        const flavorSelect = document.getElementById('flavorSelection');
+        if (isObject && item.flavors) {
+            flavorGroup.style.display = 'block';
+            flavorSelect.innerHTML = item.flavors.map(f => `<option value="${f}">${f}</option>`).join('');
+        } else {
+            flavorGroup.style.display = 'none';
+        }
+        
+        document.getElementById('orderModal').style.display = 'block';
+    }
+
+    function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
+
+    document.getElementById('orderForm').onsubmit = function(e) {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('userName').value,
+            item: document.getElementById('menuItem').value,
+            flavor: document.getElementById('flavorSelection').value || '無',
+            rice: document.getElementById('riceAmount').value,
+            note: document.getElementById('note').value
+        };
+
+        // 請在此處填入您的 GAS 部署網址
+        const GAS_URL = "您的_GAS_網址";
+        
+        fetch(GAS_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify(data)
+        }).then(() => {
+            alert("訂單已送出！");
+            closeModal();
+            this.reset();
+        });
+    };
+
+    renderMenu();
+</script>
+</body>
+</html>
