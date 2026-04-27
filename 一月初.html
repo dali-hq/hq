@@ -9,6 +9,7 @@
             --orange: #FF9800;
             --pink: #E91E63;
             --red: #D32F2F;
+            --active-blue: #007BFF;
         }
         body { font-family: "Microsoft JhengHei", sans-serif; background: #f8f9fa; margin: 0; padding: 20px; }
         .container { max-width: 900px; margin: auto; text-align: center; }
@@ -32,19 +33,22 @@
         .modal-content { background: white; width: 90%; max-width: 450px; margin: 8% auto; padding: 25px; border-radius: 12px; text-align: left; }
         
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #444; }
+        label { display: block; margin-bottom: 12px; font-weight: bold; color: #444; }
         input[type="text"], select, textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; }
 
-        /* 飯量選取 - 黑字加強版 */
-        .rice-options { display: flex; flex-wrap: wrap; gap: 10px; }
+        /* 飯量選取 - 移除膠囊框 & 選取變藍字 */
+        .rice-options { display: flex; flex-wrap: wrap; gap: 15px; }
         .rice-options label { 
-            display: flex; align-items: center; background: #f0f0f0; padding: 8px 15px; border-radius: 20px; 
-            cursor: pointer; font-size: 14px; transition: 0.2s;
-            color: #000000; /* 強制黑字 */
-            font-weight: bold;
+            display: flex; align-items: center; cursor: pointer; 
+            font-size: 16px; color: #000000; font-weight: bold; 
+            transition: color 0.2s;
         }
-        .rice-options input[type="radio"] { margin-right: 8px; width: 18px; height: 18px; cursor: pointer; }
-        .rice-options label:hover { background: #e0e0e0; }
+        .rice-options input[type="radio"] { margin-right: 6px; width: 18px; height: 18px; cursor: pointer; }
+        
+        /* 當 radio 被選中時，後方的 span 變藍色 */
+        .rice-options input[type="radio"]:checked + span {
+            color: var(--active-blue);
+        }
 
         .btn-submit { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 18px; font-weight: bold; }
         .btn-cancel { width: 100%; margin-top: 10px; background: none; color: #888; border: none; cursor: pointer; text-decoration: underline; }
@@ -55,7 +59,7 @@
 <div class="container">
     <h1>🍱 一月初健康餐盒</h1>
     <a href="https://lh3.googleusercontent.com/d/1AvmLPM6kOiekJaOLIHFI8txWShy8blIN" target="_blank" class="menu-link">
-        菜單📋(點擊開啟)
+        菜單 📋 (點擊開啟)
     </a>
 
     <div class="section-title bg-orange">活力輕享</div>
@@ -113,7 +117,7 @@
         special: [
             { name: "舒肥嫩煮雞", flavors: ["原味", "蜜汁烤肉醬", "鹹蛋黃塔塔", "椒鹽檸檬", "港式蔥鹽", "蒜香蜂蜜"] },
             { name: "日式唐揚雞", flavors: ["椒鹽", "松露醬", "桂花釀"] },
-            "泰式椒麻雞", "宮保雞丁", "薑汁燒肉豬", "香烤松阪豬", "日式照燒牛", "川辣口水牛(辣)", "蔥爆牛柳(辣)", "照燒金磚魚", "清蒸鱸魚", "舒肥嫩鮭魚"
+            "泰式椒麻雞", "宮保雞丁", "薑汁燒肉豬", "香烤松阪豬", "日式照燒牛", "川辣口水牛🌶️", "蔥爆牛柳🌶️", "照燒金磚魚", "清蒸鱸魚", "舒肥嫩鮭魚"
         ]
     };
 
