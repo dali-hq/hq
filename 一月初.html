@@ -16,8 +16,8 @@
         
         /* 標題與菜單連結 - 已移除底線 */
         /* 尋找 h1 標籤並修改如下 */
-        h1 { margin-bottom: 5px; color: #333; font-size: 36px; /* 這裡可以調整大小，數字越大字越大 */
-        font-weight: 800; /* 讓標題更粗、更有氣勢 */}
+        h1 { margin-bottom: 5px; color: #333; font-size: 16px; /* 這裡可以調整大小，數字越大字越大 */
+        }
         /* 尋找 .menu-link 並修改 color 屬性 */
         .menu-link {     display: inline-block; margin-bottom: 20px; color: #006400; /* 將原本的 #555 改為 #006400 (深綠色) */
         text-decoration: none; font-size: 18px; font-weight: bold; padding: 5px 10px; transition: 0.2s;}
@@ -25,7 +25,9 @@
         /* 如果希望滑鼠移上去時顏色深一點或維持綠色 */
         .menu-link:hover { color: #004d00; /* 滑鼠懸停時變成更深的綠色 */background-color: #eee; border-radius: 5px;}
 
-        .section-title { padding: 12px; color: white; border-radius: 5px; margin-top: 25px; font-weight: bold; text-align: left; }
+        /* 調整分類橫條的文字大小 */
+        .section-title { padding: 12px; color: white; border-radius: 5px; margin-top: 25px; font-weight: bold; text-align: left;font-size: 22px; /* 原本大約是 16-18px，現在放大到 22px */
+        letter-spacing: 1px; /* 增加一點字距，看起來更有質感 */}
         .bg-orange { background-color: var(--orange); }
         .bg-pink { background-color: var(--pink); }
         .bg-red { background-color: var(--red); }
