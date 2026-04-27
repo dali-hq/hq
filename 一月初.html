@@ -3,76 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>一月初健康餐盒</title>
+    <title>一月初健康餐盒訂購</title>
     <style>
         :root {
             --orange: #FF9800; --pink: #E91E63; --red: #D32F2F;
             --green: #006400; --gray: #e0e0e0;
         }
-        body { font-family: "Microsoft JhengHei", sans-serif; background: #f8f9fa; padding: 20px; /* 核心置中語法 */ display: flex; flex-direction: column; align-items: center; }
 
-/* 讓所有內容容器有一個最大寬度，避免在寬螢幕上拉得太開 */
-.container { width: 100%; max-width: 900px; /* 您可以根據喜好調整這個寬度 */}
+        /* 核心置中排版 */
+        body { 
+            font-family: "Microsoft JhengHei", sans-serif; 
+            background: #f8f9fa; 
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center; 
+        }
 
-h1, .menu-link { text-align: center; }
+        .container { width: 100%; max-width: 800px; }
 
-/* 讓膠囊標頭在容器內填滿，且內容維持左對齊（但在置中的容器裡） */
-.section-header { 
-    width: 100%;
-    display: flex; 
-    align-items: center; 
-    margin-top: 35px; 
-    margin-bottom: 15px; 
-}
+        h1 { font-size: 36px; font-weight: 800; color: #333; text-align: center; margin-bottom: 5px; }
+        .menu-link { display: block; text-align: center; margin-bottom: 25px; color: var(--green); text-decoration: none; font-size: 18px; font-weight: bold; }
 
-/* 網格置中調整 */
-.menu-grid { 
-    width: 100%;
-    display: flex; 
-    flex-wrap: wrap; 
-    gap: 12px; 
-    margin-top: 15px; 
-    margin-bottom: 30px; 
-    justify-content: center; /* 讓餐點方塊在正中間排列 */
-}
-        body { font-family: "Microsoft JhengHei", sans-serif; background: #f8f9fa; padding: 20px; }
-        
-        .section-title-box { padding: 8px 25px; border-radius: 50px 0 0 50px; font-weight: bold; font-size: 22px; display: flex; align-items: center; white-space: nowrap; background-color: #fff; z-index: 2; }
+        /* 分類膠囊樣式 */
+        .section-header { display: flex; align-items: center; margin-top: 40px; margin-bottom: 15px; width: 100%; }
+        .section-title-box {
+            padding: 8px 25px; border-radius: 50px 0 0 50px; font-weight: bold;
+            font-size: 22px; display: flex; align-items: center; white-space: nowrap;
+            background-color: #fff; z-index: 2;
+        }
         .section-bar { flex-grow: 1; height: 42px; border-radius: 0 50px 50px 0; margin-left: -10px; z-index: 1; opacity: 0.9; }
 
-        .color-orange { color: var(--orange); border: 1px solid var(--orange); }
+        .color-orange { color: var(--orange); border: 1.5px solid var(--orange); }
         .bg-orange-dark { background-color: #FFB74D; }
-        .color-pink { color: var(--pink); border: 1px solid var(--pink); }
+        .color-pink { color: var(--pink); border: 1.5px solid var(--pink); }
         .bg-pink-dark { background-color: #F06292; }
-        .color-red { color: var(--red); border: 1px solid var(--red); }
+        .color-red { color: var(--red); border: 1.5px solid var(--red); }
         .bg-red-dark { background-color: #E57373; }
 
-        
-        .menu-item { background: white; padding: 10px 20px; border-radius: 50px; cursor: pointer; text-align: center; font-weight: bold; font-size: 22px; border: 1px solid transparent; display: inline-flex; align-items: center; justify-content: center; min-height: 42px; transition: 0.2s; }
-        
+        /* 菜單項目網格：讓它置中排列 */
+        .menu-grid { 
+            display: flex; flex-wrap: wrap; gap: 12px; 
+            justify-content: center; /* 讓品項方塊在正中央 */
+            margin-bottom: 30px; 
+        }
+
+        .menu-item { 
+            background: white; padding: 10px 22px; border-radius: 50px; 
+            cursor: pointer; text-align: center; font-weight: bold; 
+            font-size: 22px; color: #000; border: 1px solid transparent;
+            display: inline-flex; align-items: center; justify-content: center; 
+            min-height: 44px; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .menu-item:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
         #light-share .menu-item { border-color: var(--orange); }
         #fresh-energy .menu-item { border-color: var(--pink); }
         #special-box .menu-item { border-color: var(--red); }
 
+        /* 彈窗樣式 */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
-        .modal-content { background: white; width: 90%; max-width: 400px; margin: 50px auto; padding: 25px; border-radius: 12px; }
-        #selectedItemName { font-size: 28px; color: var(--red); font-weight: bold; margin-top: 0; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .modal-content { background: white; width: 90%; max-width: 400px; margin: 60px auto; padding: 30px; border-radius: 15px; }
+        #selectedItemName { font-size: 28px; color: var(--red); font-weight: bold; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center; }
 
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        select, .user-name-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 16px; }
+        select, .user-name-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
         
-        .btn-submit { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        .btn-cancel { width: 100%; padding: 12px; background: var(--gray); color: black; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; text-align: center; display: block; }
-        .rice-option { margin-right: 10px; display: inline-block; cursor: pointer; }
+        .btn-submit { width: 100%; padding: 14px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .btn-cancel { width: 100%; padding: 12px; background: var(--gray); color: black; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; text-align: center; display: block; text-decoration: none; }
+        
+        .rice-group { display: flex; flex-wrap: wrap; gap: 10px; }
+        .rice-option { font-weight: normal; cursor: pointer; display: flex; align-items: center; gap: 4px; }
     </style>
 </head>
 <body>
+
 <div class="container">
-        <h1>🍱 一月初健康餐盒</h1>
-        <div style="text-align: center;">
-    
-    <a href="https://lh3.googleusercontent.com/d/1AvmLPM6kOiekJaOLIHFI8txWShy8blIN" target="_blank" class="menu-link">📋菜單</a>
+    <h1>🍱 一月初健康餐盒</h1>
+    <a href="https://lh3.googleusercontent.com/d/1AvmLPM6kOiekJaOLIHFI8txWShy8blIN" target="_blank" class="menu-link">菜單📋</a>
 
     <div class="section-header">
         <div class="section-title-box color-orange">🔸 活力輕享</div>
@@ -115,126 +122,95 @@ h1, .menu-link { text-align: center; }
         <div class="menu-item" onclick="openModal('清蒸鱸魚')">清蒸鱸魚</div>
         <div class="menu-item" onclick="openModal('舒肥嫩鮭魚')">舒肥嫩鮭魚</div>
     </div>
+</div>
 
-    <div id="orderModal" class="modal">
-        <div class="modal-content">
-            <h2 id="selectedItemName"></h2>
-            <form id="orderForm">
-                <input type="hidden" id="menuItem">
-                
-                <div class="form-group" id="flavorGroup" style="display:none;">
-                    <label>口味選擇</label>
-                    <select id="flavorSelection"></select>
-                </div>
+<div id="orderModal" class="modal">
+    <div class="modal-content">
+        <h2 id="selectedItemName"></h2>
+        <form id="orderForm">
+            <input type="hidden" id="menuItem">
+            
+            <div class="form-group" id="flavorGroup" style="display:none;">
+                <label>口味選擇</label>
+                <select id="flavorSelection"></select>
+            </div>
 
-                <div class="form-group">
-                    <label>訂購數量</label>
-                    <select id="itemQuantity" onchange="updateNameFields()">
-                        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label>數量</label>
+                <select id="itemQuantity" onchange="updateNameFields()">
+                    <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label id="nameLabel">訂購人姓名</label>
-                    <div id="nameFieldsContainer"></div>
-                </div>
+            <div class="form-group">
+                <label id="nameLabel">姓名</label>
+                <div id="nameFieldsContainer"></div>
+            </div>
 
-                <div class="form-group">
-                    <label>飯量需求</label>
+            <div class="form-group">
+                <label>飯量需求</label>
+                <div class="rice-group">
                     <label class="rice-option"><input type="radio" name="rice" value="紫米" checked> 紫米</label>
                     <label class="rice-option"><input type="radio" name="rice" value="白飯"> 白飯</label>
                     <label class="rice-option"><input type="radio" name="rice" value="紅藜麥飯"> 紅藜麥</label>
                     <label class="rice-option"><input type="radio" name="rice" value="飯少(8分)"> 飯少</label>
                     <label class="rice-option"><input type="radio" name="rice" value="飯一半"> 飯一半</label>
                 </div>
+            </div>
 
-                <button type="submit" class="btn-submit" id="submitBtn">確認送出</button>
-                <button type="button" class="btn-cancel" onclick="closeModal()">取消返回</button>
-            </form>
-        </div>
+            <button type="submit" class="btn-submit" id="submitBtn">確認送出</button>
+            <button type="button" class="btn-cancel" onclick="closeModal()">取消返回</button>
+        </form>
     </div>
+</div>
 
-    <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzkuKwCUf-9VLdkvqP53QE6DLp6LOngncKZaVgwNrphT4iQWTs6q2jm_2MOtEMk2QId/exec';
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzkuKwCUf-9VLdkvqP53QE6DLp6LOngncKZaVgwNrphT4iQWTs6q2jm_2MOtEMk2QId/exec';
 
-        function openModal(itemName) {
-            document.getElementById('selectedItemName').innerText = itemName;
-            document.getElementById('menuItem').value = itemName;
-            document.getElementById('orderModal').style.display = 'block';
-            
-            // 口味邏輯
-            const flavorGroup = document.getElementById('flavorGroup');
-            const flavorSelect = document.getElementById('flavorSelection');
-            flavorGroup.style.display = 'none';
-            flavorSelect.innerHTML = '';
+    function openModal(itemName) {
+        document.getElementById('selectedItemName').innerText = itemName;
+        document.getElementById('menuItem').value = itemName;
+        document.getElementById('orderModal').style.display = 'block';
+        
+        const fGroup = document.getElementById('flavorGroup');
+        const fSelect = document.getElementById('flavorSelection');
+        fGroup.style.display = 'none';
+        fSelect.innerHTML = '';
 
-            if (itemName === '舒肥嫩煮雞') {
-                flavorGroup.style.display = 'block';
-                ['原味', '蜜汁烤肉醬', '鹹蛋黃塔塔', '椒鹽檸檬', '港式蔥鹽', '蒜香蜂蜜'].forEach(f => {
-                    flavorSelect.add(new Option(f, f));
-                });
-            } else if (itemName === '日式唐揚雞') {
-                flavorGroup.style.display = 'block';
-                ['椒鹽', '松露醬', '桂花釀'].forEach(f => {
-                    flavorSelect.add(new Option(f, f));
-                });
-            }
-
-            document.getElementById('itemQuantity').value = "1";
-            updateNameFields();
+        if (itemName === '舒肥嫩煮雞') {
+            fGroup.style.display = 'block';
+            ['原味', '蜜汁烤肉醬', '鹹蛋黃塔塔', '椒鹽檸檬', '港式蔥鹽', '蒜香蜂蜜'].forEach(v => fSelect.add(new Option(v, v)));
+        } else if (itemName === '日式唐揚雞') {
+            fGroup.style.display = 'block';
+            ['椒鹽', '松露醬', '桂花釀'].forEach(v => fSelect.add(new Option(v, v)));
         }
+        document.getElementById('itemQuantity').value = "1";
+        updateNameFields();
+    }
 
-        function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
-        window.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
+    window.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
 
-        function updateNameFields() {
-            const qty = document.getElementById('itemQuantity').value;
-            const container = document.getElementById('nameFieldsContainer');
-            container.innerHTML = '';
-            for (let i = 0; i < qty; i++) {
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.className = 'user-name-input';
-                input.placeholder = `請輸入姓名`;
-                input.required = true;
-                input.style.marginBottom = "8px";
-                container.appendChild(input);
-            }
+    function updateNameFields() {
+        const qty = document.getElementById('itemQuantity').value;
+        const container = document.getElementById('nameFieldsContainer');
+        container.innerHTML = '';
+        for (let i = 0; i < qty; i++) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'user-name-input';
+            input.placeholder = `第 ${i+1} 位姓名`;
+            input.required = true;
+            input.style.marginBottom = "8px";
+            container.appendChild(input);
         }
+    }
 
-       document.getElementById('orderForm').onsubmit = function(e) {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerText = '傳送中...';
-
-    const names = Array.from(document.querySelectorAll('.user-name-input')).map(el => el.value).join(', ');
-    const qty = document.getElementById('itemQuantity').value;
-    const item = document.getElementById('menuItem').value;
-    const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
-    const rice = document.querySelector('input[name="rice"]:checked').value;
-
-    // 使用 URL 編碼格式，這是 GAS doPost(e) 最喜歡的格式
-    const postData = "name=" + encodeURIComponent(names) + 
-                     "&item=" + encodeURIComponent(`${item}${flavor} (x${qty})`) + 
-                     "&rice=" + encodeURIComponent(rice);
-
-    fetch(scriptURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: postData,
-        mode: 'no-cors' 
-    })
-    .then(() => {
-        alert('訂購完成！請確認試算表。');
+    document.getElementById('orderForm').onsubmit = function(e) {
+        e.preventDefault();
+        alert('明天再來接 GAS 吧！先睡個好覺。');
         closeModal();
-    })
-    .catch(err => alert('傳送失敗：' + err))
-    .finally(() => {
-        btn.disabled = false;
-        btn.innerText = '確認送出';
-    });
-};
-    </script>
+    };
+</script>
 </body>
 </html>
