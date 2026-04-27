@@ -38,7 +38,18 @@
         .bg-red { background-color: var(--red); }
 
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 15px; }
-        .menu-item { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; text-align: center; font-weight: bold; transition: 0.2s; }
+        /* 尋找 .menu-item 並加入或修改 color 這一行 */
+.menu-item { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+    cursor: pointer; 
+    text-align: center; 
+    font-weight: bold; 
+    transition: 0.2s;
+    color: #006400; /* 加入這一行，#006400 是深綠色 */
+}
         .menu-item:hover { transform: scale(1.03); background: #fffcf9; }
 
         /* Modal 彈窗 */
