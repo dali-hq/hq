@@ -63,7 +63,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 42px; 
+    min-height: 42px;/* 如果希望每個方塊至少有個寬度，看起來比較整齊 */
+min-width: 120px; 
 }
 
 /* 確保不同分類的邊框也是 1px */
@@ -157,8 +158,51 @@
     transition: background 0.2s;
 }
 
-.btn-cancel:hover {
-    background-color: #d0d0d0; /* 滑鼠移上去變深一點的灰 */
+.btn-cancel:hover { background-color: #d0d0d0; /* 滑鼠移上去變深一點的灰 */
+                  }
+        // 1. 監聽鍵盤事件
+window.addEventListener('keydown', function(event) { if (event.key === 'Escape') {loseModal(); }
+});
+        // 2. 根據數量產生對應的輸入框
+function updateNameFields() {
+    const qty = document.getElementById('itemQuantity').value;
+    const container = document.getElementById('nameFieldsContainer');
+    const label = document.getElementById('nameLabel');
+    
+    // 更新 Label
+    label.innerText = qty > 1 ? `訂購人姓名 (共 ${qty} 位)` : "訂購人姓名";
+    
+    // 清空並重新產生
+    container.innerHTML = '';
+    for (let i = 0; i < qty; i++) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'user-name-input';
+        input.placeholder = qty > 1 ? `第 ${i+1} 位姓名` : "請輸入姓名";
+        input.required = true;
+        input.style.marginBottom = "8px";
+        input.style.width = "100%"; // 確保寬度填滿
+        input.style.padding = "10px";
+        input.style.boxSizing = "border-box";
+        input.style.border = "1px solid #ccc";
+        input.style.borderRadius = "6px";
+        container.appendChild(input);
+    }
+}
+    .user-name-input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.user-name-input:focus {
+    border-color: var(--active-blue);
+    outline: none;
 }
     </style>
 </head>
@@ -196,9 +240,22 @@
             <input type="hidden" id="menuItem">
             
             <div class="form-group">
-                <label>姓名/稱呼</label>
-                <input type="text" id="userName" required>
-            </div>
+    <label>數量</label>
+    <select id="itemQuantity" onchange="updateNameFields()">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label id="nameLabel">姓名</label>
+    <div id="nameFieldsContainer">
+        <input type="text" class="user-name-input" placeholder="請輸入姓名或稱呼" required style="margin-bottom: 8px;">
+    </div>
+</div>
 
             <div id="flavorGroup" class="form-group" style="display:none;">
                 <label>口味選擇</label>
@@ -273,16 +330,25 @@
 
     function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
 
-    document.getElementById('orderForm').onsubmit = function(e) {
-        e.preventDefault();
-        const riceVal = document.querySelector('input[name="rice"]:checked').value;
-        const data = {
-            name: document.getElementById('userName').value,
-            item: document.getElementById('menuItem').value,
-            flavor: document.getElementById('flavorSelection').value || '無',
-            rice: riceVal,
-            note: document.getElementById('note').value
-        };
+document.getElementById('orderForm').onsubmit = function(e) {
+    e.preventDefault();
+    
+    // 收集所有姓名，並用逗號隔開
+    const nameElements = document.querySelectorAll('.user-name-input');
+    const names = Array.from(nameElements).map(el => el.value).join(', ');
+    
+    const qty = document.getElementById('itemQuantity').value;
+    const riceVal = document.querySelector('input[name="rice"]:checked').value;
+    
+    const data = {
+        name: names, // 這裡會變成 "張三, 李四"
+        item: document.getElementById('menuItem').value + ` (x${qty})`, // 註記數量
+        flavor: document.getElementById('flavorSelection').value || '無',
+        rice: riceVal,
+        note: document.getElementById('note').value
+    };
+
+    // ... 後續 fetch 到 GAS 的部分不變 ...
 
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzkuKwCUf-9VLdkvqP53QE6DLp6LOngncKZaVgwNrphT4iQWTs6q2jm_2MOtEMk2QId/exec"; 
         
