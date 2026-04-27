@@ -202,7 +202,7 @@ h1, .menu-link { text-align: center; }
             }
         }
 
-        document.getElementById('orderForm').onsubmit = function(e) {
+       document.getElementById('orderForm').onsubmit = function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
@@ -214,15 +214,31 @@ h1, .menu-link { text-align: center; }
             const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
             const rice = document.querySelector('input[name="rice"]:checked').value;
 
-            const formData = new FormData();
-            formData.append('name', names);
-            formData.append('item', `${item}${flavor} (x${qty})`);
-            formData.append('rice', rice);
+            // 1. 建立參數字串 (這是 GAS 最穩的接收方式)
+            const params = new URLSearchParams();
+            params.append('name', names);
+            params.append('item', `${item}${flavor} (x${qty})`);
+            params.append('rice', rice);
 
-            fetch(scriptURL, { method: 'POST', body: formData })
-                .then(() => { alert('訂購成功！'); closeModal(); })
-                .catch(err => alert('錯誤：' + err.message))
-                .finally(() => { btn.disabled = false; btn.innerText = '確認送出'; });
+            // 2. 執行傳送
+            fetch(scriptURL, {
+                method: 'POST',
+                body: params, // 使用 URLSearchParams
+                mode: 'no-cors' // 解決跨域攔截問題
+            })
+            .then(() => {
+                // 注意：no-cors 模式下無法讀取回傳內容，只要沒噴 catch 就是成功
+                alert('訂購指令已發出！請檢查試算表。');
+                closeModal();
+            })
+            .catch(err => {
+                console.error(err);
+                alert('傳送失敗，請檢查網址或網路。');
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerText = '確認送出';
+            });
         };
     </script>
 </body>
