@@ -31,12 +31,16 @@
         .bg-pink { background-color: var(--pink); }
         .bg-red { background-color: var(--red); }
 
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 15px; }
-        /* 尋找 .menu-item 並加入或修改 color 這一行 */
+        /* 建立網格排版，讓餐點方塊自動排列 */
+.menu-grid { display: grid; /* 這裡的 200px 是方塊的最小寬度，您可以根據字體大小調整 */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 15px;  /* 方塊之間的間距 */
+    margin-top: 15px; margin-bottom: 30px;}
         /* 調整下方所有餐點品項的文字大小 */
+/* 共用的餐點方塊樣式 */
 .menu-item { 
     background: white; 
-    padding: 22px;        /* 稍微增加內距，字變大後比例才協調 */
+    padding: 22px;
     border-radius: 8px; 
     box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
     cursor: pointer; 
@@ -44,9 +48,31 @@
     font-weight: bold; 
     transition: 0.2s;
     color: #000000;
-    
-    font-size: 20px;      /* 這裡是重點！原本大約 16px，現在改為 20px */
-    letter-spacing: 0.5px; /* 增加一點點字距，閱讀更舒適 */
+    font-size: 20px;
+    border: 2px solid transparent; /* 預設透明邊框，避免畫面跳動 */
+}
+
+/* 針對不同分類設定 2px 邊框顏色 */
+
+/* 活力輕享 (橘色區塊) */
+#light-share .menu-item {
+    border: 2px solid #FF9800;
+}
+
+/* 清爽元氣 (粉紅色區塊) */
+#fresh-energy .menu-item {
+    border: 2px solid #E91E63;
+}
+
+/* 特色盒餐 (紅色區塊) */
+#special-box .menu-item {
+    border: 2px solid #D32F2F;
+}
+
+/* 滑鼠移上去時的細微效果 (可選) */
+.menu-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
         .menu-item:hover { transform: scale(1.03); background: #fffcf9; }
 
