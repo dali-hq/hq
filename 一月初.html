@@ -3,133 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🍱一月初健康餐盒</title>
+    <title>🥦一月初健康餐盒</title>
     <style>
         :root {
             --orange: #FF9800; --pink: #E91E63; --red: #D32F2F;
             --green: #2E7D32; --light-green: #E2F3E1; --gray: #e0e0e0;
+            --blue: #007BFF;
         }
 
-        /* 核心置中排版 */
         body { 
             font-family: "Microsoft JhengHei", sans-serif; 
-            background: #f8f9fa; 
-            margin: 0; padding: 20px;
+            background: #f8f9fa; margin: 0; padding: 20px;
             display: flex; flex-direction: column; align-items: center; 
         }
 
         .container { width: 100%; max-width: 800px; }
-
         h1 { font-size: 24px; font-weight: 800; color: #333; text-align: center; margin-bottom: 5px; }
 
-        /* 1 & 2. 菜單文字樣式：加入 1px 綠色邊框 */
-.menu-text { 
-    background-color: var(--light-green); 
-    color: #2E7D32;            /* 使用深綠色字體 */
-    padding: 2px 12px; 
-    border-radius: 12px; 
-    font-weight: bold; 
-    display: inline-block;
-    margin-right: 4px;
-    
-    /* 新增 1px 綠色邊框 */
-    border: 1px solid #2E7D32; 
-}
-
-/* 確保連結本身依然置中 */
-.menu-link { 
-    text-decoration: none; 
-    font-size: 1.1rem; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center;
-    width: 100%; 
-    margin: 10px 0 20px 0;
-}
+        /* 菜單連結樣式 */
+        .menu-link { 
+            text-decoration: none; font-size: 1.1rem; display: flex; 
+            justify-content: center; align-items: center; width: 100%; margin: 10px 0 20px 0;
+        }
+        .menu-text { 
+            background-color: var(--light-green); color: #2E7D32; padding: 2px 12px; 
+            border-radius: 12px; font-weight: bold; margin-right: 4px; border: 1px solid #2E7D32; 
+        }
 
         /* 分類標題樣式 */
-/* --- 分類項標題：淺色底、全圓角膠囊 --- */
-.section-header { 
-    display: flex; 
-    align-items: center; 
-    margin-top: 35px; 
-    margin-bottom: 15px; 
-    width: 100%; 
-}
-
-.section-title-box {
-    padding: 6px 20px; 
-    border-radius: 50px; 
-    font-weight: bold;
-    font-size: 18px;
-    display: flex; 
-    align-items: center; 
-    white-space: nowrap;
-    z-index: 2; /* 確保膠囊在線條上方，圓角才漂亮 */
-}
-
-/* 右側裝飾線：深色、連在一起 */
-.section-bar { 
-    flex-grow: 1; 
-    height: 5px; 
-    border-radius: 0 50px 50px 0; /* 線條右側圓角 */
-    margin-left: -5px;   /* 關鍵：稍微往左負移，讓它跟膠囊重疊連在一起 */
-    z-index: 1; 
-    opacity: 1;          /* 顏色完全顯現，不再透明 */
-}
-
-/* --- 深色線條顏色設定 (Bar 使用深色) --- */
-/* 橘色系 (活力輕享) */
-.color-orange { 
-    color: #E67E22; 
-    background-color: #FFF3E0; 
-    border: 1px solid #F39C12;
-}
-.bg-orange-dark { background-color: #F39C12; } /* 深橘色線條 */
-
-/* 粉色系 (清爽元氣) */
-.color-pink { 
-    color: #D81B60; 
-    background-color: #FCE4EC; 
-    border: 1px solid #D81B60;
-}
-.bg-pink-dark { background-color: #D81B60; } /* 深粉紅線條 */
-
-/* 紅色系 (特色盒餐) */
-.color-red { 
-    color: #C62828; 
-    background-color: #FFEBEE; 
-    border: 1px solid #C62828;
-}
-.bg-red-dark { background-color: #C62828; } /* 深紅色線條 */
-
-/* --- 便當項目：文字改黑色 --- */
-.menu-item { 
-    background: white; 
-    padding: 6px 18px; 
-    border-radius: 50px; 
-    cursor: pointer; 
-    text-align: center; 
-    font-weight: bold; 
-    font-size: 16px; 
-    color: #000000 !important; /* 強制設定為純黑色 */
-    border: 1.5px solid transparent;
-    display: inline-flex; 
-    align-items: center; 
-    justify-content: center; 
-    min-height: 30px; 
-    transition: 0.2s; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-        /* 3. 縮小後的便當選項膠囊 */
-        .menu-grid { 
-            display: flex; flex-wrap: wrap; gap: 10px; 
-            justify-content: center; 
-            margin-bottom: 30px; 
+        .section-header { display: flex; align-items: center; margin-top: 35px; margin-bottom: 15px; width: 100%; }
+        .section-title-box {
+            padding: 6px 20px; border-radius: 50px; font-weight: bold; font-size: 18px;
+            display: flex; align-items: center; white-space: nowrap; z-index: 2;
         }
-        
-        .menu-item:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .section-bar { flex-grow: 1; height: 5px; border-radius: 0 50px 50px 0; margin-left: -5px; z-index: 1; }
 
+        .color-orange { color: #E67E22; background-color: #FFF3E0; border: 1px solid #F39C12; }
+        .bg-orange-dark { background-color: #F39C12; }
+        .color-pink { color: #D81B60; background-color: #FCE4EC; border: 1px solid #D81B60; }
+        .bg-pink-dark { background-color: #D81B60; }
+        .color-red { color: #C62828; background-color: #FFEBEE; border: 1px solid #C62828; }
+        .bg-red-dark { background-color: #C62828; }
+
+        /* 便當項目膠囊 */
+        .menu-grid { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 30px; }
+        .menu-item { 
+            background: white; padding: 6px 18px; border-radius: 50px; cursor: pointer; 
+            text-align: center; font-weight: bold; font-size: 16px; color: #000 !important;
+            border: 1.5px solid transparent; display: inline-flex; align-items: center; 
+            justify-content: center; min-height: 30px; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .menu-item:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         #light-share .menu-item { border-color: var(--orange); }
         #fresh-energy .menu-item { border-color: var(--pink); }
         #special-box .menu-item { border-color: var(--red); }
@@ -141,66 +65,36 @@
 
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 16px; }
-        select, .user-name-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-        /* 備註欄樣式 */
-.user-note-input {
-    width: 100%;
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-    box-sizing: border-box;
-    font-family: inherit; /* 確保字體一致 */
-    resize: vertical;     /* 允許使用者上下調整高度 */
-}
-        .btn-submit { width: 100%; padding: 14px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        .btn-cancel { width: 100%; padding: 12px; background: var(--gray); color: black; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; text-align: center; display: block; text-decoration: none; }
+        select, .user-name-input, .user-note-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        .user-note-input { height: 60px; resize: none; font-family: inherit; }
+
+        /* 數量、飯量橫向排列 (不換行) */
+        .rice-group { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 12px; padding: 5px 0; -webkit-overflow-scrolling: touch; }
+        .rice-group::-webkit-scrollbar { display: none; }
         
-        /* 讓容器變成橫向排列，且不要換行 */
-/* 1. 修改容器：強制不換行，並在寬度不足時允許橫向滑動 */
-.rice-group { 
-    display: flex; 
-    flex-wrap: nowrap;     /* 強制不換行 */
-    overflow-x: auto;      /* 寬度不足時允許橫向滾動 */
-    gap: 8px;              /* 稍微縮小間距省空間 */
-    margin-top: 5px;
-    padding-bottom: 5px;   /* 留一點空間給滾動條（手機上通常會隱藏） */
-    -webkit-overflow-scrolling: touch; /* 讓手機滑動更流暢 */
-}
+        .rice-option { 
+            display: inline-flex; align-items: center; flex-shrink: 0; gap: 4px; 
+            font-size: 15px; cursor: pointer; white-space: nowrap; color: #333;
+        }
+        /* 選中項目變藍色 */
+        .rice-option input:checked + span { color: var(--blue); font-weight: bold; }
 
-/* 2. 隱藏橫向滾動條（選用，讓介面更乾淨） */
-.rice-group::-webkit-scrollbar {
-    display: none;
-}
-
-/* 3. 讓每個選項內容不折行 */
-.rice-option { 
-    display: inline-flex; 
-    align-items: center; 
-    flex-shrink: 0;        /* 關鍵：防止選項被壓縮變形 */
-    gap: 4px; 
-    font-size: 14px;       /* 稍微縮小字體確保能塞進更多項 */
-    cursor: pointer;
-    white-space: nowrap; 
-    background: #f1f3f5;   /* 加個淡淡的底色 */
-    padding: 4px 10px;
-    border-radius: 50px;
-}
+        /* 按鈕並排樣式 */
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-submit { flex: 1; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .btn-cancel { flex: 1; padding: 12px; background: var(--gray); color: black; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>🍱 一月初健康餐盒</h1>
-    
-    <a href="https://lh3.googleusercontent.com/d/1AvmLPM6kOiekJaOLIHFI8txWShy8blIN" target="_blank" class="menu-link">
-        <span class="menu-text">菜單</span>🌿
-    </a>
+    <a href="https://lh3.googleusercontent.com/d/1AvmLPM6kOiekJaOLIHFI8txWShy8blIN" target="_blank" class="menu-link"><span class="menu-text">菜單</span>📋</a>
+
     <div class="section-header">
-    <div class="section-title-box color-orange">🔸 活力輕享</div>
-    <div class="section-bar bg-orange-dark"></div>
-</div>
-    
+        <div class="section-title-box color-orange">🔸 活力輕享</div>
+        <div class="section-bar bg-orange-dark"></div>
+    </div>
     <div class="menu-grid" id="light-share">
         <div class="menu-item" onclick="openModal('塔香三杯雞')">塔香三杯雞</div>
         <div class="menu-item" onclick="openModal('蒜泥白肉豬')">蒜泥白肉豬</div>
@@ -245,42 +139,39 @@
         <h2 id="selectedItemName"></h2>
         <form id="orderForm">
             <input type="hidden" id="menuItem">
-            
-            <div class="form-group" id="flavorGroup" style="display:none;">
-                <label>口味選擇</label>
-                <select id="flavorSelection"></select>
-            </div>
-            
-<div class="form-group">
-    <label>數量</label>
-    <div class="rice-group">
-        <label class="rice-option">1 <input type="radio" name="qty" value="1" checked onclick="updateNameFields()"></label>
-        <label class="rice-option">2 <input type="radio" name="qty" value="2" onclick="updateNameFields()"></label>
-        <label class="rice-option">3 <input type="radio" name="qty" value="3" onclick="updateNameFields()"></label>
-    </div>
-</div>
+            <div class="form-group" id="flavorGroup" style="display:none;"><label>口味選擇</label><select id="flavorSelection"></select></div>
+
             <div class="form-group">
-                <label id="nameLabel">姓名</label>
+                <label>數量</label>
+                <div class="rice-group">
+                    <label class="rice-option"><span>1</span><input type="radio" name="qty" value="1" checked onclick="updateNameFields()"></label>
+                    <label class="rice-option"><span>2</span><input type="radio" name="qty" value="2" onclick="updateNameFields()"></label>
+                    <label class="rice-option"><span>3</span><input type="radio" name="qty" value="3" onclick="updateNameFields()"></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>姓名</label>
                 <div id="nameFieldsContainer"></div>
             </div>
 
             <div class="form-group">
                 <label>飯量需求</label>
                 <div class="rice-group">
-                    <label class="rice-option"><input type="radio" name="rice" value="紫米" checked> 紫米</label>
-                    <label class="rice-option"><input type="radio" name="rice" value="白飯"> 白飯</label>
-                    <label class="rice-option"><input type="radio" name="rice" value="紅藜麥飯"> 紅藜麥</label>
-                    <label class="rice-option"><input type="radio" name="rice" value="飯少(8分)"> 飯少</label>
-                    <label class="rice-option"><input type="radio" name="rice" value="飯一半"> 飯一半</label>
+                    <label class="rice-option"><span>紫米</span><input type="radio" name="rice" value="紫米" checked></label>
+                    <label class="rice-option"><span>白飯</span><input type="radio" name="rice" value="白飯"></label>
+                    <label class="rice-option"><span>紅藜麥</span><input type="radio" name="rice" value="紅藜麥飯"></label>
+                    <label class="rice-option"><span>飯少</span><input type="radio" name="rice" value="飯少(8分)"></label>
+                    <label class="rice-option"><span>飯一半</span><input type="radio" name="rice" value="飯一半"></label>
                 </div>
             </div>
-            <div class="form-group">
-            <label>備註</label>
-            <textarea id="orderNote" class="user-note-input" rows="2" placeholder="備註"></textarea>
-            </div>
 
-            <button type="submit" class="btn-submit" id="submitBtn">確認送出</button>
-            <button type="button" class="btn-cancel" onclick="closeModal()">取消返回</button>
+            <div class="form-group"><label>備註</label><textarea id="orderNote" class="user-note-input" placeholder="不加蔥、醬少..."></textarea></div>
+
+            <div class="btn-group">
+                <button type="button" class="btn-cancel" onclick="closeModal()">取消返回</button>
+                <button type="submit" class="btn-submit" id="submitBtn">確認送出</button>
+            </div>
         </form>
     </div>
 </div>
@@ -289,96 +180,51 @@
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzkuKwCUf-9VLdkvqP53QE6DLp6LOngncKZaVgwNrphT4iQWTs6q2jm_2MOtEMk2QId/exec';
 
     function openModal(itemName) {
-    document.getElementById('selectedItemName').innerText = itemName;
-    document.getElementById('menuItem').value = itemName;
-    document.getElementById('orderModal').style.display = 'block';
-    
-    const fGroup = document.getElementById('flavorGroup');
-    const fSelect = document.getElementById('flavorSelection');
-    fGroup.style.display = 'none';
-    fSelect.innerHTML = '';
-
-    if (itemName === '舒肥嫩煮雞') {
-        fGroup.style.display = 'block';
-        ['原味', '蜜汁烤肉醬', '鹹蛋黃塔塔', '椒鹽檸檬', '港式蔥鹽', '蒜香蜂蜜'].forEach(v => fSelect.add(new Option(v, v)));
-    } else if (itemName === '日式唐揚雞') {
-        fGroup.style.display = 'block';
-        ['椒鹽', '松露醬', '桂花釀'].forEach(v => fSelect.add(new Option(v, v)));
+        document.getElementById('selectedItemName').innerText = itemName;
+        document.getElementById('menuItem').value = itemName;
+        document.getElementById('orderModal').style.display = 'block';
+        const fGroup = document.getElementById('flavorGroup'), fSelect = document.getElementById('flavorSelection');
+        fGroup.style.display = 'none'; fSelect.innerHTML = '';
+        if (itemName === '舒肥嫩煮雞') {
+            fGroup.style.display = 'block';
+            ['原味', '蜜汁烤肉醬', '鹹蛋黃塔塔', '椒鹽檸檬', '港式蔥鹽', '蒜香蜂蜜'].forEach(v => fSelect.add(new Option(v, v)));
+        } else if (itemName === '日式唐揚雞') {
+            fGroup.style.display = 'block';
+            ['椒鹽', '松露醬', '桂花釀'].forEach(v => fSelect.add(new Option(v, v)));
+        }
+        document.querySelector('input[name="qty"][value="1"]').checked = true;
+        updateNameFields();
     }
-
-    // --- 關鍵修正處 ---
-    // 1. 強制將數量預設選回 "1" (避免上次點選 2 或 3 的殘留)
-    document.querySelector('input[name="qty"][value="1"]').checked = true;
-    
-    // 2. 主動觸發一次更新函數，讓「第 1 位姓名」框顯示出來
-    updateNameFields();
-}
-
-// 確保抓取數量的方式正確
-function updateNameFields() {
-    const qtyElement = document.querySelector('input[name="qty"]:checked');
-    const qty = qtyElement ? qtyElement.value : 1; // 如果沒選中則預設 1
-    
-    const container = document.getElementById('nameFieldsContainer');
-    container.innerHTML = '';
-    
-    for (let i = 0; i < qty; i++) {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.className = 'user-name-input';
-        input.placeholder = `第 ${i+1} 位姓名`;
-        input.required = true;
-        input.style.marginBottom = "8px";
-        container.appendChild(input);
-    }
-}
 
     function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
-    window.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
 
-    
+    function updateNameFields() {
+        const qty = document.querySelector('input[name="qty"]:checked').value;
+        const container = document.getElementById('nameFieldsContainer');
+        container.innerHTML = '';
+        for (let i = 0; i < qty; i++) {
+            const input = document.createElement('input');
+            input.type = 'text'; input.className = 'user-name-input';
+            input.placeholder = `第 ${i+1} 位姓名`; input.required = true;
+            input.style.marginBottom = "8px"; container.appendChild(input);
+        }
+    }
 
     document.getElementById('orderForm').onsubmit = function(e) {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerText = '傳送中...';
-
-    const names = Array.from(document.querySelectorAll('.user-name-input')).map(el => el.value).join(', ');
-    const qty = document.querySelector('input[name="qty"]:checked').value;
-    const item = document.getElementById('menuItem').value;
-    const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
-    const rice = document.querySelector('input[name="rice"]:checked').value;
-    
-    // 1. 抓取備註內容
-    const note = document.getElementById('orderNote').value;
-
-    // 2. 整合進 postData (新增 &note=)
-    const postData = "name=" + encodeURIComponent(names) + 
-                     "&item=" + encodeURIComponent(`${item}${flavor} (x${qty})`) + 
-                     "&rice=" + encodeURIComponent(rice) +
-                     "&note=" + encodeURIComponent(note); // 傳送備註
-
-    fetch(scriptURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: postData,
-        mode: 'no-cors' 
-    })
-    .then(() => {
-        alert('訂購完成！');
-        // 3. 送出後清空備註欄
-        document.getElementById('orderNote').value = ''; 
-        closeModal();
-    })
-
-        .catch(err => alert('傳送失敗：' + err))
-        .finally(() => {
-            btn.disabled = false;
-            btn.innerText = '確認送出';
-        });
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true; btn.innerText = '傳送中...';
+        const names = Array.from(document.querySelectorAll('.user-name-input')).map(el => el.value).join(', ');
+        const qty = document.querySelector('input[name="qty"]:checked').value;
+        const item = document.getElementById('menuItem').value;
+        const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
+        const rice = document.querySelector('input[name="rice"]:checked').value;
+        const note = document.getElementById('orderNote').value;
+        const postData = "name=" + encodeURIComponent(names) + "&item=" + encodeURIComponent(`${item}${flavor} (x${qty})`) + "&rice=" + encodeURIComponent(rice) + "&note=" + encodeURIComponent(note);
+        fetch(scriptURL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: postData, mode: 'no-cors' })
+        .then(() => { alert('訂購完成！'); document.getElementById('orderNote').value = ''; closeModal(); })
+        .catch(err => alert('失敗：' + err)).finally(() => { btn.disabled = false; btn.innerText = '確認送出'; });
     };
 </script>
-
 </body>
 </html>
