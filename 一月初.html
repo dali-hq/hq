@@ -52,17 +52,18 @@
         .modal-content { background: white; width: 95%; max-width: 420px; margin: 50px auto; padding: 25px; border-radius: 15px; box-sizing: border-box; }
         #selectedItemName { font-size: 24px; color: var(--red); font-weight: bold; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center; }
 
-        /* --- 修正並排與標題寬度 --- */
         .form-group { margin-bottom: 15px; }
         .inline-group { display: flex; align-items: center; margin-bottom: 15px; }
-        .inline-group label:first-child { width: 80px; flex-shrink: 0; margin-bottom: 0; font-weight: bold; font-size: 16px; }
+        /* 標題固定寬度，確保對齊 */
+        .inline-group label:first-child { width: 80px; flex-shrink: 0; margin-bottom: 0 !important; font-weight: bold; font-size: 16px; }
         
         label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 16px; }
         .user-name-input, .user-note-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
         .user-note-input { height: 60px; resize: none; font-family: inherit; }
 
-        .rice-group { display: flex; flex-wrap: wrap; gap: 10px; flex: 1; align-items: center; }
-        .rice-option { display: inline-flex; align-items: center; gap: 4px; font-size: 15px; cursor: pointer; white-space: nowrap; color: #333; margin-bottom: 0 !important; }
+        /* 修正：移除 flex: 1 並設定緊湊的 gap，解決間距過大問題 */
+        .rice-group { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
+        .rice-option { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; cursor: pointer; white-space: nowrap; color: #333; margin-bottom: 0 !important; }
         .rice-option input:checked + span { color: var(--blue); font-weight: bold; }
 
         .btn-group { display: flex; gap: 10px; margin-top: 20px; }
@@ -186,16 +187,14 @@
         document.getElementById('orderModal').style.display = 'block';
         
         const fGroup = document.getElementById('flavorGroup'), fSelect = document.getElementById('flavorSelection');
-        
-        // 核心邏輯：先隱藏，只有符合名稱的才顯示
         fGroup.style.display = 'none'; 
         fSelect.innerHTML = '';
         
         if (itemName === '舒肥嫩煮雞') {
-            fGroup.style.display = 'flex'; // 顯示並排
+            fGroup.style.display = 'flex'; 
             ['原味', '蜜汁烤肉醬', '鹹蛋黃塔塔', '椒鹽檸檬', '港式蔥鹽', '蒜香蜂蜜'].forEach(v => fSelect.add(new Option(v, v)));
         } else if (itemName === '日式唐揚雞') {
-            fGroup.style.display = 'flex'; // 顯示並排
+            fGroup.style.display = 'flex'; 
             ['椒鹽', '松露醬', '桂花釀'].forEach(v => fSelect.add(new Option(v, v)));
         }
 
@@ -203,9 +202,7 @@
         updateNameFields();
     }
 
-    function closeModal() { 
-        document.getElementById('orderModal').style.display = 'none'; 
-    }
+    function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
 
     window.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') closeModal();
@@ -232,13 +229,11 @@
         const qty = document.querySelector('input[name="qty"]:checked').value;
         const item = document.getElementById('menuItem').value;
         const flavor = document.getElementById('flavorGroup').style.display === 'flex' ? `(${document.getElementById('flavorSelection').value})` : '';
-        
-        // 整合拆分後的飯種與飯量
         const rType = document.querySelector('input[name="rice-type"]:checked').value;
         const rAmount = document.querySelector('input[name="rice-amount"]:checked').value;
         const rice = `${rType}(${rAmount})`;
-        
         const note = document.getElementById('orderNote').value;
+
         const postData = "name=" + encodeURIComponent(names) + 
                          "&item=" + encodeURIComponent(`${item}${flavor} (x${qty})`) + 
                          "&rice=" + encodeURIComponent(rice) + 
