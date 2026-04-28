@@ -52,18 +52,16 @@
 
 /* --- 分類項標題：右側改為平角以對接橫線 --- */
 .section-title-box {
-    padding: 6px 25px; 
-    /* 左側保持圓角，右側改為 0 讓線條銜接 */
-    border-radius: 50px 0 0 50px; 
+    padding: 6px 20px; 
+    border-radius: 50px; /* 全圓角膠囊 */
     font-weight: bold;
-    font-size: 18px;    
+    font-size: 18px;    /* 稍微縮小一點點更精緻 */
     display: flex; 
     align-items: center; 
     white-space: nowrap;
     background-color: #fff; 
     z-index: 2;
-    /* 移除右側邊框，讓銜接更自然 */
-    border-right: none !important; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* 加一點點陰影增加立體感 */
 }
 
 /* --- 右側裝飾線：移除間距並與標題對接 --- */
