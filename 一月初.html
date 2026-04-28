@@ -239,9 +239,26 @@
                          "&rice=" + encodeURIComponent(rice) + 
                          "&note=" + encodeURIComponent(note);
 
-        fetch(scriptURL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: postData, mode: 'no-cors' })
-        .then(() => { alert('訂購完成！'); document.getElementById('orderNote').value = ''; closeModal(); })
-        .catch(err => alert('失敗：' + err)).finally(() => { btn.disabled = false; btn.innerText = '確認送出'; });
+        // 使用 no-cors 模式發送，並在發送後直接執行成功動作，不處理回應內容以避免字串干擾
+        fetch(scriptURL, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
+            body: postData, 
+            mode: 'no-cors' 
+        })
+        .then(() => {
+            // 直接跳出乾淨的提示
+            alert('訂購完成！'); 
+            document.getElementById('orderNote').value = ''; 
+            closeModal(); 
+        })
+        .catch(() => {
+            alert('系統忙碌中，請稍後再試');
+        })
+        .finally(() => { 
+            btn.disabled = false; 
+            btn.innerText = '確認送出'; 
+        });
     };
 </script>
 </body>
