@@ -299,31 +299,39 @@
     }
 
     document.getElementById('orderForm').onsubmit = function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = true;
-        btn.innerText = '傳送中...';
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerText = '傳送中...';
 
-        const names = Array.from(document.querySelectorAll('.user-name-input')).map(el => el.value).join(', ');
-        const qty = document.getElementById('itemQuantity').value;
-        const item = document.getElementById('menuItem').value;
-        const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
-        const rice = document.querySelector('input[name="rice"]:checked').value;
+    const names = Array.from(document.querySelectorAll('.user-name-input')).map(el => el.value).join(', ');
+    const qty = document.getElementById('itemQuantity').value;
+    const item = document.getElementById('menuItem').value;
+    const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
+    const rice = document.querySelector('input[name="rice"]:checked').value;
+    
+    // 1. 抓取備註內容
+    const note = document.getElementById('orderNote').value;
 
-        const postData = "name=" + encodeURIComponent(names) + 
-                         "&item=" + encodeURIComponent(`${item}${flavor} (x${qty})`) + 
-                         "&rice=" + encodeURIComponent(rice);
+    // 2. 整合進 postData (新增 &note=)
+    const postData = "name=" + encodeURIComponent(names) + 
+                     "&item=" + encodeURIComponent(`${item}${flavor} (x${qty})`) + 
+                     "&rice=" + encodeURIComponent(rice) +
+                     "&note=" + encodeURIComponent(note); // 傳送備註
 
-        fetch(scriptURL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: postData,
-            mode: 'no-cors' 
-        })
-        .then(() => {
-            alert('訂購完成！');
-            closeModal();
-        })
+    fetch(scriptURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: postData,
+        mode: 'no-cors' 
+    })
+    .then(() => {
+        alert('訂購完成！');
+        // 3. 送出後清空備註欄
+        document.getElementById('orderNote').value = ''; 
+        closeModal();
+    })
+
         .catch(err => alert('傳送失敗：' + err))
         .finally(() => {
             btn.disabled = false;
