@@ -50,27 +50,32 @@
     width: 100%; 
 }
 
+/* --- 分類項標題：右側改為平角以對接橫線 --- */
 .section-title-box {
-    padding: 6px 20px; 
-    border-radius: 50px; /* 全圓角膠囊 */
+    padding: 6px 25px; 
+    /* 左側保持圓角，右側改為 0 讓線條銜接 */
+    border-radius: 50px 0 0 50px; 
     font-weight: bold;
-    font-size: 18px;    /* 稍微縮小一點點更精緻 */
+    font-size: 18px;    
     display: flex; 
     align-items: center; 
     white-space: nowrap;
     background-color: #fff; 
     z-index: 2;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* 加一點點陰影增加立體感 */
+    /* 移除右側邊框，讓銜接更自然 */
+    border-right: none !important; 
 }
 
-/* 右側裝飾線改為 5px 高度 */
+/* --- 右側裝飾線：移除間距並與標題對接 --- */
 .section-bar { 
     flex-grow: 1; 
-    height: 5px;        /* 粗線改為 5px */
-    border-radius: 50px; 
-    margin-left: 10px;  /* 讓它跟膠囊保持一點距離 */
+    height: 5px;        
+    /* 左側改為 0，右側保持圓角 */
+    border-radius: 0 50px 50px 0; 
+    /* 移除左邊距，並向左微移確保重疊無縫隙 */
+    margin-left: 0;  
     z-index: 1; 
-    opacity: 1; 
+    opacity: 1;
 }
 
 /* --- 便當項目：文字改黑色 --- */
@@ -133,7 +138,7 @@
     <h1>🍱 一月初健康餐盒</h1>
     
     <a href="https://lh3.googleusercontent.com/d/1AvmLPM6kOiekJaOLIHFI8txWShy8blIN" target="_blank" class="menu-link">
-        <span class="menu-text">菜單</span>📋
+        <span class="menu-text">菜單</span>🌿
     </a>
     <div class="section-header">
     <div class="section-title-box color-orange">🔸 活力輕享</div>
