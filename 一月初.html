@@ -267,25 +267,47 @@
     }
 
     document.getElementById('orderForm').onsubmit = function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.innerText = '傳送中...';
-        const names = Array.from(document.querySelectorAll('.user-name-input')).map(el => el.value).join(', ');
-        const qty = document.querySelector('input[name="qty"]:checked').value;
-        const item = document.getElementById('menuItem').value;
-        const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
-        const rice = document.querySelector('input[name="rice"]:checked').value;
-        const note = document.getElementById('orderNote').value;
-        
-        const postData = "name=" + encodeURIComponent(names) + 
-                         "&item=" + encodeURIComponent(`${item}${flavor} (x${qty})`) + 
-                         "&rice=" + encodeURIComponent(rice) + 
-                         "&note=" + encodeURIComponent(note);
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.innerText = '傳送中...';
 
-        fetch(scriptURL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: postData, mode: 'no-cors' })
-        .then(() => { alert('訂購完成！'); document.getElementById('orderNote').value = ''; closeModal(); })
-        .catch(err => alert('失敗：' + err)).finally(() => { btn.disabled = false; btn.innerText = '確認送出'; });
-    };
+    // 1. 抓取基本欄位
+    const names = Array.from(document.querySelectorAll('.user-name-input')).map(el => el.value).join(', ');
+    const qty = document.querySelector('input[name="qty"]:checked').value;
+    const item = document.getElementById('menuItem').value;
+    const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
+    
+    // 2. 更新：抓取飯種與飯量並組合
+    const riceType = document.querySelector('input[name="rice-type"]:checked').value;
+    const riceAmount = document.querySelector('input[name="rice-amount"]:checked').value;
+    // 組合格式範例：紫米(飯一半) 或 白飯(正常)
+    const combinedRice = `${riceType}(${riceAmount})`;
+
+    const note = document.getElementById('orderNote').value;
+    
+    // 3. 組裝 POST 資料
+    const postData = "name=" + encodeURIComponent(names) + 
+                     "&item=" + encodeURIComponent(`${item}${flavor} (x${qty})`) + 
+                     "&rice=" + encodeURIComponent(combinedRice) + // 傳送組合後的字串
+                     "&note=" + encodeURIComponent(note);
+
+    fetch(scriptURL, { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
+        body: postData, 
+        mode: 'no-cors' 
+    })
+    .then(() => { 
+        alert('訂購完成！'); 
+        document.getElementById('orderNote').value = ''; 
+        closeModal(); 
+    })
+    .catch(err => alert('失敗：' + err))
+    .finally(() => { 
+        btn.disabled = false; 
+        btn.innerText = '確認送出'; 
+    });
+};
 </script>
 </body>
 </html>
