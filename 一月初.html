@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,40 +20,13 @@
         .container { width: 100%; max-width: 800px; }
         h1 { font-size: 24px; font-weight: 800; color: #333; text-align: center; margin-bottom: 5px; }
 
-        /* 新增：外層容器負責置中與垂直排列 */
-.menu-area {
-    display: flex;
-    flex-direction: column; /* 讓內容由上而下排列 */
-    align-items: center;    /* 水平置中 */
-    width: 100%;
-    margin: 10px 0 20px 0;
-}
-
-/* 修正：menu-link 不再需要獨佔 margin */
-.menu-link { 
-    text-decoration: none; 
-    font-size: 1.1rem; 
-    display: flex; 
-    align-items: center;
-    margin-bottom: 5px; /* 與下方備註文字的間距 */
-}
-
-/* 新增：下方備註文字的樣式 */
-.menu-notice {
-    font-size: 16px;       /* 縮小一點，避免搶走焦點 */
-    color: #333;          /* 使用灰色字體，看起來較柔和 */
-    font-weight: normal;
-}
-        .menu-text { 
-            background-color: var(--light-green); color: #2E7D32; padding: 2px 12px; 
-            border-radius: 12px; font-weight: bold; margin-right: 4px; border: 1px solid #2E7D32; 
-        }
+        .menu-area { display: flex; flex-direction: column; align-items: center; width: 100%; margin: 10px 0 20px 0; }
+        .menu-link { text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; margin-bottom: 5px; }
+        .menu-notice { font-size: 16px; color: #333; font-weight: normal; }
+        .menu-text { background-color: var(--light-green); color: #2E7D32; padding: 2px 12px; border-radius: 12px; font-weight: bold; margin-right: 4px; border: 1px solid #2E7D32; }
 
         .section-header { display: flex; align-items: center; margin-top: 35px; margin-bottom: 15px; width: 100%; }
-        .section-title-box {
-            padding: 6px 20px; border-radius: 50px; font-weight: bold; font-size: 18px;
-            display: flex; align-items: center; white-space: nowrap; z-index: 2;
-        }
+        .section-title-box { padding: 6px 20px; border-radius: 50px; font-weight: bold; font-size: 18px; display: flex; align-items: center; white-space: nowrap; z-index: 2; }
         .section-bar { flex-grow: 1; height: 5px; border-radius: 0 50px 50px 0; margin-left: -5px; z-index: 1; }
 
         .color-orange { color: #E67E22; background-color: #FFF3E0; border: 1px solid #F39C12; }
@@ -76,35 +49,27 @@
         #special-box .menu-item { border-color: var(--red); }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
-        .modal-content { background: white; width: 95%; max-width: 400px; margin: 50px auto; padding: 25px; border-radius: 15px; box-sizing: border-box; }
+        .modal-content { background: white; width: 95%; max-width: 420px; margin: 50px auto; padding: 25px; border-radius: 15px; box-sizing: border-box; }
         #selectedItemName { font-size: 24px; color: var(--red); font-weight: bold; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center; }
 
+        /* --- 修正並排與標題寬度 --- */
         .form-group { margin-bottom: 15px; }
+        .inline-group { display: flex; align-items: center; margin-bottom: 15px; }
+        .inline-group label:first-child { width: 80px; flex-shrink: 0; margin-bottom: 0; font-weight: bold; font-size: 16px; }
+        
         label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 16px; }
         .user-name-input, .user-note-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
         .user-note-input { height: 60px; resize: none; font-family: inherit; }
 
-        /* 修正：自動分行、無捲軸 */
-        .rice-group { 
-            display: flex; 
-            flex-wrap: wrap; /* 改為分行 */
-            gap: 12px; 
-            padding: 5px 0; 
-        }
-        
-        .rice-option { 
-            display: inline-flex; align-items: center; gap: 6px; 
-            font-size: 15px; cursor: pointer; white-space: nowrap; color: #333;
-        }
-
-        /* 修正：選中後變藍色 */
+        .rice-group { display: flex; flex-wrap: wrap; gap: 10px; flex: 1; align-items: center; }
+        .rice-option { display: inline-flex; align-items: center; gap: 4px; font-size: 15px; cursor: pointer; white-space: nowrap; color: #333; margin-bottom: 0 !important; }
         .rice-option input:checked + span { color: var(--blue); font-weight: bold; }
 
         .btn-group { display: flex; gap: 10px; margin-top: 20px; }
         .btn-submit { flex: 1; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
         .btn-cancel { flex: 1; padding: 12px; background: var(--gray); color: black; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; }
         
-        select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+        select { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -112,9 +77,10 @@
 <div class="container">
     <h1>🍱 一月初健康餐盒</h1>
     <div class="menu-area">
-    <a href="https://lh3.googleusercontent.com/d/1AvmLPM6kOiekJaOLIHFI8txWShy8blIN" target="_blank" class="menu-link"><span class="menu-text">菜單</span>🥦</a>
-<div class="menu-notice">(本表單為預先統計，實際出餐以店家為主)</div>
-</div>
+        <a href="https://lh3.googleusercontent.com/d/1AvmLPM6kOiekJaOLIHFI8txWShy8blIN" target="_blank" class="menu-link"><span class="menu-text">菜單</span>🥦</a>
+        <div class="menu-notice">(本表單為預先統計，實際出餐以店家為主)</div>
+    </div>
+
     <div class="section-header">
         <div class="section-title-box color-orange">🔸 活力輕享</div>
         <div class="section-bar bg-orange-dark"></div>
@@ -163,9 +129,13 @@
         <h2 id="selectedItemName"></h2>
         <form id="orderForm">
             <input type="hidden" id="menuItem">
-            <div class="form-group" id="flavorGroup" style="display:none;"><label>口味選擇</label><select id="flavorSelection"></select></div>
+            
+            <div class="form-group inline-group" id="flavorGroup" style="display:none;">
+                <label>口味選擇</label>
+                <select id="flavorSelection"></select>
+            </div>
 
-            <div class="form-group">
+            <div class="form-group inline-group">
                 <label>數量</label>
                 <div class="rice-group">
                     <label class="rice-option"><input type="radio" name="qty" value="1" checked onclick="updateNameFields()"><span>1</span></label>
@@ -179,14 +149,21 @@
                 <div id="nameFieldsContainer"></div>
             </div>
 
-            <div class="form-group">
-                <label>飯量需求</label>
+            <div class="form-group inline-group">
+                <label>飯種</label>
                 <div class="rice-group">
-                    <label class="rice-option"><input type="radio" name="rice" value="紫米" checked><span>紫米</span></label>
-                    <label class="rice-option"><input type="radio" name="rice" value="白飯"><span>白飯</span></label>
-                    <label class="rice-option"><input type="radio" name="rice" value="紅藜麥飯"><span>紅藜麥</span></label>
-                    <label class="rice-option"><input type="radio" name="rice" value="飯少(8分)"><span>飯少</span></label>
-                    <label class="rice-option"><input type="radio" name="rice" value="飯一半"><span>飯一半</span></label>
+                    <label class="rice-option"><input type="radio" name="rice-type" value="紫米" checked><span>紫米</span></label>
+                    <label class="rice-option"><input type="radio" name="rice-type" value="白飯"><span>白飯</span></label>
+                    <label class="rice-option"><input type="radio" name="rice-type" value="紅藜麥飯"><span>紅藜麥</span></label>
+                </div>
+            </div>
+
+            <div class="form-group inline-group">
+                <label>飯量</label>
+                <div class="rice-group">
+                    <label class="rice-option"><input type="radio" name="rice-amount" value="正常" checked><span>正常</span></label>
+                    <label class="rice-option"><input type="radio" name="rice-amount" value="飯少(8分)"><span>飯少</span></label>
+                    <label class="rice-option"><input type="radio" name="rice-amount" value="飯一半"><span>飯一半</span></label>
                 </div>
             </div>
 
@@ -207,15 +184,21 @@
         document.getElementById('selectedItemName').innerText = itemName;
         document.getElementById('menuItem').value = itemName;
         document.getElementById('orderModal').style.display = 'block';
+        
         const fGroup = document.getElementById('flavorGroup'), fSelect = document.getElementById('flavorSelection');
-        fGroup.style.display = 'none'; fSelect.innerHTML = '';
+        
+        // 核心邏輯：先隱藏，只有符合名稱的才顯示
+        fGroup.style.display = 'none'; 
+        fSelect.innerHTML = '';
+        
         if (itemName === '舒肥嫩煮雞') {
-            fGroup.style.display = 'block';
+            fGroup.style.display = 'flex'; // 顯示並排
             ['原味', '蜜汁烤肉醬', '鹹蛋黃塔塔', '椒鹽檸檬', '港式蔥鹽', '蒜香蜂蜜'].forEach(v => fSelect.add(new Option(v, v)));
         } else if (itemName === '日式唐揚雞') {
-            fGroup.style.display = 'block';
+            fGroup.style.display = 'flex'; // 顯示並排
             ['椒鹽', '松露醬', '桂花釀'].forEach(v => fSelect.add(new Option(v, v)));
         }
+
         document.querySelector('input[name="qty"][value="1"]').checked = true;
         updateNameFields();
     }
@@ -224,11 +207,8 @@
         document.getElementById('orderModal').style.display = 'none'; 
     }
 
-    // 新增：按下 ESC 鍵關閉彈窗
     window.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeModal();
-        }
+        if (event.key === 'Escape') closeModal();
     });
 
     function updateNameFields() {
@@ -247,13 +227,18 @@
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.disabled = true; btn.innerText = '傳送中...';
+        
         const names = Array.from(document.querySelectorAll('.user-name-input')).map(el => el.value).join(', ');
         const qty = document.querySelector('input[name="qty"]:checked').value;
         const item = document.getElementById('menuItem').value;
-        const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
-        const rice = document.querySelector('input[name="rice"]:checked').value;
-        const note = document.getElementById('orderNote').value;
+        const flavor = document.getElementById('flavorGroup').style.display === 'flex' ? `(${document.getElementById('flavorSelection').value})` : '';
         
+        // 整合拆分後的飯種與飯量
+        const rType = document.querySelector('input[name="rice-type"]:checked').value;
+        const rAmount = document.querySelector('input[name="rice-amount"]:checked').value;
+        const rice = `${rType}(${rAmount})`;
+        
+        const note = document.getElementById('orderNote').value;
         const postData = "name=" + encodeURIComponent(names) + 
                          "&item=" + encodeURIComponent(`${item}${flavor} (x${qty})`) + 
                          "&rice=" + encodeURIComponent(rice) + 
