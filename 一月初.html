@@ -41,40 +41,62 @@
         }
 
         /* 分類標題樣式 */
-        /* --- 分類項標題：改為圓角純膠囊 --- */
+/* --- 分類項標題：淺色底、全圓角膠囊 --- */
 .section-header { 
     display: flex; 
     align-items: center; 
-    margin-top: 30px; 
+    margin-top: 35px; 
     margin-bottom: 15px; 
     width: 100%; 
 }
 
-/* --- 分類項標題：右側改為平角以對接橫線 --- */
 .section-title-box {
     padding: 6px 20px; 
-    border-radius: 50px; /* 全圓角膠囊 */
+    border-radius: 50px; /* 確保是完整的全圓角 */
     font-weight: bold;
-    font-size: 18px;    /* 稍微縮小一點點更精緻 */
+    font-size: 18px;
     display: flex; 
     align-items: center; 
     white-space: nowrap;
-    background-color: #fff; 
     z-index: 2;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* 加一點點陰影增加立體感 */
+    /* 這裡會根據下方的顏色 class 套用不同的淺色底 */
 }
 
-/* --- 右側裝飾線：移除間距並與標題對接 --- */
+/* 右側裝飾線：高度 5px */
 .section-bar { 
     flex-grow: 1; 
-    height: 5px;        
-    /* 左側改為 0，右側保持圓角 */
-    border-radius: 0 50px 50px 0; 
-    /* 移除左邊距，並向左微移確保重疊無縫隙 */
-    margin-left: 0;  
-    z-index: 1; 
-    opacity: 1;
+    height: 5px; 
+    border-radius: 50px; 
+    margin-left: 12px; /* 與膠囊分開，避免遮擋圓角 */
+    opacity: 0.5; /* 讓線條輕盈一點 */
 }
+
+/* --- 顏色設定：淺色底 + 文字顏色 --- */
+/* 橘色系 (活力輕享) */
+.color-orange { 
+    color: #E67E22; 
+    background-color: #FFF3E0; /* 淺橘底 */
+    border: 1px solid #FFE0B2;
+}
+.bg-orange-dark { background-color: #FFB74D; }
+
+/* 粉色系 (清爽元氣) */
+.color-pink { 
+    color: #D81B60; 
+    background-color: #FCE4EC; /* 淺粉底 */
+    border: 1px solid #F8BBD0;
+}
+.bg-pink-dark { background-color: #F06292; }
+
+/* 紅色系 (特色盒餐) */
+.color-red { 
+    color: #C62828; 
+    background-color: #FFEBEE; /* 淺紅底 */
+    border: 1px solid #FFCDD2;
+}
+.bg-red-dark { background-color: #E57373; }
+
+/* --- 便當選項文字改黑色 --- */
 
 /* --- 便當項目：文字改黑色 --- */
 .menu-item { 
@@ -94,13 +116,6 @@
     transition: 0.2s; 
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
-        .color-orange { color: var(--orange); border: 1.5px solid var(--orange); }
-        .bg-orange-dark { background-color: #E67E22; }
-        .color-pink { color: var(--pink); border: 1.5px solid var(--pink); }
-        .bg-pink-dark { background-color: #C2185B; }
-        .color-red { color: var(--red); border: 1.5px solid var(--red); }
-        .bg-red-dark { background-color: #B71C1C; }
-
         /* 3. 縮小後的便當選項膠囊 */
         .menu-grid { 
             display: flex; flex-wrap: wrap; gap: 10px; 
