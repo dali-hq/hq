@@ -157,21 +157,34 @@
         .btn-cancel { width: 100%; padding: 12px; background: var(--gray); color: black; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; text-align: center; display: block; text-decoration: none; }
         
         /* 讓容器變成橫向排列，且不要換行 */
+/* 1. 修改容器：強制不換行，並在寬度不足時允許橫向滑動 */
 .rice-group { 
     display: flex; 
-    flex-wrap: nowrap; /* 強制不換行 */
-    gap: 10px;         /* 選項之間的間距 */
+    flex-wrap: nowrap;     /* 強制不換行 */
+    overflow-x: auto;      /* 寬度不足時允許橫向滾動 */
+    gap: 8px;              /* 稍微縮小間距省空間 */
     margin-top: 5px;
+    padding-bottom: 5px;   /* 留一點空間給滾動條（手機上通常會隱藏） */
+    -webkit-overflow-scrolling: touch; /* 讓手機滑動更流暢 */
 }
 
-/* 讓每個選項變成小巧的橫向膠囊 */
+/* 2. 隱藏橫向滾動條（選用，讓介面更乾淨） */
+.rice-group::-webkit-scrollbar {
+    display: none;
+}
+
+/* 3. 讓每個選項內容不折行 */
 .rice-option { 
     display: inline-flex; 
     align-items: center; 
-    gap: 4px;          /* 文字與圓圈的距離 */
-    font-size: 15px;
+    flex-shrink: 0;        /* 關鍵：防止選項被壓縮變形 */
+    gap: 4px; 
+    font-size: 14px;       /* 稍微縮小字體確保能塞進更多項 */
     cursor: pointer;
-    white-space: nowrap; /* 確保內容不折行 */
+    white-space: nowrap; 
+    background: #f1f3f5;   /* 加個淡淡的底色 */
+    padding: 4px 10px;
+    border-radius: 50px;
 }
     </style>
 </head>
