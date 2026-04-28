@@ -22,23 +22,30 @@
 
         h1 { font-size: 24px; font-weight: 800; color: #333; text-align: center; margin-bottom: 5px; }
 
-        /* 1 & 2. 「菜單」二字的樣式：淺綠底、圓角 */
-        .menu-link { 
-            text-decoration: none; 
-            font-size: 1.1rem; 
-            display: flex; /* 改成 flex */
-            justify-content: center;
-            align-items: center;
-            margin: 10px 0 20px 0;
-        }
-        .menu-text { 
-            background-color: var(--light-green); 
-            color: #333; 
-            padding: 2px 12px; 
-            border-radius: 12px; 
-            font-weight: bold; 
-            margin-right: 4px;
-        }
+        /* 1 & 2. 菜單文字樣式：加入 1px 綠色邊框 */
+.menu-text { 
+    background-color: var(--light-green); 
+    color: #2E7D32;            /* 使用深綠色字體 */
+    padding: 2px 12px; 
+    border-radius: 12px; 
+    font-weight: bold; 
+    display: inline-block;
+    margin-right: 4px;
+    
+    /* 新增 1px 綠色邊框 */
+    border: 1px solid #2E7D32; 
+}
+
+/* 確保連結本身依然置中 */
+.menu-link { 
+    text-decoration: none; 
+    font-size: 1.1rem; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    width: 100%; 
+    margin: 10px 0 20px 0;
+}
 
         /* 分類標題樣式 */
 /* --- 分類項標題：淺色底、全圓角膠囊 --- */
