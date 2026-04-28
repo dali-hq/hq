@@ -52,51 +52,49 @@
 
 .section-title-box {
     padding: 6px 20px; 
-    border-radius: 50px; /* 確保是完整的全圓角 */
+    border-radius: 50px; 
     font-weight: bold;
     font-size: 18px;
     display: flex; 
     align-items: center; 
     white-space: nowrap;
-    z-index: 2;
-    /* 這裡會根據下方的顏色 class 套用不同的淺色底 */
+    z-index: 2; /* 確保膠囊在線條上方，圓角才漂亮 */
 }
 
-/* 右側裝飾線：高度 5px */
+/* 右側裝飾線：深色、連在一起 */
 .section-bar { 
     flex-grow: 1; 
     height: 5px; 
-    border-radius: 50px; 
-    margin-left: 12px; /* 與膠囊分開，避免遮擋圓角 */
-    opacity: 0.5; /* 讓線條輕盈一點 */
+    border-radius: 0 50px 50px 0; /* 線條右側圓角 */
+    margin-left: -5px;   /* 關鍵：稍微往左負移，讓它跟膠囊重疊連在一起 */
+    z-index: 1; 
+    opacity: 1;          /* 顏色完全顯現，不再透明 */
 }
 
-/* --- 顏色設定：淺色底 + 文字顏色 --- */
+/* --- 深色線條顏色設定 (Bar 使用深色) --- */
 /* 橘色系 (活力輕享) */
 .color-orange { 
     color: #E67E22; 
-    background-color: #FFF3E0; /* 淺橘底 */
+    background-color: #FFF3E0; 
     border: 1px solid #FFE0B2;
 }
-.bg-orange-dark { background-color: #FFB74D; }
+.bg-orange-dark { background-color: #F39C12; } /* 深橘色線條 */
 
 /* 粉色系 (清爽元氣) */
 .color-pink { 
     color: #D81B60; 
-    background-color: #FCE4EC; /* 淺粉底 */
+    background-color: #FCE4EC; 
     border: 1px solid #F8BBD0;
 }
-.bg-pink-dark { background-color: #F06292; }
+.bg-pink-dark { background-color: #D81B60; } /* 深粉紅線條 */
 
 /* 紅色系 (特色盒餐) */
 .color-red { 
     color: #C62828; 
-    background-color: #FFEBEE; /* 淺紅底 */
+    background-color: #FFEBEE; 
     border: 1px solid #FFCDD2;
 }
-.bg-red-dark { background-color: #E57373; }
-
-/* --- 便當選項文字改黑色 --- */
+.bg-red-dark { background-color: #C62828; } /* 深紅色線條 */
 
 /* --- 便當項目：文字改黑色 --- */
 .menu-item { 
