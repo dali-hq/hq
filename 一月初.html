@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>一月初健康餐盒</title>
+    <title>一月初健康餐盒訂購</title>
     <style>
         :root {
             --orange: #FF9800; --pink: #E91E63; --red: #D32F2F;
-            --green: #006400; --gray: #e0e0e0;
+            --green: #2E7D32; --light-green: #E2F3E1; --gray: #e0e0e0;
         }
 
         /* 核心置中排版 */
@@ -20,44 +20,33 @@
 
         .container { width: 100%; max-width: 800px; }
 
-        h1 { font-size: 36px; font-weight: 800; color: #333; text-align: center; margin-bottom: 5px; }
-                /* 1 & 2. 針對「菜單」二字的樣式：淺綠底、圓角 */
-.menu-text {
-    background-color: #E2F3E1; /* 淺綠色底 */
-    color: #333;               /* 深色文字 */
-    padding: 2px 10px;         /* 增加左右空間 */
-    border-radius: 12px;       /* 圓角 */
-    font-weight: bold;
-    display: inline-block;
-    margin-right: 2px;
-}
+        h1 { font-size: 24px; font-weight: 800; color: #333; text-align: center; margin-bottom: 5px; }
 
-/* 移除連結下劃線，保持視覺乾淨 */
-.menu-link {
-    text-decoration: none;
-    font-size: 1.2rem;
-    display: inline-flex;
-    align-items: center;
-}
+        /* 1 & 2. 「菜單」二字的樣式：淺綠底、圓角 */
+        .menu-link { 
+            text-decoration: none; 
+            font-size: 1.1rem; 
+            display: inline-flex; 
+            align-items: center;
+            margin: 10px 0 20px 0;
+        }
+        .menu-text { 
+            background-color: var(--light-green); 
+            color: #333; 
+            padding: 2px 12px; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            margin-right: 4px;
+        }
 
-/* 3. 縮小所有便當選項的膠囊 (針對網頁中的 li 標籤) */
-ul li {
-    font-size: 13px !important;    /* 縮小字體 */
-    padding: 3px 12px !important;  /* 減少上下內距，維持膠囊感 */
-    border-radius: 50px !important; /* 確保圓角 */
-    margin: 3px !important;         /* 縮減項目間距 */
-    display: inline-block;
-    list-style: none;
-}
-
-        /* 分類膠囊樣式 */
-        .section-header { display: flex; align-items: center; margin-top: 40px; margin-bottom: 15px; width: 100%; }
+        /* 分類標題樣式 */
+        .section-header { display: flex; align-items: center; margin-top: 30px; margin-bottom: 15px; width: 100%; }
         .section-title-box {
             padding: 8px 25px; border-radius: 50px 0 0 50px; font-weight: bold;
-            font-size: 22px; display: flex; align-items: center; white-space: nowrap;
+            font-size: 20px; display: flex; align-items: center; white-space: nowrap;
             background-color: #fff; z-index: 2;
         }
-        .section-bar { flex-grow: 1; height: 42px; border-radius: 0 50px 50px 0; margin-left: -10px; z-index: 1; opacity: 0.9; }
+        .section-bar { flex-grow: 1; height: 38px; border-radius: 0 50px 50px 0; margin-left: -10px; z-index: 1; opacity: 0.9; }
 
         .color-orange { color: var(--orange); border: 1.5px solid var(--orange); }
         .bg-orange-dark { background-color: #FFB74D; }
@@ -66,19 +55,18 @@ ul li {
         .color-red { color: var(--red); border: 1.5px solid var(--red); }
         .bg-red-dark { background-color: #E57373; }
 
-        /* 菜單項目網格：讓它置中排列 */
+        /* 3. 縮小後的便當選項膠囊 */
         .menu-grid { 
-            display: flex; flex-wrap: wrap; gap: 12px; 
-            justify-content: center; /* 讓品項方塊在正中央 */
-            margin-bottom: 30px; 
+            display: flex; flex-wrap: wrap; gap: 10px; 
+            justify-content: center; 
+            margin-bottom: 20px; 
         }
-
         .menu-item { 
-            background: white; padding: 10px 22px; border-radius: 50px; 
+            background: white; padding: 6px 18px; border-radius: 50px; 
             cursor: pointer; text-align: center; font-weight: bold; 
-            font-size: 22px; color: #000; border: 1px solid transparent;
+            font-size: 16px; color: #333; border: 1.2px solid transparent;
             display: inline-flex; align-items: center; justify-content: center; 
-            min-height: 44px; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            min-height: 38px; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         .menu-item:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
@@ -88,28 +76,30 @@ ul li {
 
         /* 彈窗樣式 */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
-        .modal-content { background: white; width: 90%; max-width: 400px; margin: 60px auto; padding: 30px; border-radius: 15px; }
-        #selectedItemName { font-size: 28px; color: var(--red); font-weight: bold; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center; }
+        .modal-content { background: white; width: 90%; max-width: 400px; margin: 50px auto; padding: 25px; border-radius: 15px; box-sizing: border-box; }
+        #selectedItemName { font-size: 24px; color: var(--red); font-weight: bold; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center; }
 
-        .form-group { margin-bottom: 18px; }
+        .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 16px; }
-        select, .user-name-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        select, .user-name-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
         
         .btn-submit { width: 100%; padding: 14px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
         .btn-cancel { width: 100%; padding: 12px; background: var(--gray); color: black; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; text-align: center; display: block; text-decoration: none; }
         
-        .rice-group { display: flex; flex-wrap: wrap; gap: 10px; }
-        .rice-option { font-weight: normal; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+        .rice-group { display: flex; flex-wrap: wrap; gap: 8px; }
+        .rice-option { font-weight: normal; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>🍱 一月初健康餐盒</h1>
+    
     <a href="https://lh3.googleusercontent.com/d/1AvmLPM6kOiekJaOLIHFI8txWShy8blIN" target="_blank" class="menu-link">
-    <span class="menu-text">菜單</span>📋
-</a>
-        <div class="section-header">
+        <span class="menu-text">菜單</span>📋
+    </a>
+
+    <div class="section-header">
         <div class="section-title-box color-orange">🔸 活力輕享</div>
         <div class="section-bar bg-orange-dark"></div>
     </div>
@@ -235,38 +225,38 @@ ul li {
     }
 
     document.getElementById('orderForm').onsubmit = function(e) {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerText = '傳送中...';
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerText = '傳送中...';
 
-    const names = Array.from(document.querySelectorAll('.user-name-input')).map(el => el.value).join(', ');
-    const qty = document.getElementById('itemQuantity').value;
-    const item = document.getElementById('menuItem').value;
-    const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
-    const rice = document.querySelector('input[name="rice"]:checked').value;
+        const names = Array.from(document.querySelectorAll('.user-name-input')).map(el => el.value).join(', ');
+        const qty = document.getElementById('itemQuantity').value;
+        const item = document.getElementById('menuItem').value;
+        const flavor = document.getElementById('flavorGroup').style.display === 'block' ? `(${document.getElementById('flavorSelection').value})` : '';
+        const rice = document.querySelector('input[name="rice"]:checked').value;
 
-    // 使用 URL 編碼格式，這是 GAS doPost(e) 最喜歡的格式
-    const postData = "name=" + encodeURIComponent(names) + 
-                     "&item=" + encodeURIComponent(`${item}${flavor} (x${qty})`) + 
-                     "&rice=" + encodeURIComponent(rice);
+        const postData = "name=" + encodeURIComponent(names) + 
+                         "&item=" + encodeURIComponent(`${item}${flavor} (x${qty})`) + 
+                         "&rice=" + encodeURIComponent(rice);
 
-    fetch(scriptURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: postData,
-        mode: 'no-cors' 
-    })
-    .then(() => {
-        alert('訂購完成！');
-        closeModal();
-    })
-    .catch(err => alert('傳送失敗：' + err))
-    .finally(() => {
-        btn.disabled = false;
-        btn.innerText = '確認送出';
-    });
-};
+        fetch(scriptURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: postData,
+            mode: 'no-cors' 
+        })
+        .then(() => {
+            alert('訂購完成！');
+            closeModal();
+        })
+        .catch(err => alert('傳送失敗：' + err))
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerText = '確認送出';
+        });
+    };
 </script>
+
 </body>
 </html>
