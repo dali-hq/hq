@@ -156,18 +156,22 @@
         .btn-submit { width: 100%; padding: 14px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
         .btn-cancel { width: 100%; padding: 12px; background: var(--gray); color: black; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; text-align: center; display: block; text-decoration: none; }
         
-        .rice-group { display: flex; flex-wrap: wrap; gap: 8px; }
-        .rice-option { 
-    font-weight: normal; 
-    cursor: pointer; 
+        /* 讓容器變成橫向排列，且不要換行 */
+.rice-group { 
     display: flex; 
-    flex-direction: row-reverse; /* 讓 input (勾選框) 跑到文字右邊 */
+    flex-wrap: nowrap; /* 強制不換行 */
+    gap: 10px;         /* 選項之間的間距 */
+    margin-top: 5px;
+}
+
+/* 讓每個選項變成小巧的橫向膠囊 */
+.rice-option { 
+    display: inline-flex; 
     align-items: center; 
-    gap: 6px; 
-    font-size: 16px;
-    background: #f0f0f0;    /* 加個淡淡的底色像小膠囊 */
-    padding: 4px 10px;
-    border-radius: 5px;
+    gap: 4px;          /* 文字與圓圈的距離 */
+    font-size: 15px;
+    cursor: pointer;
+    white-space: nowrap; /* 確保內容不折行 */
 }
     </style>
 </head>
@@ -233,15 +237,15 @@
                 <label>口味選擇</label>
                 <select id="flavorSelection"></select>
             </div>
-
-            <div class="form-group">
+            
+<div class="form-group">
     <label>數量</label>
-    <div class="rice-group"> <label class="rice-option"><input type="radio" name="qty" value="1" checked onclick="updateNameFields()"> 1</label>
-        <label class="rice-option"><input type="radio" name="qty" value="2" onclick="updateNameFields()"> 2</label>
-        <label class="rice-option"><input type="radio" name="qty" value="3" onclick="updateNameFields()"> 3</label>
+    <div class="rice-group">
+        <label class="rice-option">1 <input type="radio" name="qty" value="1" checked onclick="updateNameFields()"></label>
+        <label class="rice-option">2 <input type="radio" name="qty" value="2" onclick="updateNameFields()"></label>
+        <label class="rice-option">3 <input type="radio" name="qty" value="3" onclick="updateNameFields()"></label>
     </div>
 </div>
-
             <div class="form-group">
                 <label id="nameLabel">姓名</label>
                 <div id="nameFieldsContainer"></div>
@@ -272,34 +276,39 @@
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzkuKwCUf-9VLdkvqP53QE6DLp6LOngncKZaVgwNrphT4iQWTs6q2jm_2MOtEMk2QId/exec';
 
     function openModal(itemName) {
-        document.getElementById('selectedItemName').innerText = itemName;
-        document.getElementById('menuItem').value = itemName;
-        document.getElementById('orderModal').style.display = 'block';
-        
-        const fGroup = document.getElementById('flavorGroup');
-        const fSelect = document.getElementById('flavorSelection');
-        fGroup.style.display = 'none';
-        fSelect.innerHTML = '';
+    document.getElementById('selectedItemName').innerText = itemName;
+    document.getElementById('menuItem').value = itemName;
+    document.getElementById('orderModal').style.display = 'block';
+    
+    const fGroup = document.getElementById('flavorGroup');
+    const fSelect = document.getElementById('flavorSelection');
+    fGroup.style.display = 'none';
+    fSelect.innerHTML = '';
 
-        if (itemName === '舒肥嫩煮雞') {
-            fGroup.style.display = 'block';
-            ['原味', '蜜汁烤肉醬', '鹹蛋黃塔塔', '椒鹽檸檬', '港式蔥鹽', '蒜香蜂蜜'].forEach(v => fSelect.add(new Option(v, v)));
-        } else if (itemName === '日式唐揚雞') {
-            fGroup.style.display = 'block';
-            ['椒鹽', '松露醬', '桂花釀'].forEach(v => fSelect.add(new Option(v, v)));
-        }
-        document.getElementById('itemQuantity').value = "1";
-        updateNameFields();
+    if (itemName === '舒肥嫩煮雞') {
+        fGroup.style.display = 'block';
+        ['原味', '蜜汁烤肉醬', '鹹蛋黃塔塔', '椒鹽檸檬', '港式蔥鹽', '蒜香蜂蜜'].forEach(v => fSelect.add(new Option(v, v)));
+    } else if (itemName === '日式唐揚雞') {
+        fGroup.style.display = 'block';
+        ['椒鹽', '松露醬', '桂花釀'].forEach(v => fSelect.add(new Option(v, v)));
     }
 
-    function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
-    window.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+    // --- 關鍵修正處 ---
+    // 1. 強制將數量預設選回 "1" (避免上次點選 2 或 3 的殘留)
+    document.querySelector('input[name="qty"][value="1"]').checked = true;
+    
+    // 2. 主動觸發一次更新函數，讓「第 1 位姓名」框顯示出來
+    updateNameFields();
+}
 
-    function updateNameFields() {
-    // 抓取目前選中的數量 radio
-    const qty = document.querySelector('input[name="qty"]:checked').value;
+// 確保抓取數量的方式正確
+function updateNameFields() {
+    const qtyElement = document.querySelector('input[name="qty"]:checked');
+    const qty = qtyElement ? qtyElement.value : 1; // 如果沒選中則預設 1
+    
     const container = document.getElementById('nameFieldsContainer');
     container.innerHTML = '';
+    
     for (let i = 0; i < qty; i++) {
         const input = document.createElement('input');
         input.type = 'text';
@@ -310,6 +319,11 @@
         container.appendChild(input);
     }
 }
+
+    function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
+    window.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+    
 
     document.getElementById('orderForm').onsubmit = function(e) {
     e.preventDefault();
