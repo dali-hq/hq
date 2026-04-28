@@ -20,10 +20,30 @@
         .container { width: 100%; max-width: 800px; }
         h1 { font-size: 24px; font-weight: 800; color: #333; text-align: center; margin-bottom: 5px; }
 
-        .menu-link { 
-            text-decoration: none; font-size: 1.1rem; display: flex; 
-            justify-content: center; align-items: center; width: 100%; margin: 10px 0 20px 0;
-        }
+        /* 新增：外層容器負責置中與垂直排列 */
+.menu-area {
+    display: flex;
+    flex-direction: column; /* 讓內容由上而下排列 */
+    align-items: center;    /* 水平置中 */
+    width: 100%;
+    margin: 10px 0 20px 0;
+}
+
+/* 修正：menu-link 不再需要獨佔 margin */
+.menu-link { 
+    text-decoration: none; 
+    font-size: 1.1rem; 
+    display: flex; 
+    align-items: center;
+    margin-bottom: 5px; /* 與下方備註文字的間距 */
+}
+
+/* 新增：下方備註文字的樣式 */
+.menu-notice {
+    font-size: 13px;       /* 縮小一點，避免搶走焦點 */
+    color: #666;          /* 使用灰色字體，看起來較柔和 */
+    font-weight: normal;
+}
         .menu-text { 
             background-color: var(--light-green); color: #2E7D32; padding: 2px 12px; 
             border-radius: 12px; font-weight: bold; margin-right: 4px; border: 1px solid #2E7D32; 
@@ -91,8 +111,10 @@
 
 <div class="container">
     <h1>🍱 一月初健康餐盒</h1>
+    <div class="menu-area">
     <a href="https://lh3.googleusercontent.com/d/1AvmLPM6kOiekJaOLIHFI8txWShy8blIN" target="_blank" class="menu-link"><span class="menu-text">菜單</span>🥦</a>
-(本表單僅供統計, 實際出餐以店家為主)
+<div class="menu-notice">(本表單僅供統計，實際出餐以店家為主)</div>
+</div>
     <div class="section-header">
         <div class="section-title-box color-orange">🔸 活力輕享</div>
         <div class="section-bar bg-orange-dark"></div>
