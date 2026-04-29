@@ -231,7 +231,7 @@
         const flavor = document.getElementById('flavorGroup').style.display === 'flex' ? `(${document.getElementById('flavorSelection').value})` : '';
         const rType = document.querySelector('input[name="rice-type"]:checked').value;
         const rAmount = document.querySelector('input[name="rice-amount"]:checked').value;
-        const rice = `${rType}(${rAmount})`;
+        const rice = `${rType}-${rAmount}`; //飯量
         const note = document.getElementById('orderNote').value;
 
         const postData = "name=" + encodeURIComponent(names) + 
