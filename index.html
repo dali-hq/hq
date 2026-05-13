@@ -44,30 +44,39 @@
     margin: 0 auto; 
 }
         /* 員工卡片樣式：邊框已改為黑色 */
-        .emp-card { 
-            background: #fff; 
-            border: 1px solid black; /* ★ 這裡已修改為黑色邊框 ★ */
-            border-radius: 8px; 
-            padding: 8px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-            box-sizing: border-box; 
-            text-align: center; 
-            width: calc((100% - 15px) / 2); 
-        }
+       .emp-card { 
+    background: #fff; 
+    border: 1px solid black; 
+    border-radius: 8px; 
+    padding: 8px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+    box-sizing: border-box; 
+    text-align: center; 
+    /* 修改這裡：讓手機版維持一行 2 個或自動，重點是下面的電腦版 */
+    width: calc((100% - 15px) / 2); 
+}
         .emp-card img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 4px; }
         .emp-card .emp-name-tag { font-weight: bold; font-size: 14px; margin-top: 6px; border-bottom: 1px solid #f0f0f0; padding-bottom: 4px; overflow: hidden; text-overflow: ellipsis; }
 
 /* 3. 電腦版：確保 Grid 佈局也置中 */
+/* 3. 電腦版：強制定製一行 8 個 */
 @media (min-width: 1024px) {
     .result-container { 
         display: grid !important; 
-        justify-content: center; /* Grid 整體置中 */
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important; 
-        max-width: 1100px; /* 限制最大寬度防止過散 */
-        gap: 15px; 
+        justify-content: center; 
+        /* 修改這裡：將 repeat 的數量固定為 8 */
+        grid-template-columns: repeat(8, 1fr) !important; 
+        max-width: 1200px; /* 稍微調大一點，讓 8 個卡片有足夠空間 */
+        gap: 10px; 
         margin: 0 auto;
     }
-    .emp-card { width: 100% !important; }
+    .emp-card { 
+        width: 100% !important; 
+        padding: 5px; /* 稍微縮小內距，避免 8 個太擠 */
+    }
+    .emp-card .emp-name-tag {
+        font-size: 12px; /* 稍微縮小字體，確保工號名字不折行 */
+    }
 }
         /* 轉出人員表格 */
         .resigned-table { width: 100%; max-width: 450px; margin: 0 auto; border-collapse: separate; border-spacing: 0; font-size: 15px; background: white; border: 2px solid #636e72; border-radius: 12px; overflow: hidden; }
