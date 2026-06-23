@@ -525,12 +525,6 @@ const WORKER_DATA = [
 
 const LEAVE_DATA = [ 
 {
-"id": "34021",
-"name": "丁曰勇",
-"start": "2026/05/20",
-"end": "2026/06/20"
-},
-{
 "id": "35043",
 "name": "梁文貴",
 "start": "2026/05/26",
@@ -541,7 +535,13 @@ const LEAVE_DATA = [
 "name": "陳文生",
 "start": "2026/05/24",
 "end": "2026/06/24"
-}
+},
+{
+"id": "36061",
+"name": "阮文大",
+"start": "2026/07/20",
+"end": "2026/09/06"
+} 
 ];
 
 const RESIGNED_DATA = [
