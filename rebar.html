@@ -9,25 +9,20 @@
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); width: 850px; }
         h2 { text-align: center; color: #1a73e8; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         
-        /* 標題列：與下方輸入列採用相同的 flex 寬度與間距配置，完美對齊 */
+        /* 標題列：與下方輸入列共用相同的 padding 與 gap，確保完美對齊 */
         .header-labels { display: flex; gap: 8px; margin-bottom: 6px; padding: 0 10px; }
-        .header-labels div { font-size: 14px; font-weight: bold; color: #555; }
-        .lbl-date { width: 90px; }
-        .lbl-batch { width: 170px; }
-        .lbl-size { width: 75px; text-align: center; }
-        .lbl-spec { width: 110px; }
-        .lbl-weight { width: 85px; }
-
-        /* PC 單行排版 */
+        .header-labels div { font-size: 14px; font-weight: bold; color: #555; box-sizing: border-box; }
+        
+        /* PC 單行排版與標題列的寬度設定一致 */
         .batch-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; background: #fafafa; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
-        .batch-row input, .batch-row select { padding: 8px; border: 2px solid #ddd; border-radius: 6px; font-size: 15px; outline: none; }
+        .batch-row input, .batch-row select { padding: 8px; border: 2px solid #ddd; border-radius: 6px; font-size: 15px; outline: none; box-sizing: border-box; }
         .batch-row input:focus, .batch-row select:focus { border-color: #1a73e8; background-color: #f8fbff; }
         
-        .inp-date { width: 90px; }
-        .inp-batch { width: 170px; }
-        .inp-size { width: 75px; text-align: center; }
-        .inp-spec { width: 110px; }
-        .inp-weight { width: 85px; }
+        .lbl-date, .inp-date { width: 90px; }
+        .lbl-batch, .inp-batch { width: 170px; }
+        .lbl-size, .inp-size { width: 75px; text-align: center; }
+        .lbl-spec, .inp-spec { width: 110px; }
+        .lbl-weight, .inp-weight { width: 85px; }
 
         .btn-delete { background-color: #d93025; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
         .btn-delete:hover { background-color: #b31412; }
@@ -50,7 +45,7 @@
 <div class="card">
     <h2>鋼筋標籤產生器 (PC單行版)</h2>
     
-    <!-- 精準對齊輸入框上方的說明標籤 -->
+    <!-- 說明標籤 -->
     <div class="header-labels">
         <div class="lbl-date">日期</div>
         <div class="lbl-batch">批號</div>
