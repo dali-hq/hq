@@ -54,10 +54,10 @@
   const date = now.getDate().toString().padStart(2, '0');
   const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
   const dayStr = weekDays[now.getDay()];                // 組合基本文字
-  let text = `您好今日訂餐, 實毅營造\n${year}/${month}/${date}(${dayStr})\n印尼: ${indo}\n台: ${generalTotal}`;// 判斷是否有素食
-  // 判斷是否有素食（先寫總共，再寫工務所袋）
+  let text = `您好今日訂餐, 實毅營造\n${year}/${month}/${date}(${dayStr})\n印尼: ${indo}\n台: ${generalTotal}`;
+  // 判斷是否有素食
   if (veg > 0) 
-  {text += `\n素: ${veg}\n總共: ${total}\n工務所袋：${tw}+1素`;
+  {text += `\n素: ${veg}\n總共: ${total}\n\n工務所袋：${tw}+${veg}素`;
   } else 
   {text += `\n總共: ${total}`;        }
   
