@@ -56,7 +56,7 @@
   const dayStr = weekDays[now.getDay()];                // 組合基本文字
   let text = `您好今日訂餐, 實毅營造\n${year}/${month}/${date}(${dayStr})\n印尼: ${indo}\n台: ${generalTotal}\n`;// 判斷是否有素食
   if (veg > 0) {
-    text += `素: ${veg}\n工務所袋：2+1素\n`;        }
+    text += `素: ${veg}\n工務所袋：${tw}+1素\n`;        }
   text += `總共: ${total}`;
   document.getElementById('finalText').innerText = text;    }
         function copyToClipboard() {
