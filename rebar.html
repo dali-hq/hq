@@ -9,8 +9,8 @@
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); width: 850px; }
         h2 { text-align: center; color: #1a73e8; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         
-        /* 標題列樣式 */
-        .header-labels { display: flex; gap: 8px; margin-bottom: 5px; padding: 0 10px; }
+        /* 標題列：與下方輸入列採用相同的 flex 寬度與間距配置，完美對齊 */
+        .header-labels { display: flex; gap: 8px; margin-bottom: 6px; padding: 0 10px; }
         .header-labels div { font-size: 14px; font-weight: bold; color: #555; }
         .lbl-date { width: 90px; }
         .lbl-batch { width: 170px; }
@@ -50,7 +50,7 @@
 <div class="card">
     <h2>鋼筋標籤產生器 (PC單行版)</h2>
     
-    <!-- 空格上方的欄位說明標籤 -->
+    <!-- 精準對齊輸入框上方的說明標籤 -->
     <div class="header-labels">
         <div class="lbl-date">日期</div>
         <div class="lbl-batch">批號</div>
