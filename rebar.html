@@ -9,6 +9,15 @@
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); width: 850px; }
         h2 { text-align: center; color: #1a73e8; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         
+        /* 標題列樣式 */
+        .header-labels { display: flex; gap: 8px; margin-bottom: 5px; padding: 0 10px; }
+        .header-labels div { font-size: 14px; font-weight: bold; color: #555; }
+        .lbl-date { width: 90px; }
+        .lbl-batch { width: 170px; }
+        .lbl-size { width: 75px; text-align: center; }
+        .lbl-spec { width: 110px; }
+        .lbl-weight { width: 85px; }
+
         /* PC 單行排版 */
         .batch-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; background: #fafafa; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
         .batch-row input, .batch-row select { padding: 8px; border: 2px solid #ddd; border-radius: 6px; font-size: 15px; outline: none; }
@@ -30,10 +39,10 @@
         .btn-success { width: 100%; padding: 15px; background-color: #34a853; color: white; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; margin-top: 15px; font-weight: bold; }
         .btn-success:hover { background-color: #2b813f; }
         
-        /* 放大並改為藍色的鋼筋對照表 */
-        .hint-box { margin-top: 20px; padding: 15px; background-color: #e8f0fe; border-radius: 8px; border-left: 5px solid #1a73e8; }
-        .hint-title { font-weight: bold; color: #1a73e8; font-size: 16px; margin-bottom: 5px; }
-        .hint-content { font-size: 18px; color: #1a73e8; font-weight: bold; line-height: 1.5; font-family: monospace; }
+        /* 鋼筋對照表 */
+        .hint-box { margin-top: 20px; padding: 15px; background-color: #f1f3f4; border-radius: 8px; border-left: 5px solid #5f6368; }
+        .hint-title { font-weight: bold; color: #3c4043; font-size: 16px; margin-bottom: 5px; }
+        .hint-content { font-size: 18px; color: #000000; font-weight: bold; line-height: 1.5; font-family: monospace; }
     </style>
 </head>
 <body>
@@ -41,6 +50,15 @@
 <div class="card">
     <h2>鋼筋標籤產生器 (PC單行版)</h2>
     
+    <!-- 空格上方的欄位說明標籤 -->
+    <div class="header-labels">
+        <div class="lbl-date">日期</div>
+        <div class="lbl-batch">批號</div>
+        <div class="lbl-size">號數</div>
+        <div class="lbl-spec">規格</div>
+        <div class="lbl-weight">重量</div>
+    </div>
+
     <div id="itemsList">
         <!-- 動態單行輸入區 -->
     </div>
@@ -53,12 +71,11 @@
 
     <div class="hint-box">
         <div class="hint-title">💡 鋼筋號數對照參考：</div>
-        <div class="hint-content">3(#3) / 4(#4) / 5(#5) / 6(#6) / 7(#7)<br>8(#8) / 9(#9) / 10(#10) / 11(#11)</div>
+        <div class="hint-content">D10#3, D13#4, D16#5, D19#6, D22#7, D25#8, D29#9, D32#10, D36#11</div>
     </div>
 </div>
 
 <script>
-    // 取得預設今天的 mm/dd
     function getDefaultDate() {
         const now = new Date();
         const m = (now.getMonth() + 1).toString().padStart(2, '0');
@@ -66,12 +83,10 @@
         return m + d;
     }
 
-    // 初始化載入第一筆
     function init() {
         addItem(getDefaultDate(), '', '6', 'SD420W', '0.00');
     }
 
-    // 新增一筆單行輸入
     function addItem(date = getDefaultDate(), batch = '', size = '6', spec = 'SD420W', weight = '0.00') {
         const container = document.getElementById('itemsList');
         const index = container.children.length;
@@ -79,28 +94,26 @@
         const div = document.createElement('div');
         div.className = 'batch-row';
         div.innerHTML = `
-            <input type="text" class="inp-date" value="${date}" placeholder="日期mm/dd" title="日期 (mm/dd)" oninput="updateText()">
-            <input type="text" class="inp-batch" value="${batch}" placeholder="輸入批號" title="批號" oninput="updateText()">
-            <input type="number" class="inp-size" value="${size}" min="3" max="11" placeholder="號數" title="號數 (3~11)" oninput="updateText()">
-            <select class="inp-spec" title="規格" onchange="updateText()">
+            <input type="text" class="inp-date" value="${date}" placeholder="mm/dd" oninput="updateText()">
+            <input type="text" class="inp-batch" value="${batch}" placeholder="輸入批號" oninput="updateText()">
+            <input type="number" class="inp-size" value="${size}" min="3" max="11" oninput="updateText()">
+            <select class="inp-spec" onchange="updateText()">
                 <option value="SD280" ${spec==='SD280'?'selected':''}>SD280</option>
                 <option value="SD280W" ${spec==='SD280W'?'selected':''}>SD280W</option>
                 <option value="SD420W" ${spec==='SD420W'?'selected':''}>SD420W</option>
             </select>
-            <input type="number" class="inp-weight" value="${weight}" step="0.01" placeholder="重量" title="重量 (T)" oninput="updateText()">
+            <input type="number" class="inp-weight" value="${weight}" step="0.01" oninput="updateText()">
             ${index > 0 ? '<button class="btn-delete" onclick="removeItem(this)" title="刪除此行">✕</button>' : '<div style="width: 35px;"></div>'}
         `;
         container.appendChild(div);
         updateText();
     }
 
-    // 刪除該行
     function removeItem(btn) {
         btn.closest('.batch-row').remove();
         updateText();
     }
 
-    // 組合全部行數的文字
     function updateText() {
         const items = document.querySelectorAll('.batch-row');
         let results = [];
@@ -113,7 +126,6 @@
             const spec = item.querySelector('.inp-spec').value;
             const weight = item.querySelector('.inp-weight').value;
 
-            // 處理日期格式
             let formattedDate = `${currentYearRoc}.MM.DD`;
             if (rawDate.length >= 4) {
                 const mm = rawDate.substring(0, 2);
@@ -121,7 +133,6 @@
                 formattedDate = `${currentYearRoc}.${mm}.${dd}`;
             }
 
-            // 抓取規格內的數字
             let specCode = spec.includes("280") ? "280" : "420W";
             if(spec.includes("W") && specCode === "280") specCode = "280W";
 
@@ -147,7 +158,6 @@
         });
     }
 
-    // 初始化載入
     init();
 </script>
 
