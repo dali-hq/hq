@@ -545,7 +545,7 @@ const WORKER_DATA = [
 {
 "id": "34022",
 "name": "黃文福",
-"site": "19vVcZCjnkPH5ABqrttBANh1XOovgf4lD"
+"site": "19vVcZCjnkPH5ABqrttBANh1XOovgf4lD",
 "photoUrl": "https://lh3.googleusercontent.com/d/19vVcZCjnkPH5ABqrttBANh1XOovgf4lD"
 },
 
