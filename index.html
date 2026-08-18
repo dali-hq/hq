@@ -59,13 +59,13 @@
         .emp-card .emp-name-tag { font-weight: bold; font-size: 14px; margin-top: 6px; border-bottom: 1px solid #f0f0f0; padding-bottom: 4px; overflow: hidden; text-overflow: ellipsis; }
 
 /* 3. 電腦版：確保 Grid 佈局也置中 */
-/* 3. 電腦版：強制定製一行 8 個 */
+/* 3. 電腦版：強制定製一行 7 個 */
 @media (min-width: 1024px) {
     .result-container { 
         display: grid !important; 
         justify-content: center; 
         /* 修改這裡：將 repeat 的數量固定為 8 */
-        grid-template-columns: repeat(8, 1fr) !important; 
+        grid-template-columns: repeat(7, 1fr) !important; 
         max-width: 1200px; /* 稍微調大一點，讓 8 個卡片有足夠空間 */
         gap: 10px; 
         margin: 0 auto;
@@ -95,10 +95,10 @@
         margin: 0.5cm;
     }
 
-    /* 2. 強制容器在列印時固定為 8 欄，不准跑掉 */
+    /* 2. 強制容器在列印時固定為 7 欄，不准跑掉 */
     .result-container {
         display: grid !important;
-        grid-template-columns: repeat(8, 1fr) !important; 
+        grid-template-columns: repeat(7, 1fr) !important; 
         gap: 5px !important; /* 縮小間距，確保 8 個排得進去 */
         width: 100% !important;
         max-width: none !important;
