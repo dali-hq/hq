@@ -144,6 +144,12 @@
         <h2 style="color: #27ae60;">🌱 新進同仁</h2>
         <div id="result-new" class="result-container"></div>
     </div>
+    
+    <!-- 新增的 8/18支援 頁面 -->
+    <div id="page-support" style="display:none;">
+        <h2 style="color: #9b59b6;">📅 8/18支援</h2>
+        <div id="result-support" class="result-container"></div>
+    </div>
 
     <div id="page-resigned" style="display:none;">
         <h2 style="color: #d63031;">🚫 轉出人員名單</h2>
@@ -161,6 +167,7 @@
     <div class="nav-link">
         <a onclick="showPage('search')">🔍 查詢</a>|
         <a onclick="showPage('new')">🌱 新進</a>|
+        <a onclick="showPage('support')">📅 8/18支援</a>| <!-- 新增此行 -->
         <a onclick="showPage('resigned')">🚫 轉出</a>|
         <span class="mobile-br"></span>
         <a onclick="showPage('dali')">🏢 大里移工</a>|
@@ -177,9 +184,9 @@
     // 網頁載入時執行今日休假查詢
     window.onload = function() { loadOffDuty(); };
 
-    // 分頁切換邏輯
+    // 1. 修改 showPage 函式
     function showPage(p) {
-        const pages = ['search', 'new', 'resigned', 'dali'];
+        const pages = ['search', 'new', 'support', 'resigned', 'dali']; // 加入 support
         pages.forEach(id => {
             const el = document.getElementById('page-' + id);
             if (el) el.style.display = 'none';
@@ -189,15 +196,30 @@
         const targetPage = document.getElementById('page-' + p);
         if (targetPage) targetPage.style.display = 'block';
 
-        // 轉出頁面不需要寬版，其他有照片的頁面在電腦版都撐開
         if (p === 'resigned') {
             card.classList.remove('wide');
             loadResigned();
         } else {
             card.classList.add('wide');
             if (p === 'new') loadNewComers();
+            if (p === 'support') loadSupport(); // 新增支援頁邏輯
             if (p === 'dali') renderCards('result-dali', WORKER_DATA);
-            // 搜尋頁面的 wide 由 doSearch 觸發，這裡僅預設撐開
+        }
+    }
+
+    // 2. 新增 loadSupport 函式
+    function loadSupport() {
+        if (typeof WORKER_DATA === 'undefined') return;
+        
+        // 請在此處填入 8/18 支援人員的工號
+        const supportIds = ["31007", "31008", "34020", "34022", "35018", "35020", "35021", "36016", 35042", "38007", "33006", "36060", "37005"];
+        const res = WORKER_DATA.filter(w => supportIds.includes(w.id.toString().trim()));
+        renderCards('result-support', res);
+        
+        const container = document.getElementById('result-support');
+        if (container && res.length > 0) {
+            const breakStyle = 'width: 100%; flex-basis: 100%; color: #9b59b6; font-weight: bold; margin: 15px 0; font-size: 18px; grid-column: 1 / -1;';
+            container.insertAdjacentHTML('afterbegin', `<div style="${breakStyle}">🚀 8/18 支援名單</div>`);
         }
     }
 
