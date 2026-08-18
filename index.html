@@ -212,7 +212,7 @@
         if (typeof WORKER_DATA === 'undefined') return;
         
         // 請在此處填入 8/18 支援人員的工號
-        const supportIds = ["31007", "31008", "34020", "34022", "35018", "35020", "35021", "36016", 35042", "38007", "33006", "36060", "37005"];
+        const supportIds = ["31007", "31008", "34020", "34022", "35018", "35020", "35021", "36016", "35042", "38007", "33006", "36060", "37005"];
         const res = WORKER_DATA.filter(w => supportIds.includes(w.id.toString().trim()));
         renderCards('result-support', res);
         
