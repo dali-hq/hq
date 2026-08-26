@@ -55,11 +55,24 @@
   const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
   const dayStr = weekDays[now.getDay()];                // 組合基本文字
   let text = `您好今日訂餐, 實毅營造\n${year}/${month}/${date}(${dayStr})\n印尼：${indo}\n台：${generalTotal}`;
-  // 判斷是否有素食
-  if (tw > 0 || veg > 0)
-  {text += `\n素(飯50g)：${veg}\n總共：${total}\n\n(工務所袋：${tw}+${veg}素(飯50g))`;
-  } else 
-  {text += `\n總共: ${total}`;        }
+// 判斷是否顯示素食行
+            if (veg > 0) {
+                text += `\n素(飯50g)：${veg}`;
+            }
+
+            text += `\n總共：${total}`;
+
+            // 根據台灣與素食的數量組合，調整工務所袋顯示內容
+            if (tw > 0 && veg === 0) {
+                // 1. 有台灣，素食為 0
+                text += `\n\n(工務所袋：${tw})`;
+            } else if (tw > 0 && veg > 0) {
+                // 2. 有台灣，也有素食
+                text += `\n\n(工務所袋：${tw}+${veg}素(飯50g))`;
+            } else if (tw === 0 && veg > 0) {
+                // 3. 無台灣，有素食
+                text += `\n\n(工務所袋：${veg}素(飯50g))`;
+            }
   
       document.getElementById('finalText').innerText = text;    }
         function copyToClipboard() {
