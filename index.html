@@ -5,79 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer">
     <title>🍰 實毅大里員工</title>
+    <!-- 引入 Google Fonts 思源宋體 (Noto Serif TC) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    
     <script src="data.js"></script>
     <style>
-        body { font-family: "Microsoft JhengHei", sans-serif; text-align: center; background: #f5f7fa; padding: 15px; margin: 0; }
+        body { 
+            font-family: "Noto Serif TC", "Microsoft JhengHei", serif; 
+            text-align: center; 
+            background: #f5f7fa; 
+            padding: 15px; 
+            margin: 0; 
+        }
         
         /* 基礎卡片容器：在電腦版會透過 .wide 撐開 */
         .card { 
-            background: white; padding: 25px; border-radius: 12px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: block; 
-            width: 100%; max-width: 450px; box-sizing: border-box; 
-            margin: 10px auto; transition: max-width 0.3s; 
+            background: white; 
+            padding: 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
+            display: block; 
+            width: 100%; 
+            max-width: 450px; 
+            box-sizing: border-box; 
+            margin: 10px auto; 
+            transition: max-width 0.3s; 
         }
         /* 電腦版撐開後的寬度 */
         .card.wide { max-width: 1200px; }
 
+        /* 標題套用宋體與適度放大 */
+        h2 {
+            font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+        }
+
         /* 搜尋區域 */
         .search-section { max-width: 400px; margin: 0 auto; }
-        input { padding: 15px; border: 2px solid #ddd; border-radius: 6px; font-size: 18px; outline: none; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
+        input { padding: 15px; border: 2px solid #ddd; border-radius: 6px; font-size: 18px; font-family: "Noto Serif TC", serif; outline: none; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
         .btn-group { display: flex; gap: 10px; margin-bottom: 15px; }
-        .btn-search { flex: 2; padding: 15px 0; background-color: #4a90e2; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        .btn-clear { flex: 1; padding: 15px 0; background-color: #95a5a6; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .btn-search { flex: 2; padding: 15px 0; background-color: #4a90e2; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; font-family: "Noto Serif TC", serif; cursor: pointer; }
+        .btn-clear { flex: 1; padding: 15px 0; background-color: #95a5a6; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; font-family: "Noto Serif TC", serif; cursor: pointer; }
 
-        /* 導覽連結 */
-        .nav-link { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; font-size: 14px; line-height: 2.5; display: flex; flex-wrap: wrap; justify-content: center; }
-        .nav-link a { color: #4a90e2; text-decoration: none; font-weight: bold; cursor: pointer; margin: 0 10px; white-space: nowrap; }
+        /* 下方導覽列：純文字、加上分隔點、字體放大到 20px */
+        .nav-link { 
+            margin-top: 25px; 
+            padding-top: 15px; 
+            border-top: 1px solid #eee; 
+            font-size: 20px; 
+            line-height: 2.5; 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            align-items: center;
+            gap: 8px; 
+        }
+        .nav-link a { 
+            background: none !important; 
+            border: none !important; 
+            padding: 0 !important; 
+            color: #4a90e2; 
+            text-decoration: none; 
+            font-weight: bold; 
+            cursor: pointer; 
+            white-space: nowrap; 
+            font-size: 20px; 
+            font-family: "Noto Serif TC", serif;
+            transition: color 0.2s;
+        }
+        .nav-link a:hover {
+            color: #2c3e50; 
+            text-decoration: underline; 
+        }
+        .nav-link span.divider {
+            color: #bbb;
+            font-weight: normal;
+        }
         .nav-duty { color: #2c3e50 !important; }
         .nav-duty span { color: #27ae60 !important; }
 
-/* 1. 容器：強化水平置中 */
-.result-container { 
-    display: flex; 
-    flex-wrap: wrap; 
-    justify-content: center; /* 讓內容物水平置中 */
-    align-items: flex-start; 
-    gap: 10px; 
-    padding: 10px 0; 
-    width: 100%; 
-    margin: 0 auto; 
-}
-        /* 員工卡片樣式：邊框已改為黑色 */
-       .emp-card { 
-    background: #fff; 
-    border: 1px solid black; 
-    border-radius: 8px; 
-    padding: 8px; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-    box-sizing: border-box; 
-    text-align: center; 
-    /* 修改這裡：讓手機版維持一行 2 個或自動，重點是下面的電腦版 */
-    width: calc((100% - 15px) / 2); 
-}
+        /* 1. 容器：強化水平置中 */
+        .result-container { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            align-items: flex-start; 
+            gap: 10px; 
+            padding: 10px 0; 
+            width: 100%; 
+            margin: 0 auto; 
+        }
+        
+        /* 員工卡片樣式 */
+        .emp-card { 
+            background: #fff; 
+            border: 1px solid black; 
+            border-radius: 8px; 
+            padding: 8px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+            box-sizing: border-box; 
+            text-align: center; 
+            width: calc((100% - 15px) / 2); 
+        }
         .emp-card img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 4px; }
         .emp-card .emp-name-tag { font-weight: bold; font-size: 14px; margin-top: 6px; border-bottom: 1px solid #f0f0f0; padding-bottom: 4px; overflow: hidden; text-overflow: ellipsis; }
 
-/* 3. 電腦版：確保 Grid 佈局也置中 */
-/* 3. 電腦版：強制定製一行 7 個 */
-@media (min-width: 1024px) {
-    .result-container { 
-        display: grid !important; 
-        justify-content: center; 
-        /* 修改這裡：將 repeat 的數量固定為 8 */
-        grid-template-columns: repeat(7, 1fr) !important; 
-        max-width: 1200px; /* 稍微調大一點，讓 8 個卡片有足夠空間 */
-        gap: 10px; 
-        margin: 0 auto;
-    }
-    .emp-card { 
-        width: 100% !important; 
-        padding: 5px; /* 稍微縮小內距，避免 8 個太擠 */
-    }
-    .emp-card .emp-name-tag {
-        font-size: 16px; /* 稍微縮小字體，確保工號名字不折行 */
-    }
-}
+        /* 3. 電腦版：強制定製一行 7 個 */
+        @media (min-width: 1024px) {
+            .result-container { 
+                display: grid !important; 
+                justify-content: center; 
+                grid-template-columns: repeat(7, 1fr) !important; 
+                max-width: 1200px; 
+                gap: 10px; 
+                margin: 0 auto;
+            }
+            .emp-card { 
+                width: 100% !important; 
+                padding: 5px; 
+            }
+            .emp-card .emp-name-tag {
+                font-size: 16px; 
+            }
+        }
+
         /* 轉出人員表格 */
         .resigned-table { width: 100%; max-width: 450px; margin: 0 auto; border-collapse: separate; border-spacing: 0; font-size: 15px; background: white; border: 2px solid #636e72; border-radius: 12px; overflow: hidden; }
         .resigned-table th, .resigned-table td { border: 1px solid #ccc; padding: 12px 8px; }
@@ -88,41 +140,33 @@
         /* 手機斷行控制 */
         @media (max-width: 600px) { .mobile-br { display: block; width: 100%; height: 0; } }
         @media (min-width: 601px) { .mobile-br { display: none; } }
-        /* --- 專門控制列印的樣式：強制 8 欄 --- */
-@media print {
-    /* 1. 設定紙張邊距，讓空間最大化 */
-    @page {
-        margin: 0.5cm;
-    }
 
-    /* 2. 強制容器在列印時固定為 7 欄，不准跑掉 */
-    .result-container {
-        display: grid !important;
-        grid-template-columns: repeat(7, 1fr) !important; 
-        gap: 5px !important; /* 縮小間距，確保 8 個排得進去 */
-        width: 100% !important;
-        max-width: none !important;
-    }
-
-    /* 3. 調整卡片在紙張上的細節 */
-    .emp-card {
-        width: 100% !important;
-        padding: 2px !important; /* 極小化內距 */
-        border: 1px solid #000 !important;
-        page-break-inside: avoid;
-    }
-
-    /* 4. 縮小字體，防止名字太長撐開格子 */
-    .emp-name-tag {
-        font-size: 16px !important;
-        white-space: nowrap;
-    }
-
-    /* 5. 隱藏列印時不需要的按鈕 */
-    .search-section, .nav-link, .btn-group, button, #off-duty-box {
-        display: none !important;
-    }
-}
+        /* --- 專門控制列印的樣式 --- */
+        @media print {
+            @page {
+                margin: 0.5cm;
+            }
+            .result-container {
+                display: grid !important;
+                grid-template-columns: repeat(7, 1fr) !important; 
+                gap: 5px !important; 
+                width: 100% !important;
+                max-width: none !important;
+            }
+            .emp-card {
+                width: 100% !important;
+                padding: 2px !important; 
+                border: 1px solid #000 !important;
+                page-break-inside: avoid;
+            }
+            .emp-name-tag {
+                font-size: 16px !important;
+                white-space: nowrap;
+            }
+            .search-section, .nav-link, .btn-group, button, #off-duty-box {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -145,7 +189,6 @@
         <div id="result-new" class="result-container"></div>
     </div>
     
-    <!-- 新增的 8/18支援 頁面 -->
     <div id="page-support" style="display:none;">
         <h2 style="color: #9b59b6;">📅 08/18北港支援</h2>
         <div id="result-support" class="result-container"></div>
@@ -165,12 +208,12 @@
     </div>
 
     <div class="nav-link">
-        <a onclick="showPage('search')">🔍 查詢</a>|
-        <a onclick="showPage('new')">🌱 新進</a>|
-        <a onclick="showPage('support')">📅 8/18北港支援</a>| <!-- 新增此行 -->
-        <a onclick="showPage('resigned')">🚫 轉出</a>|
+        <a onclick="showPage('search')">🔍 查詢</a><span class="divider">‧</span>
+        <a onclick="showPage('new')">🌱 新進</a><span class="divider">‧</span>
+        <a onclick="showPage('support')">📅 8/18北港支援</a><span class="divider">‧</span>
+        <a onclick="showPage('resigned')">🚫 轉出</a>
         <span class="mobile-br"></span>
-        <a onclick="showPage('dali')">🏢 大里移工</a>|
+        <a onclick="showPage('dali')">🏢 大里移工</a><span class="divider">‧</span>
         <a href="duty.html" class="nav-duty">♚ <span>月曆</span></a>
     </div>
 </div>
@@ -181,12 +224,10 @@
 </div>
 
 <script>
-    // 網頁載入時執行今日休假查詢
     window.onload = function() { loadOffDuty(); };
 
-    // 1. 修改 showPage 函式
     function showPage(p) {
-        const pages = ['search', 'new', 'support', 'resigned', 'dali']; // 加入 support
+        const pages = ['search', 'new', 'support', 'resigned', 'dali'];
         pages.forEach(id => {
             const el = document.getElementById('page-' + id);
             if (el) el.style.display = 'none';
@@ -202,16 +243,13 @@
         } else {
             card.classList.add('wide');
             if (p === 'new') loadNewComers();
-            if (p === 'support') loadSupport(); // 新增支援頁邏輯
+            if (p === 'support') loadSupport();
             if (p === 'dali') renderCards('result-dali', WORKER_DATA);
         }
     }
 
-    // 2. 新增 loadSupport 函式
     function loadSupport() {
         if (typeof WORKER_DATA === 'undefined') return;
-        
-        // 請在此處填入 8/18 支援人員的工號
         const supportIds = ["31007", "31008", "34020", "34022", "35018", "35020", "35021", "36016", "35042", "38007", "33006", "36060", "37005"];
         const res = WORKER_DATA.filter(w => supportIds.includes(w.id.toString().trim()));
         renderCards('result-support', res);
@@ -223,7 +261,6 @@
         }
     }
 
-    // 渲染員工卡片
     function renderCards(targetId, list) {
         const div = document.getElementById(targetId);
         if (!div) return;
@@ -231,7 +268,6 @@
             div.innerHTML = "<div style='width:100%; padding:20px;'>查無相關資料</div>";
             return;
         }
-        // 排序：工號由小到大
         list.sort((a, b) => (parseInt(a.id.toString().replace(/\D/g,'')) || 0) - (parseInt(b.id.toString().replace(/\D/g,'')) || 0));
         div.innerHTML = list.map(e => `
             <div class='emp-card'>
@@ -241,51 +277,39 @@
         `).join('');
     }
 
-    // 搜尋功能
     function doSearch() {
         const val = document.getElementById('empId').value.trim();
         if (!val) {
             alert("請輸入工號或姓名");
             return;
         }
-        
         const keywords = val.split(/\s+/);
-        // ⚠ 確保你的 data.js 中有名為 WORKER_DATA 的陣列
         if (typeof WORKER_DATA === 'undefined') {
             alert("錯誤：無法讀取員工資料(WORKER_DATA missing)");
             return;
         }
-        
-        // 從 WORKER_DATA 中過濾
         const results = WORKER_DATA.filter(w => 
             keywords.some(k => w.id.toString().includes(k) || w.name.includes(k))
         );
-        
         renderCards('result-display', results);
-        
-        // 搜尋後在電腦版撐開卡片
         if (window.innerWidth >= 1024) {
             document.getElementById('main-card').classList.add('wide');
         }
     }
 
-    // 清空搜尋
     function clearSearch() {
         document.getElementById('empId').value = '';
         document.getElementById('result-display').innerHTML = '';
-        // 清空後恢復窄版
         if (window.innerWidth >= 1024) {
              document.getElementById('main-card').classList.remove('wide');
         }
     }
 
-    // 載入新進同仁 (範例工號)
     function loadNewComers() {
         if (typeof WORKER_DATA === 'undefined') return;
         const ids = ["31010", "36074", "36075", "36076", "36077", "36078", "36079", "36080"];
         const res = WORKER_DATA.filter(w => ids.includes(w.id.toString().trim()));
         renderCards('result-new', res);
-        
         const container = document.getElementById('result-new');
         if (container && res.length > 0) {
             const breakStyle = 'width: 100%; flex-basis: 100%; color: #e67e22; font-weight: bold; margin: 15px 0; font-size: 18px; grid-column: 1 / -1;';
@@ -293,16 +317,13 @@
         }
     }
 
-    // 載入轉出名單
     function loadResigned() {
         const tbody = document.getElementById('resigned-tbody');
         if (!tbody) return;
-        // ⚠ 確保你的 data.js 中有名為 RESIGNED_DATA 的陣列
         if (typeof RESIGNED_DATA === 'undefined') {
             tbody.innerHTML = "<tr><td colspan='2'>錯誤：無法讀取轉出資料</td></tr>";
             return;
         }
-        
         const groups = {};
         RESIGNED_DATA.forEach(item => {
             const key = `${item.date}_${item.site}`;
@@ -315,16 +336,13 @@
         `).join('') || "<tr><td colspan='2'>目前無轉出人員</td></tr>";
     }
 
-    // 今日休假查詢
     function loadOffDuty() {
         const offListEl = document.getElementById('off-list');
         if (!offListEl) return;
-        // ⚠ 確保你的 data.js 中有名為 LEAVE_DATA 的陣列
         if (typeof LEAVE_DATA === 'undefined') {
             offListEl.innerHTML = "無法讀取休假資料";
             return;
         }
-        
         const today = new Date().toISOString().slice(0,10).replace(/-/g,"/");
         const list = LEAVE_DATA.filter(d => today >= d.start && today <= d.end);
         offListEl.innerHTML = list.length ? 
