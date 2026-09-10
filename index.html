@@ -43,7 +43,12 @@
 
         /* 搜尋區域 */
         .search-section { max-width: 400px; margin: 0 auto; }
-        input { padding: 15px; border: 2px solid #ddd; border-radius: 6px; font-size: 18px; font-family: "Noto Serif TC", serif; outline: none; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
+        input { padding: 15px; border: 2px solid #005ab5; /* 框框邊線改為 #005ab5 */ border-radius: 6px; font-size: 18px; font-family: "Noto Serif TC", serif;  outline: none; 
+    width: 100%; box-sizing: border-box; margin-bottom: 10px; }
+
+/* 當點擊輸入框準備打字時，外框也保持或加強這個顏色 */
+input:focus { border-color: #005ab5; box-shadow: 0 0 5px rgba(0, 90, 181, 0.3);}
+        
         .btn-group { display: flex; gap: 10px; margin-bottom: 15px; }
         .btn-search { flex: 2; padding: 15px 0; background-color: #005ab5; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; font-family: "Noto Serif TC", serif; cursor: pointer; }
         .btn-clear { flex: 1; padding: 15px 0; background-color: #95a5a6; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; font-family: "Noto Serif TC", serif; cursor: pointer; }
