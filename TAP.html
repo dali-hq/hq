@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -10,17 +12,17 @@
     body { margin:0; background:var(--bg); color:#1d2939; font-family:Arial,"Noto Sans TC",sans-serif; }
     .container { max-width:1500px; margin:0 auto; padding:24px; }
     h1 { margin:0 0 20px; font-size:28px; }
+    h2 { margin-top:0; font-size:20px; }
     .panel { background:#fff; border:1px solid var(--border); border-radius:12px; padding:18px; margin-bottom:18px; box-shadow:0 2px 8px #1018280d; }
     .filters, .form-grid { display:grid; grid-template-columns:repeat(4,minmax(160px,1fr)); gap:12px; }
     label { display:flex; flex-direction:column; gap:6px; font-size:14px; font-weight:600; }
     input, textarea, button { font:inherit; }
     input, textarea { width:100%; border:1px solid var(--border); border-radius:8px; padding:9px 10px; background:#fff; }
     textarea { min-height:70px; resize:vertical; }
-    .wide { grid-column:span 2; }
     .actions { display:flex; gap:10px; align-items:end; margin-top:14px; flex-wrap:wrap; }
     button { border:0; border-radius:8px; padding:10px 16px; cursor:pointer; background:var(--blue); color:#fff; font-weight:700; }
     button.secondary { background:#667085; }
-    button.danger { background:#b42318; }
+    button:disabled { opacity:.6; cursor:not-allowed; }
     .status { margin-top:10px; min-height:20px; color:#475467; }
     .table-wrap { overflow:auto; max-height:65vh; border:1px solid var(--border); border-radius:8px; }
     table { width:100%; min-width:1450px; border-collapse:collapse; background:#fff; }
@@ -31,7 +33,6 @@
     @media (max-width:800px) {
       .container { padding:12px; }
       .filters, .form-grid { grid-template-columns:1fr; }
-      .wide { grid-column:span 1; }
     }
   </style>
 </head>
@@ -69,9 +70,13 @@
           <label>案號<input name="caseNo" required></label>
           <label>申請事由<input name="reason"></label>
           <label>起始日期<input name="startDate" type="date" required></label>
-          <label>起始時間  <input    name="startTime"    type="text"    placeholder="例如 08:30"    pattern="(?:[01]\d|2[0-3]):[0-5]\d"    maxlength="5"    required></label>
+          <label>起始時間
+            <input name="startTime" type="text" placeholder="例如 08:30" pattern="(?:[01]\d|2[0-3]):[0-5]\d" maxlength="5" required>
+          </label>
           <label>結束日期<input name="endDate" type="date"></label>
-          <label>結束時間  <input    name="endTime"    type="text"    placeholder="例如 17:00"   pattern="(?:[01]\d|2[0-3]):[0-5]\d"    maxlength="5"    required></label>
+          <label>結束時間
+            <input name="endTime" type="text" placeholder="例如 17:00" pattern="(?:[01]\d|2[0-3]):[0-5]\d" maxlength="5">
+          </label>
           <label>協勤地點<input name="location" required></label>
           <label>申請人數<input name="peopleCount" type="number" min="1" required></label>
           <label>申請單位<input name="applicant"></label>
@@ -82,7 +87,7 @@
           <label>申請日期<input name="applyDate" type="date"></label>
         </div>
         <div class="actions">
-          <button type="submit">送出新增</button>
+          <button type="submit" id="submitButton">送出新增</button>
           <button type="reset" class="secondary">重設</button>
         </div>
       </form>
@@ -102,40 +107,59 @@
   </main>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyzedRFabg0lRD7x_PVJlrd1oRlgHNwsIKzOmOdwNFWDEGypdwy-HmOGyAf-jiNmpZH/exec';
+    // 這裡必須與 Code.gs 的 API_TOKEN 完全相同
     const API_TOKEN = 'test-TAPTAP-2026';
-    const columns = ['案號','申請事由','起始日期','起始時間','結束日期','結束時間','協勤地點','申請人數','申請單位','聯絡人1','行動電話1','聯絡人2','行動電話2','申請日期'];
+
+    const columns = [
+      '案號','申請事由','起始日期','起始時間','結束日期','結束時間',
+      '協勤地點','申請人數','申請單位','聯絡人1','行動電話1',
+      '聯絡人2','行動電話2','申請日期'
+    ];
 
     const $ = id => document.getElementById(id);
 
     function escapeHtml(value) {
-      return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+      return String(value ?? '').replace(/[&<>'"]/g, ch => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'
+      }[ch]));
     }
 
-    async function loadRows() {
-      const params = new URLSearchParams({
-        action: 'list',
+    function showError(elementId, error) {
+      const message = error && error.message ? error.message : String(error);
+      $(elementId).textContent = `錯誤：${message}`;
+      console.error(error);
+    }
+
+    function loadRows() {
+      const params = {
         keyword: $('keyword').value.trim(),
         fromDate: $('fromDate').value,
         toDate: $('toDate').value
-      });
+      };
+
       $('searchStatus').textContent = '查詢中……';
-      try {
-        const response = await fetch(`${API_URL}?${params.toString()}`);
-        const result = await response.json();
-        if (!result.ok) throw new Error(result.error || '查詢失敗');
-        renderTable(result.rows || []);
-        $('searchStatus').textContent = '查詢完成';
-      } catch (error) {
-        $('searchStatus').textContent = `查詢失敗：${error.message}`;
-      }
+
+      google.script.run
+        .withSuccessHandler(result => {
+          if (!result || !result.ok) {
+            throw new Error(result && result.error ? result.error : '查詢失敗');
+          }
+          renderTable(result.rows || []);
+          $('searchStatus').textContent = '查詢完成';
+        })
+        .withFailureHandler(error => showError('searchStatus', error))
+        .getRows(params);
     }
 
     function renderTable(rows) {
-      $('tableHead').innerHTML = columns.map(col => `<th>${escapeHtml(col)}</th>`).join('');
+      $('tableHead').innerHTML = columns
+        .map(col => `<th>${escapeHtml(col)}</th>`)
+        .join('');
+
       $('tableBody').innerHTML = rows.length
         ? rows.map(row => `<tr>${columns.map(col => `<td>${escapeHtml(row[col])}</td>`).join('')}</tr>`).join('')
-        : `<tr><td colspan="14">查無資料</td></tr>`;
+        : '<tr><td colspan="14">查無資料</td></tr>';
+
       $('resultCount').textContent = `共 ${rows.length} 筆資料`;
     }
 
@@ -151,44 +175,35 @@
 
     $('reload').addEventListener('click', loadRows);
 
-    $('dataForm').addEventListener('submit', async event => {
-  event.preventDefault();
+    $('dataForm').addEventListener('submit', event => {
+      event.preventDefault();
 
-  const form = event.currentTarget;
-  const data = Object.fromEntries(new FormData(form).entries());
+      const form = event.currentTarget;
+      const data = Object.fromEntries(new FormData(form).entries());
+      data.token = API_TOKEN;
 
-  data.token = API_TOKEN;
+      $('formStatus').textContent = '送出中……';
+      $('submitButton').disabled = true;
 
-  $('formStatus').textContent = '送出中……';
+      google.script.run
+        .withSuccessHandler(result => {
+          $('submitButton').disabled = false;
 
-  try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      redirect: 'follow',
-      mode: 'cors',
-      credentials: 'omit',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8'
-      },
-      body: JSON.stringify(data)
+          if (!result || !result.ok) {
+            $('formStatus').textContent = `新增失敗：${result && result.error ? result.error : '未知錯誤'}`;
+            return;
+          }
+
+          $('formStatus').textContent = '新增成功';
+          form.reset();
+          loadRows();
+        })
+        .withFailureHandler(error => {
+          $('submitButton').disabled = false;
+          showError('formStatus', error);
+        })
+        .addRow(data);
     });
-
-    const text = await response.text();
-    const result = JSON.parse(text);
-
-    if (!result.ok) {
-      throw new Error(result.error || '新增失敗');
-    }
-
-    $('formStatus').textContent = '新增成功';
-    form.reset();
-    await loadRows();
-
-  } catch (error) {
-    console.error(error);
-    $('formStatus').textContent = `新增失敗：${error.message}`;
-  }
-});
 
     loadRows();
   </script>
