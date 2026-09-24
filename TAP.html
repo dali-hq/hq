@@ -95,6 +95,23 @@
     const API_TOKEN = 'YiJiaoDispatch-2026-9F4KpQ82Lm';
     const columns = ['案號','申請事由','起始日期','起始時間','結束日期','結束時間','協勤地點','申請人數','申請單位','聯絡人1','行動電話1','聯絡人2','行動電話2','申請日期'];
     const $ = id => document.getElementById(id);
+    
+    function getTodayString() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+function setDefaultDates() {
+  const today = getTodayString();
+
+  document.querySelector('input[name="startDate"]').value = today;
+  document.querySelector('input[name="endDate"]').value = today;
+  document.querySelector('input[name="applyDate"]').value = today;
+}
 
     function escapeHtml(value) {
       return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
@@ -156,6 +173,7 @@
       }
     });
 
+    setDefaultDates();
     loadRows();
   </script>
 </body>
