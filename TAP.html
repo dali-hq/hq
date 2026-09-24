@@ -155,7 +155,7 @@
       event.preventDefault();
       const form = event.currentTarget;
       const data = Object.fromEntries(new FormData(form).entries());
-      data.token = TOKEN;
+      data.token = API_TOKEN;
       $('formStatus').textContent = '送出中……';
 
       try {
