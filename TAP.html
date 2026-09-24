@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>義交派遣資料管理</title>
+  <style>
+    :root { --blue:#155eef; --border:#d0d5dd; --bg:#f5f7fb; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:#1d2939; font-family:Arial,"Noto Sans TC",sans-serif; }
+    .container { max-width:1500px; margin:0 auto; padding:24px; }
+    h1 { margin:0 0 20px; font-size:28px; }
+    .panel { background:#fff; border:1px solid var(--border); border-radius:12px; padding:18px; margin-bottom:18px; box-shadow:0 2px 8px #1018280d; }
+    .filters, .form-grid { display:grid; grid-template-columns:repeat(4,minmax(160px,1fr)); gap:12px; }
+    label { display:flex; flex-direction:column; gap:6px; font-size:14px; font-weight:600; }
+    input, textarea, button { font:inherit; }
+    input, textarea { width:100%; border:1px solid var(--border); border-radius:8px; padding:9px 10px; background:#fff; }
+    textarea { min-height:70px; resize:vertical; }
+    .wide { grid-column:span 2; }
+    .actions { display:flex; gap:10px; align-items:end; margin-top:14px; flex-wrap:wrap; }
+    button { border:0; border-radius:8px; padding:10px 16px; cursor:pointer; background:var(--blue); color:#fff; font-weight:700; }
+    button.secondary { background:#667085; }
+    button.danger { background:#b42318; }
+    .status { margin-top:10px; min-height:20px; color:#475467; }
+    .table-wrap { overflow:auto; max-height:65vh; border:1px solid var(--border); border-radius:8px; }
+    table { width:100%; min-width:1450px; border-collapse:collapse; background:#fff; }
+    th, td { padding:9px 10px; border-bottom:1px solid #eaecf0; text-align:left; white-space:nowrap; font-size:14px; }
+    th { position:sticky; top:0; background:#eef4ff; z-index:1; }
+    tr:hover td { background:#f8faff; }
+    .count { margin-bottom:10px; color:#475467; font-size:14px; }
+    @media (max-width:800px) {
+      .container { padding:12px; }
+      .filters, .form-grid { grid-template-columns:1fr; }
+      .wide { grid-column:span 1; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>義交派遣資料顯示／查詢</h1>
+
+    <section class="panel">
+      <h2>資料查詢</h2>
+      <form id="searchForm">
+        <div class="filters">
+          <label>關鍵字
+            <input id="keyword" placeholder="案號、地點、申請單位、聯絡人">
+          </label>
+          <label>起始日期（起）
+            <input id="fromDate" type="date">
+          </label>
+          <label>起始日期（迄）
+            <input id="toDate" type="date">
+          </label>
+        </div>
+        <div class="actions">
+          <button type="submit">查詢</button>
+          <button type="button" class="secondary" id="clearSearch">清除條件</button>
+          <button type="button" class="secondary" id="reload">重新載入</button>
+        </div>
+      </form>
+      <div class="status" id="searchStatus"></div>
+    </section>
+
+    <section class="panel">
+      <h2>新增派遣資料</h2>
+      <form id="dataForm">
+        <div class="form-grid">
+          <label>案號<input name="caseNo" required></label>
+          <label>申請事由<input name="reason"></label>
+          <label>起始日期<input name="startDate" type="date" required></label>
+          <label>起始時間<input name="startTime" type="time"></label>
+          <label>結束日期<input name="endDate" type="date"></label>
+          <label>結束時間<input name="endTime" type="time"></label>
+          <label>協勤地點<input name="location" required></label>
+          <label>申請人數<input name="peopleCount" type="number" min="1" required></label>
+          <label>申請單位<input name="applicant"></label>
+          <label>聯絡人1<input name="contact1"></label>
+          <label>行動電話1<input name="phone1" type="tel"></label>
+          <label>聯絡人2<input name="contact2"></label>
+          <label>行動電話2<input name="phone2" type="tel"></label>
+          <label>申請日期<input name="applyDate" type="date"></label>
+        </div>
+        <div class="actions">
+          <button type="submit">送出新增</button>
+          <button type="reset" class="secondary">重設</button>
+        </div>
+      </form>
+      <div class="status" id="formStatus"></div>
+    </section>
+
+    <section class="panel">
+      <h2>派遣資料</h2>
+      <div class="count" id="resultCount">資料載入中……</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr id="tableHead"></tr></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyzedRFabg0lRD7x_PVJlrd1oRlgHNwsIKzOmOdwNFWDEGypdwy-HmOGyAf-jiNmpZH/exec';
+    const API_TOKEN = 'test-TAPTAP-2026';
+    const columns = ['案號','申請事由','起始日期','起始時間','結束日期','結束時間','協勤地點','申請人數','申請單位','聯絡人1','行動電話1','聯絡人2','行動電話2','申請日期'];
+
+    const $ = id => document.getElementById(id);
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+    }
+
+    async function loadRows() {
+      const params = new URLSearchParams({
+        action: 'list',
+        keyword: $('keyword').value.trim(),
+        fromDate: $('fromDate').value,
+        toDate: $('toDate').value
+      });
+      $('searchStatus').textContent = '查詢中……';
+      try {
+        const response = await fetch(`${API_URL}?${params.toString()}`);
+        const result = await response.json();
+        if (!result.ok) throw new Error(result.error || '查詢失敗');
+        renderTable(result.rows || []);
+        $('searchStatus').textContent = '查詢完成';
+      } catch (error) {
+        $('searchStatus').textContent = `查詢失敗：${error.message}`;
+      }
+    }
+
+    function renderTable(rows) {
+      $('tableHead').innerHTML = columns.map(col => `<th>${escapeHtml(col)}</th>`).join('');
+      $('tableBody').innerHTML = rows.length
+        ? rows.map(row => `<tr>${columns.map(col => `<td>${escapeHtml(row[col])}</td>`).join('')}</tr>`).join('')
+        : `<tr><td colspan="14">查無資料</td></tr>`;
+      $('resultCount').textContent = `共 ${rows.length} 筆資料`;
+    }
+
+    $('searchForm').addEventListener('submit', event => {
+      event.preventDefault();
+      loadRows();
+    });
+
+    $('clearSearch').addEventListener('click', () => {
+      $('searchForm').reset();
+      loadRows();
+    });
+
+    $('reload').addEventListener('click', loadRows);
+
+    $('dataForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const data = Object.fromEntries(new FormData(form).entries());
+      data.token = TOKEN;
+      $('formStatus').textContent = '送出中……';
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          redirect: 'follow',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (!result.ok) throw new Error(result.error || '新增失敗');
+        $('formStatus').textContent = '新增成功';
+        form.reset();
+        await loadRows();
+      } catch (error) {
+        $('formStatus').textContent = `新增失敗：${error.message}`;
+      }
+    });
+
+    loadRows();
+  </script>
+</body>
+</html>
