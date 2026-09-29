@@ -10,6 +10,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <script src="data.js"></script>
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzqUaCXi4yBUYAtC31lx7ohvIlNWdSxX9rKU5pHDzhXyRhdDdfZzDJY84O3aEMzbGcA/exec';
+    </script>
     <style>
         body { font-family: "Noto Serif TC", "Microsoft JhengHei", serif; text-align: center; background: #f5f7fa; padding: 15px; margin: 0; }
         .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: block; width: 100%; max-width: 450px; box-sizing: border-box; margin: 10px auto; transition: max-width 0.3s; }
@@ -63,15 +67,8 @@
         </div>
         <div id="result-display" class="result-container"></div>
     </div>
-    <div id="page-new" style="display:none;">
-        <h2 style="color: #27ae60;">🌱 新進同仁</h2>
-        <div id="result-new" class="result-container"></div>
-    </div>
-    <div id="page-support" style="display:none;">
-        <h2 style="color: #9b59b6;">📅 08/18 北港支援</h2>
-        <div id="result-support" class="result-container"></div>
-    </div>
-    <div id="page-resigned" style="display:none;">
+   
+       <div id="page-resigned" style="display:none;">
         <h2 style="color: #d63031;">🚫 轉出人員名單</h2>
         <table class="resigned-table">
             <thead><tr><th>日期/工地</th><th>轉出人員名單</th></tr></thead>
@@ -97,27 +94,35 @@
 <script>
     let LEAVE_DATA_FROM_SHEET = null;
     let RESIGNED_DATA_FROM_SHEET = null;
-    window.onload = function() { loadLeaveData(); };
+    window.onload = async function() {
+        await loadLeaveDataFromSheet();
+        await loadResignedDataFromSheet();
+        loadOffDuty();
+        loadResigned();
+    };
 
-    function loadLeaveData() {
-        google.script.run
-            .withFailureHandler(function(err) { console.error('讀取休假失敗:', err); LEAVE_DATA_FROM_SHEET = []; loadResignedData(); })
-            .withSuccessHandler(function(data) {
-                LEAVE_DATA_FROM_SHEET = (data || []).map(d => ({ id: d.id, name: d.name, start: d.start, end: d.end }));
-                loadResignedData();
-            })
-            .getLeaveDataForFrontend();
+    async function loadLeaveDataFromSheet() {
+        if (LEAVE_DATA_FROM_SHEET !== null) return;
+        try {
+            const url = API_URL + '?action=todayOff';
+            const res = await fetch(url, { method: 'GET', mode: 'cors' });
+            const text = await res.text();
+            const json = JSON.parse(text);
+            if (!json || json.ok === false) { console.error('讀取休假失敗:', json ? json.error : '未知錯誤'); LEAVE_DATA_FROM_SHEET = []; return; }
+            LEAVE_DATA_FROM_SHEET = (json.data || []).map(d => ({ id: d.id, name: d.name, start: d.start, end: d.end }));
+        } catch (err) { console.error('讀取休假錯誤:', err); LEAVE_DATA_FROM_SHEET = []; }
     }
 
-    function loadResignedData() {
-        google.script.run
-            .withFailureHandler(function(err) { console.error('讀取轉出失敗:', err); RESIGNED_DATA_FROM_SHEET = []; loadOffDuty(); loadResigned(); })
-            .withSuccessHandler(function(data) {
-                RESIGNED_DATA_FROM_SHEET = data || [];
-                loadOffDuty();
-                loadResigned();
-            })
-            .getResignedDataForFrontend();
+    async function loadResignedDataFromSheet() {
+        if (RESIGNED_DATA_FROM_SHEET !== null) return;
+        try {
+            const url = API_URL + '?action=resigned';
+            const res = await fetch(url, { method: 'GET', mode: 'cors' });
+            const text = await res.text();
+            const json = JSON.parse(text);
+            if (!json || json.ok === false) { console.error('讀取轉出失敗:', json ? json.error : '未知錯誤'); RESIGNED_DATA_FROM_SHEET = []; return; }
+            RESIGNED_DATA_FROM_SHEET = json.data || [];
+        } catch (err) { console.error('讀取轉出錯誤:', err); RESIGNED_DATA_FROM_SHEET = []; }
     }
 
     function showPage(p) {
