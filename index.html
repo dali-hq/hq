@@ -13,6 +13,12 @@
 
     <script src="data.js"></script>
 
+    <!-- ===== 最小改動：新增 API_URL ===== -->
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzqUaCXi4yBUYAtC31lx7ohvIlNWdSxX9rKU5pHDzhXyRhdDdfZzDJY84O3aEMzbGcA/exec';
+    </script>
+    <!-- ================================== -->
+
     <style>
         body {
             font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
@@ -144,7 +150,6 @@
             color: #27ae60 !important;
         }
 
-        /* 預設：所有結果區用 Flex，結果不足一排時可置中 */
         .result-container {
             display: flex;
             flex-wrap: wrap;
@@ -191,11 +196,6 @@
             white-space: nowrap;
         }
 
-        /*
-           PC：一排最多 7 位。
-           維持 Flex 而非改 Grid，查到 1～6 位時才會真正置中。
-           7 欄之間共 6 個 gap，每個 10px，故扣除 60px。
-        */
         @media (min-width: 1024px) {
             .result-container {
                 display: flex !important;
@@ -317,7 +317,7 @@
     </div>
 
     <div id="page-support" style="display:none;">
-        <h2 style="color: #9b59b6;">📅 08/18北港支援</h2>
+        <h2 style="color: #9b59b6;">📅 08/18 北港支援</h2>
         <div id="result-support" class="result-container"></div>
     </div>
 
@@ -348,9 +348,62 @@
 </div>
 
 <script>
-    window.onload = function() {
+    // ===== 最小改動：全域快取變數 =====
+    let LEAVE_DATA_FROM_SHEET = null;
+    let RESIGNED_DATA_FROM_SHEET = null;
+    // ==================================
+
+    window.onload = async function() {
+        // 先從 GAS 讀休假跟轉出，再顯示
+        await Promise.all([
+            loadLeaveDataFromSheet(),
+            loadResignedDataFromSheet()
+        ]);
         loadOffDuty();
     };
+
+    // ===== 新增：從 GAS 讀休假 =====
+    async function loadLeaveDataFromSheet() {
+        if (LEAVE_DATA_FROM_SHEET !== null) return;
+        try {
+            const res = await fetch(API_URL + '?action=todayOff');
+            const json = await res.json();
+            if (!json.ok) {
+                console.error('讀取休假失敗:', json.error);
+                LEAVE_DATA_FROM_SHEET = [];
+                return;
+            }
+            LEAVE_DATA_FROM_SHEET = (json.data || []).map(d => ({
+                id: d.id,
+                name: d.name,
+                start: d.start,
+                end: d.end
+            }));
+        } catch (err) {
+            console.error('讀取休假錯誤:', err);
+            LEAVE_DATA_FROM_SHEET = [];
+        }
+    }
+    // ==============================
+
+    // ===== 新增：從 GAS 讀轉出 =====
+    async function loadResignedDataFromSheet() {
+        if (RESIGNED_DATA_FROM_SHEET !== null) return;
+        try {
+            const res = await fetch(API_URL + '?action=resigned');
+            const json = await res.json();
+            if (!json.ok) {
+                console.error('讀取轉出失敗:', json.error);
+                RESIGNED_DATA_FROM_SHEET = [];
+                return;
+            }
+            RESIGNED_DATA_FROM_SHEET = json.data || [];
+        } catch (err) {
+            console.error('讀取轉出錯誤:', err);
+            RESIGNED_DATA_FROM_SHEET = [];
+        }
+    }
+    // ==============================
 
     function showPage(p) {
         const pages = ['search', 'new', 'support', 'resigned', 'dali'];
@@ -383,7 +436,7 @@
         const container = document.getElementById('result-support');
         if (container && res.length > 0) {
             const breakStyle = 'width: 100%; flex-basis: 100%; color: #9b59b6; font-weight: bold; margin: 15px 0; font-size: 18px;';
-            container.insertAdjacentHTML('afterbegin', `<div style="${breakStyle}"> 8/18 北港支援13員</div>`);
+            container.insertAdjacentHTML('afterbegin', `<div style="${breakStyle}"> 8/18 北港支援 13 員</div>`);
         }
     }
 
@@ -415,7 +468,7 @@
 
         const keywords = val.split(/\s+/);
         if (typeof WORKER_DATA === 'undefined') {
-            alert('錯誤：無法讀取員工資料(WORKER_DATA missing)');
+            alert('錯誤：無法讀取員工資料 (WORKER_DATA missing)');
             return;
         }
 
@@ -450,17 +503,20 @@
         }
     }
 
+    // ===== 修改：轉出人員改用 GAS 資料 =====
     function loadResigned() {
         const tbody = document.getElementById('resigned-tbody');
         if (!tbody) return;
 
-        if (typeof RESIGNED_DATA === 'undefined') {
-            tbody.innerHTML = "<tr><td colspan='2'>錯誤：無法讀取轉出資料</td></tr>";
+        // 改用從 GAS 讀取的 RESIGNED_DATA_FROM_SHEET
+        const list = RESIGNED_DATA_FROM_SHEET;
+        if (!list || list.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='2'>目前無轉出人員</td></tr>";
             return;
         }
 
         const groups = {};
-        RESIGNED_DATA.forEach(item => {
+        list.forEach(item => {
             const key = `${item.date}_${item.site}`;
             if (!groups[key]) groups[key] = { date: item.date, site: item.site, members: [] };
             if (Array.isArray(item.members)) groups[key].members = groups[key].members.concat(item.members);
@@ -471,22 +527,28 @@
             <tr><td>${g.date}<br>${g.site}</td><td style="text-align:left; padding-left:15px;">${g.members.join('<br>')}</td></tr>
         `).join('') || "<tr><td colspan='2'>目前無轉出人員</td></tr>";
     }
+    // ====================================
 
+    // ===== 修改：休假改用 GAS 資料 =====
     function loadOffDuty() {
         const offListEl = document.getElementById('off-list');
         if (!offListEl) return;
 
-        if (typeof LEAVE_DATA === 'undefined') {
+        // 改用從 GAS 讀取的 LEAVE_DATA_FROM_SHEET
+        const list = LEAVE_DATA_FROM_SHEET;
+        if (!list || list.length === 0) {
             offListEl.innerHTML = '無法讀取休假資料';
             return;
         }
 
         const today = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
-        const list = LEAVE_DATA.filter(d => today >= d.start && today <= d.end);
-        offListEl.innerHTML = list.length
-            ? list.map(e => `${e.id} ${e.name} (${e.start.slice(5)}~${e.end.slice(5)})`).join('<br>')
+        const filtered = list.filter(d => today >= d.start && today <= d.end);
+
+        offListEl.innerHTML = filtered.length
+            ? filtered.map(e => `${e.id} ${e.name} (${e.start.slice(5)}~${e.end.slice(5)})`).join('<br>')
             : '今日無人休假';
     }
+    // ====================================
 </script>
 
 </body>
