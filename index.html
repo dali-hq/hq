@@ -348,6 +348,9 @@
 </div>
 
 <script>
+    console.log('API_URL:', API_URL);
+console.log('WORKER_DATA 是否存在？', typeof WORKER_DATA);
+console.log('WORKER_DATA 長度:', typeof WORKER_DATA !== 'undefined' ? WORKER_DATA.length : 'N/A');
     // ===== 最小改動：全域快取變數 =====
     let LEAVE_DATA_FROM_SHEET = null;
     let RESIGNED_DATA_FROM_SHEET = null;
@@ -364,45 +367,53 @@
 
     // ===== 新增：從 GAS 讀休假 =====
     async function loadLeaveDataFromSheet() {
-        if (LEAVE_DATA_FROM_SHEET !== null) return;
-        try {
-            const res = await fetch(API_URL + '?action=todayOff');
-            const json = await res.json();
-            if (!json.ok) {
-                console.error('讀取休假失敗:', json.error);
-                LEAVE_DATA_FROM_SHEET = [];
-                return;
-            }
-            LEAVE_DATA_FROM_SHEET = (json.data || []).map(d => ({
-                id: d.id,
-                name: d.name,
-                start: d.start,
-                end: d.end
-            }));
-        } catch (err) {
-            console.error('讀取休假錯誤:', err);
+    console.log('loadLeaveDataFromSheet 開始');
+    if (LEAVE_DATA_FROM_SHEET !== null) return;
+    try {
+        const res = await fetch(API_URL + '?action=todayOff');
+        console.log('休假 API 回應狀態:', res.status);
+        const json = await res.json();
+        console.log('休假 API 回應內容:', json);
+        if (!json.ok) {
+            console.error('讀取休假失敗:', json.error);
             LEAVE_DATA_FROM_SHEET = [];
+            return;
         }
+        LEAVE_DATA_FROM_SHEET = (json.data || []).map(d => ({
+            id: d.id,
+            name: d.name,
+            start: d.start,
+            end: d.end
+        }));
+        console.log('休假資料載入完成，筆數:', LEAVE_DATA_FROM_SHEET.length);
+    } catch (err) {
+        console.error('讀取休假錯誤:', err);
+        LEAVE_DATA_FROM_SHEET = [];
     }
+}
     // ==============================
 
     // ===== 新增：從 GAS 讀轉出 =====
     async function loadResignedDataFromSheet() {
-        if (RESIGNED_DATA_FROM_SHEET !== null) return;
-        try {
-            const res = await fetch(API_URL + '?action=resigned');
-            const json = await res.json();
-            if (!json.ok) {
-                console.error('讀取轉出失敗:', json.error);
-                RESIGNED_DATA_FROM_SHEET = [];
-                return;
-            }
-            RESIGNED_DATA_FROM_SHEET = json.data || [];
-        } catch (err) {
-            console.error('讀取轉出錯誤:', err);
+    console.log('loadResignedDataFromSheet 開始');
+    if (RESIGNED_DATA_FROM_SHEET !== null) return;
+    try {
+        const res = await fetch(API_URL + '?action=resigned');
+        console.log('轉出 API 回應狀態:', res.status);
+        const json = await res.json();
+        console.log('轉出 API 回應內容:', json);
+        if (!json.ok) {
+            console.error('讀取轉出失敗:', json.error);
             RESIGNED_DATA_FROM_SHEET = [];
+            return;
         }
+        RESIGNED_DATA_FROM_SHEET = json.data || [];
+        console.log('轉出資料載入完成，筆數:', RESIGNED_DATA_FROM_SHEET.length);
+    } catch (err) {
+        console.error('讀取轉出錯誤:', err);
+        RESIGNED_DATA_FROM_SHEET = [];
     }
+}
     // ==============================
 
     function showPage(p) {
