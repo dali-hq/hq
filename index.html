@@ -353,29 +353,26 @@ console.log('WORKER_DATA 是否存在？', typeof WORKER_DATA);
 console.log('WORKER_DATA 長度:', typeof WORKER_DATA !== 'undefined' ? WORKER_DATA.length : 'N/A');
     // ===== 最小改動：全域快取變數 =====
     let LEAVE_DATA_FROM_SHEET = null;
-    let RESIGNED_DATA_FROM_SHEET = null;
-    // ==================================
+let RESIGNED_DATA_FROM_SHEET = null;
 
-    window.onload = async function() {
-        // 先從 GAS 讀休假跟轉出，再顯示
-        await Promise.all([
-            loadLeaveDataFromSheet(),
-            loadResignedDataFromSheet()
-        ]);
-        loadOffDuty();
-    };
+window.onload = async function() {
+    // 先載入休假跟轉出，再顯示
+    await loadLeaveDataFromSheet();
+    await loadResignedDataFromSheet();
+    loadOffDuty();
+    loadResigned();
+};
 
-    // ===== 新增：從 GAS 讀休假 =====
-    async function loadLeaveDataFromSheet() {
-    console.log('loadLeaveDataFromSheet 開始');
+async function loadLeaveDataFromSheet() {
     if (LEAVE_DATA_FROM_SHEET !== null) return;
     try {
-        const res = await fetch(API_URL + '?action=todayOff');
-        console.log('休假 API 回應狀態:', res.status);
-        const json = await res.json();
-        console.log('休假 API 回應內容:', json);
-        if (!json.ok) {
-            console.error('讀取休假失敗:', json.error);
+        const url = API_URL + '?action=todayOff';
+        const res = await fetch(url, { method: 'GET', mode: 'cors' });
+        // 有些環境 res.ok 會是 false，但 body 仍是 JSON
+        const text = await res.text();
+        const json = JSON.parse(text);
+        if (!json || json.ok === false) {
+            console.error('讀取休假失敗:', json ? json.error : '未知錯誤');
             LEAVE_DATA_FROM_SHEET = [];
             return;
         }
@@ -385,30 +382,25 @@ console.log('WORKER_DATA 長度:', typeof WORKER_DATA !== 'undefined' ? WORKER_D
             start: d.start,
             end: d.end
         }));
-        console.log('休假資料載入完成，筆數:', LEAVE_DATA_FROM_SHEET.length);
     } catch (err) {
         console.error('讀取休假錯誤:', err);
         LEAVE_DATA_FROM_SHEET = [];
     }
 }
-    // ==============================
 
-    // ===== 新增：從 GAS 讀轉出 =====
-    async function loadResignedDataFromSheet() {
-    console.log('loadResignedDataFromSheet 開始');
+async function loadResignedDataFromSheet() {
     if (RESIGNED_DATA_FROM_SHEET !== null) return;
     try {
-        const res = await fetch(API_URL + '?action=resigned');
-        console.log('轉出 API 回應狀態:', res.status);
-        const json = await res.json();
-        console.log('轉出 API 回應內容:', json);
-        if (!json.ok) {
-            console.error('讀取轉出失敗:', json.error);
+        const url = API_URL + '?action=resigned';
+        const res = await fetch(url, { method: 'GET', mode: 'cors' });
+        const text = await res.text();
+        const json = JSON.parse(text);
+        if (!json || json.ok === false) {
+            console.error('讀取轉出失敗:', json ? json.error : '未知錯誤');
             RESIGNED_DATA_FROM_SHEET = [];
             return;
         }
         RESIGNED_DATA_FROM_SHEET = json.data || [];
-        console.log('轉出資料載入完成，筆數:', RESIGNED_DATA_FROM_SHEET.length);
     } catch (err) {
         console.error('讀取轉出錯誤:', err);
         RESIGNED_DATA_FROM_SHEET = [];
