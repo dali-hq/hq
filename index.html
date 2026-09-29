@@ -67,8 +67,8 @@
         </div>
         <div id="result-display" class="result-container"></div>
     </div>
-   
-       <div id="page-resigned" style="display:none;">
+    
+    <div id="page-resigned" style="display:none;">
         <h2 style="color: #d63031;">🚫 轉出人員名單</h2>
         <table class="resigned-table">
             <thead><tr><th>日期/工地</th><th>轉出人員名單</th></tr></thead>
@@ -94,11 +94,13 @@
 <script>
     let LEAVE_DATA_FROM_SHEET = null;
     let RESIGNED_DATA_FROM_SHEET = null;
-    window.onload = async function() {
-        await loadLeaveDataFromSheet();
-        await loadResignedDataFromSheet();
-        loadOffDuty();
-        loadResigned();
+
+    // 先顯示初始畫面（讀取中），不阻塞 onload
+    window.onload = function() {
+        loadOffDuty();       // 先顯示「讀取中...」
+        loadResigned();      // 先顯示「讀取中...」（若你有加邏輯）
+        loadLeaveDataFromSheet().then(() => { loadOffDuty(); });
+        loadResignedDataFromSheet().then(() => { loadResigned(); });
     };
 
     async function loadLeaveDataFromSheet() {
@@ -199,6 +201,7 @@
         const tbody = document.getElementById('resigned-tbody');
         if (!tbody) return;
         const list = RESIGNED_DATA_FROM_SHEET;
+        if (list === null) { tbody.innerHTML = "<tr><td colspan='2'>讀取中...</td></tr>"; return; }
         if (!list || list.length === 0) { tbody.innerHTML = "<tr><td colspan='2'>目前無轉出人員</td></tr>"; return; }
         const groups = {};
         list.forEach(item => {
@@ -216,6 +219,7 @@
         const offListEl = document.getElementById('off-list');
         if (!offListEl) return;
         const list = LEAVE_DATA_FROM_SHEET;
+        if (list === null) { offListEl.innerHTML = '讀取中...'; return; }
         if (!list || list.length === 0) { offListEl.innerHTML = '無法讀取休假資料'; return; }
         const today = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
         const filtered = list.filter(d => today >= d.start && today <= d.end);
